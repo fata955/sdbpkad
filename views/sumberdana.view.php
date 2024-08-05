@@ -1,4 +1,4 @@
-﻿<?php
+<?php
     include 'header.view.php';
     
 ?>
@@ -15,7 +15,7 @@
             <li class="breadcrumb-item">
               <a href="javascript:void(0);">App</a>
             </li>
-            <li class="breadcrumb-item active">Contact</li>
+            <li class="breadcrumb-item active">Sumber Dana</li>
           </ul>
           <button class="btn btn-primary btn-icon mobile_menu" type="button">
             <i class="zmdi zmdi-sort-amount-desc"></i>
@@ -42,7 +42,8 @@
     <div class="container-fluid">
       <div class="row clearfix">
         <div class="col-lg-12">
-          <div class="card" id="listopd">
+          <div class="card" id="listsumberdana">
+
 
           </div>
         </div>
@@ -53,21 +54,19 @@
 
 <div class="modal fade" id="largeModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
-    <form action="" method="POST">
+    <form action="" method="post">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="title" id="largeModalLabel">Tambah OPD</h4>
+          <h4 class="title" id="largeModalLabel">Tambah Sumber Dana</h4>
         </div>
         <div class="modal-body">
           <div class="input-group mb-3">
             <input
               type="text"
               class="form-control"
-              placeholder="Nama OPD"
-              id="namaopd"
-              name="namaopd"
-              value=""
-              required
+              placeholder="Nama Sumber dana"
+              id="namasumberdana" name="namasumberdana"
+              value="" required
             />
             <!-- <div class="input-group-append">
               <span class="input-group-text"
@@ -79,30 +78,15 @@
             <input
               type="text"
               class="form-control"
-              placeholder="KODE SIPD"
-              id="kodeopd"
-              name="kodeopd"
-              value=""
-              required
+              placeholder="Ket Sumber Dana"
+              id="ketsumberdana" name="ketsumberdana"
+              value="" required 
             />
-            <!-- <div class="input-group-append">
-              <span class="input-group-text"
-                ><a
-                  href="forgot-password.html"
-                  class="forgot"
-                  title="Forgot Password"
-                  ><i class="zmdi zmdi-lock"></i></a
-              ></span>
-            </div> -->
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            type="submit"
-            class="btn btn-default btn-round waves-effect"
-            id="btnsaveopd"
-          >
-            SAVE
+          <button type="submit" class="btn btn-default btn-round waves-effect" id="btnsavesumberdana">
+            SAVE CHANGES
           </button>
           <button
             type="button"
@@ -120,16 +104,15 @@
 <?php
     include 'footer.view.php';
 ?>
-
 <script>
   $(document).ready(function () {
-    tampil_data();
+    tampil_datasumber();
 
-    $("#btnsaveopd").on("click", function (e) {
+    $("#btnsavesumberdana").on("click", function (e) {
       e.preventDefault();
       Swal.fire({
         title: "Apakah anda yakin ?",
-        text: "Menyimpan OPD Baru ini ?",
+        text: "Menyimpan Sumber Dana Baru ini ?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -139,10 +122,10 @@
         if (result.value) {
           $.ajax({
             type: "GET",
-            url: "proses/opd/saveopd.php",
+            url: "proses/sumberdana/savesumberdana.php",
             data: {
-              nama: $("#namaopd").val(),
-              kodeopd: $("#kodeopd").val(),
+              nama: $("#namasumberdana").val(),
+              keterangan: $("#ketsumberdana").val(),
             },
             success: function () {
               Swal.fire(
@@ -151,9 +134,11 @@
                 "success"
                 // console.log(nama);
               );
-              tampil_data();
-              document.getElementById("namaopd").value = "";
-				      document.getElementById("kodeopd").value = "";
+              tampil_datasumber();
+              document.getElementById("namasumberdana").value = "";
+				      document.getElementById("ketsumberdana").value = "";
+              swal.close();
+              // swal.close();
             },
           });
         }
@@ -161,21 +146,13 @@
     });
   });
 
-  // function tampil_data(){
-  //     $("#listopd").load("views/table/opd.php");
-  // var refreshId = setInterval(function () {
-  //     $("#listopd").load('views/table/opd.php');
-  // }, 7000);
-  // $.ajaxSetup({ cache: true });
 
-  // }
-
-  function tampil_data() {
+  function tampil_datasumber() {
     $.ajax({
-      url: "views/table/opd.php",
+      url: "views/table/sumberdana.php",
       type: "get",
       success: function (data) {
-        $("#listopd").html(data);
+        $("#listsumberdana").html(data);
       },
     });
   }

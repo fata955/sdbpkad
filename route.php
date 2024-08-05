@@ -17,6 +17,9 @@
         case $me.'/opd' :
             require "views/opd.view.php";
             break;
+        case $me.'/sumberdana' :
+            require "views/sumberdana.view.php";
+            break;
         case $me.'/views' :
             require "views/error.view.php";
             break;

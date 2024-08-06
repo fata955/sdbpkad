@@ -20,6 +20,9 @@
         case $me.'/sumberdana' :
             require "views/sumberdana.view.php";
             break;
+        case $me.'/bagsumberdana' :
+            require "views/subsumberdana.view.php";
+            break;
         case $me.'/views' :
             require "views/error.view.php";
             break;

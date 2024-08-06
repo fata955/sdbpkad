@@ -20,8 +20,8 @@
                 <ul class="ml-menu">
                     <li><a href="/budget/opd">Opd</a></li>
                     <li><a href="/budget/sumberdana">Sumber Dana</a></li>
-                    <li><a href="events.html">Sub Sumber Dana</a></li>
-                    <li><a href="contact.html">Jenis Perubahan</a></li>                    
+                    <li><a href="/budget/bagsumberdana">Sub Sumber Dana</a></li>
+                    <li><a href="/budget/perubahan">Jenis Perubahan</a></li>                    
                 </ul>
             </li>
             <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-flower"></i><span>Settings</span></a>

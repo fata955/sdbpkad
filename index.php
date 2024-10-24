@@ -1,3 +1,4 @@
 <?php
 
-include 'route.php';
+    include_once "route.php";
+    ?>

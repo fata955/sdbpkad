@@ -1,7 +1,8 @@
-
 <!-- Main Content -->
 <?php
-    include 'header.view.php';
+include 'lib/conn.php';
+include 'header.view.php';
+session_start();
 ?>
 <section class="content">
     <div class="">
@@ -10,26 +11,63 @@
                 <div class="col-lg-7 col-md-6 col-sm-12">
                     <h2>Dashboard</h2>
                     <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Aero</a></li>
+                        <li class="breadcrumb-item"><a href="/sdbpkad/"><i class="zmdi zmdi-home"></i> Home</a></li>
                         <li class="breadcrumb-item active">Dashboard 1</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
                 </div>
-                <div class="col-lg-5 col-md-6 col-sm-12">                
+                <div class="col-lg-5 col-md-6 col-sm-12">
                     <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
                 </div>
             </div>
         </div>
         <div class="container-fluid">
-        <div class="row clearfix">
+            <div class="row clearfix">
                 <div class="col-lg-3 col-md-6 col-sm-12">
-                    <div class="card widget_2 big_icon traffic">
+                    <div class="card">
                         <div class="body">
-                            <h6>Traffic</h6>
-                            <h2>20 <small class="info">of 1Tb</small></h2>
-                            <small>2% higher than last month</small>
+                            <h6>TOTAL ALOKASI DANA</h6>
+                            <?php
+                                    function rupiah($angka)
+                                    {
+
+                                        $hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
+                                        return $hasil_rupiah;
+                                    }
+
+                                    function calculateRealizationPercentage($realized, $target)
+                                    {
+                                        if ($target == 0) {
+                                            return "Target cannot be zero.";
+                                        }
+                                        $percentage = ($realized / $target) * 100;
+                                        return $percentage;
+                                    }
+
+                                    $pagu = "SELECT sum(nilai) as total from pagu";
+                                    $pagu = mysqli_query($conn, $pagu);
+                                    $pagu = mysqli_fetch_array($pagu);
+                                    $pagu = $pagu['total'];
+
+
+                                    $realisasi = "SELECT COALESCE(sum(nilai_spm),0) as realisasi from t_spm where id_sumberdana > 0";
+                                    $realisasitotal = mysqli_query($conn, $realisasi);
+                                    $realisasi = mysqli_num_rows($realisasitotal);
+                                    if ($realisasi == 0) {
+                                        $realisasi = 0;
+                                    } else {
+                                        $realisasi = mysqli_fetch_assoc($realisasitotal);
+                                        $realisasi = $realisasi['realisasi'];
+                                    }
+
+                                    // $persentase = ($realisasi / $pagu )*100;
+                                    $persen = calculateRealizationPercentage($realisasi, $pagu);
+                            ?>
+
+                            <h5><?= rupiah($pagu) ?></h5>
+                            <small>Realisasi hingga Bulan ini senilai Rp. <?= rupiah($realisasi); ?></small>
                             <div class="progress">
-                                <div class="progress-bar l-amber" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;"></div>
+                                <div class="progress-bar l-amber" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width:<?= $persen; ?>%;"></div>
                             </div>
                         </div>
                     </div>
@@ -105,7 +143,7 @@
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <div class="state_w1 mb-1 mt-1">
                                         <div class="d-flex justify-content-between">
-                                            <div>                                
+                                            <div>
                                                 <h5>365</h5>
                                                 <span><i class="zmdi zmdi-turning-sign"></i> Returns</span>
                                             </div>
@@ -127,7 +165,7 @@
                                 <div class="col-lg-3 col-md-6 col-sm-6">
                                     <div class="state_w1 mb-1 mt-1">
                                         <div class="d-flex justify-content-between">
-                                            <div>                            
+                                            <div>
                                                 <h5>2,055</h5>
                                                 <span><i class="zmdi zmdi-print"></i> Invoices</span>
                                             </div>
@@ -171,10 +209,10 @@
                             </ul>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="card w_data_1">
-                       <div class="body">
+                        <div class="body">
                             <div class="w_icon pink"><i class="zmdi zmdi-bug"></i></div>
                             <h4 class="mt-3 mb-0">12.1k</h4>
                             <span class="text-muted">Bugs Fixed</span>
@@ -182,7 +220,7 @@
                                 <i class="zmdi zmdi-trending-up"></i>
                                 <span>15.5%</span>
                             </div>
-                       </div>
+                        </div>
                     </div>
                     <div class="card w_data_1">
                         <div class="body">
@@ -247,7 +285,7 @@
                                 </ul>
                             </div>
                             <div class="input-group mt-3">
-                                <div class="input-group-prepend">                                    
+                                <div class="input-group-prepend">
                                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add</button>
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="javascript:void(0);">Tim Hank</a>
@@ -280,10 +318,10 @@
                                 <li class="remove">
                                     <a role="button" class="boxs-close"><i class="zmdi zmdi-close"></i></a>
                                 </li>
-                            </ul>                        
+                            </ul>
                         </div>
                         <div class="body">
-                            <div id="world-map-markers" class="jvector-map"></div>                            
+                            <div id="world-map-markers" class="jvector-map"></div>
                         </div>
                     </div>
                 </div>
@@ -306,7 +344,7 @@
                         </div>
                         <div class="body text-center">
                             <div id="chart-pie" class="c3_chart d_distribution"></div>
-                            <button class="btn btn-primary mt-4 mb-4">View More</button>                            
+                            <button class="btn btn-primary mt-4 mb-4">View More</button>
                         </div>
                     </div>
                 </div>
@@ -339,7 +377,7 @@
                                     <div class="progress mt-4">
                                         <div class="progress-bar l-amber" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%;"></div>
                                     </div>
-                                    <div class="d-flex bd-highlight mt-4">                                
+                                    <div class="d-flex bd-highlight mt-4">
                                         <div class="flex-fill bd-highlight">
                                             <h5 class="mb-0">21,521 <i class="zmdi zmdi-long-arrow-up"></i></h5>
                                             <small>Today</small>
@@ -349,22 +387,17 @@
                                             <small>Last month %</small>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        
-
-
-
         </div>
     </div>
 </section>
 
 
 <?php
-    include 'footer.view.php';
+include 'footer.view.php';
 ?>
-

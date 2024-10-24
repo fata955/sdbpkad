@@ -35,7 +35,7 @@
                                 <span class="input-group-text"><i class="zmdi zmdi-search"></i></span>
                             </div>
                         </div>
-                        <a href="index.html" class="btn btn-primary btn-block waves-effect waves-light">GO TO HOMEPAGE</a>                        
+                        <a href="/sdbpkad" class="btn btn-primary btn-block waves-effect waves-light">GO TO HOMEPAGE</a>                        
                         <div class="signin_with mt-3">
                             <a href="javascript:void(0);" class="link">Need Help?</a>
                         </div>

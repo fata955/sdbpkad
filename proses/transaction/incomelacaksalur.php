@@ -5,7 +5,9 @@ include "../../lib/conn.php";
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
-  $sql = "call income1();";
+  // $sql = "call income1();";
+  $sql="SELECT b.id,b.tanggal_salur,a.namasumberdana,b.tujuan_dana,b.nilai_dana,b.status, (SELECT COALESCE(sum(nilai_spm),0) from t_spm where id_salur=b.id) as realisasi, (SELECT COALESCE(sum(nilai_dana),0) from t_salur) as total FROM t_sumberdana a, t_salur b  where a.id=b.jenis_dana;
+";
   $result = mysqli_query($conn, $sql);
   $data = [];
   while ($row = mysqli_fetch_assoc($result)) {

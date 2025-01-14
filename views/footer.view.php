@@ -8,16 +8,16 @@
 <script src="assets/bundles/sparkline.bundle.js"></script> <!-- Sparkline Plugin Js -->
 <script src="assets/bundles/c3.bundle.js"></script>
 <script src="assets/bundles/mainscripts.bundle.js"></script>
+<!-- <script src="assets/sweetalert2-main/src/sweetalert2.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.datatables.net/2.1.4/js/dataTables.min.js"></script>
+<script src="assets/DataTables/datatables.min.js"></script>
 <script src="assets/js/pages/index.js"></script>
-<script src="assets/plugins/select2/select2.min.js"></script> <!-- Select2 Js -->
+<script src="assets/plugins/select2/select2.min.js"></script>
 <script src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
 <script src="assets/plugins/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js --> 
 <script src="assets/js/pages/forms/advanced-form-elements.js"></script> 
 <script src="lib/formatrupiah.js"></script> 
 
 </body>
-
 
 </html>

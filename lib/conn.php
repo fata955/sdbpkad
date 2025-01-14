@@ -2,7 +2,12 @@
 $servername = "localhost";
 $username = "root";
 $password = "nadirad3mi208";
-$database = "sipd";
+$database = "spm";
+
+// $servername = "localhost";
+// $username = "satuclo1_bpkad";
+// $password = "nadirad3mi208";
+// $database = "satuclo1_sipd";
 // Create connection
 $conn = new mysqli($servername, $username, $password,$database);
 

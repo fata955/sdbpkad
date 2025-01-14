@@ -1,4 +1,10 @@
 <?php
+// include_once 'component/session.php';
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 
 ?>
@@ -66,7 +72,7 @@ include 'views/header.view.php';
           <div class="card">
             <div class="body xl-purple">
             <?php
-              $jumlahsp2d = mysqli_query($conn, "SELECT SUM(nilai_sp2d) as nilai FROM sp2d");
+              $jumlahsp2d = mysqli_query($conn, "SELECT SUM(nilai_spm) as nilai FROM t_spm where id_user > 0");
               $fetch2 = mysqli_fetch_array($jumlahsp2d);
                 echo '<h5 class="m-t-0 m-b-0">'. rupiah($fetch2['nilai']) .'</h5>';
               ?>
@@ -283,11 +289,12 @@ include 'views/footer.view.php';
         success: function(response) {
           var data = response.data;
           table.clear().draw();
+          var counter = 1;
           $.each(data, function(index, value) {
             var dana = value.nilai;
             table.row
               .add([
-                value.id,
+                counter,
                 value.nama_opd,
                 formatRupiah(dana, "Rp. "),
                 // value.idsumberdana,
@@ -299,6 +306,7 @@ include 'views/footer.view.php';
                 '"><i class="zmdi zmdi-delete"></i></Button>' 
               ])
               .draw(false);
+              counter++;
           });
         }
       });

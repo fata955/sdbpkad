@@ -1,0 +1,9 @@
+<?php
+// session_start();
+session_start(); 
+if (isset($_SESSION['username']) === true) { 
+  header('Location: /sdbpkad/'); 
+  exit(); 
+}else{
+    header('Location: /sdbpkad/login');  
+}

@@ -1,4 +1,9 @@
 <?php
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 include 'lib/conn.php';
 $opd = mysqli_query($conn, "SELECT * from skpd");

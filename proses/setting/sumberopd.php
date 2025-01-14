@@ -3,7 +3,8 @@ include "../../lib/conn.php";
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
-  $sql = "call sumberdanaopd()";
+  // $sql = "call sumberdanaopd()";
+  $sql = "select a.id,a.nilai_sumber,b.nama_opd,c.namasubsumberdana,(SELECT COALESCE(sum(nilai_spm),0) from sipd.t_spm where id_skpd=(SELECT id_sipd as id from sipd.skpd where id=a.id_opd) AND id_sumberdana=c.id) as realisasi, d.namaperubahan FROM t_opdsumberdana a, skpd b, subssumber c, t_perubahan d where b.id=a.id_opd AND c.id=a.id_subsumberdana AND d.id=a.id_perubahan";
   $result = mysqli_query($conn, $sql);
   $data = [];
   while ($row = mysqli_fetch_assoc($result)) {
@@ -37,7 +38,7 @@ if ($_GET["action"] === "fetchSinglePagu") {
     $sql = "SELECT * FROM pagu where idopd=$idopd";
     $pagu = mysqli_query($conn, $sql);
     if (mysqli_num_rows($pagu) > 0) {
-      $sql = "select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(nilai_spm),0) from sipd.t_spm where id_skpd=$opd AND id_sumberdana=c.id_subsumberdana) as realisasi,(SELECT COALESCE(sum(nilai_spm),0) from sipd.t_spm where id_skpd=$opd AND id_sumberdana > 0 ) as totalrealisasi,b.nama_opd,d.nilai, (select sum(nilai_sumber) from t_opdsumberdana where id_opd=$idopd AND id_perubahan=$perubahan) as Total, e.namaperubahan,b.id as idopd FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=$idopd AND d.idopd=c.id_opd AND e.id=c.id_perubahan AND e.status='AKTIF'";
+      $sql = "select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(nilai_spm),0) from t_spm where id_skpd=$opd AND id_sumberdana=c.id_subsumberdana) as realisasi,(SELECT COALESCE(sum(nilai_spm),0) from t_spm where id_skpd=$opd AND id_sumberdana > 0 ) as totalrealisasi,b.nama_opd,d.nilai, (select sum(nilai_sumber) from t_opdsumberdana where id_opd=$idopd AND id_perubahan=$perubahan) as Total, e.namaperubahan,b.id as idopd FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=$idopd AND d.idopd=c.id_opd AND e.id=c.id_perubahan AND e.status='AKTIF'";
       $result = mysqli_query($conn, $sql);
       $data = [];
       if (mysqli_num_rows($result) > 0) {

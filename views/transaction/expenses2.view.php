@@ -1,4 +1,12 @@
 <?php
+// include_once 'component/session.php';
+
+session_start();
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) {
+    header('Location: /sdbpkad/login');
+    exit();
+}
 include 'views/header.view.php';
 // $date_start = isset($_GET['date_start']) ? $_GET['date_start'] :  date("Y-m-d", strtotime(date("Y-m-d") . " -7 days"));
 $date_start = isset($_GET['date_start']) ? $_GET['date_start'] :  date("Y-m-d");
@@ -9,106 +17,17 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
 
 <section class="content">
     <div class="body_scroll">
-        <div class="block-header">
-            <div class="row">
-                <div class="col-lg-7 col-md-6 col-sm-12">
-                    <h2>Tagihan SPM</h2>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.html"><i class="zmdi zmdi-home"></i> Home</a></li>
-                        <li class="breadcrumb-item active">Sdbpkad</li>
-                        <li class="breadcrumb-item active">tagihan</li>
-                    </ul>
-                    <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
-
-                </div>
-                <div class="col-lg-5 col-md-6 col-sm-12">
-                    <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i class="zmdi zmdi-arrow-right"></i></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="container-fluid">
-            <form method="post" id="salur">
-                <div class="row clearfix d-flex justify-content-center">
-
-                    <?php
-                    function formatRupiah($number)
-                    {
-                        return 'Rp ' . number_format($number, 0, ',', '.');
-                    }
-                    // $sql = "SELECT a.id, a.nilai_dana,a.jenis_dana,b.namasumberdana from t_salur a, t_sumberdana b where a.jenis_dana=b.id AND a.status='AKTIF'";
-                    $sql = "select b.id, sum(a.nilai_dana) as nilai, b.namasumberdana, a.jenis_dana, (SELECT COALESCE(sum(nilai_spm),0) from sipd.t_spm where id_salur=a.jenis_dana) as realisasi, (sum(a.nilai_dana)-(SELECT COALESCE(sum(nilai_spm),0) from sipd.t_spm where id_salur=a.jenis_dana)) as sisa from t_salur a, t_sumberdana b where a.jenis_dana=b.id group by b.id";
-                    $cek = mysqli_query($conn, $sql);
-                    while ($result = mysqli_fetch_array($cek)) {
-                    ?>
-
-                        <!-- <div class="card pricing pricing-item">
-
-                                <div class="pricing-deco l-blue">
-                                    <svg class="pricing-deco-img" enable-background="new 0 0 300 100" height="100px" id="Layer_1" preserveAspectRatio="none" version="1.1" viewBox="0 0 300 100" width="300px" x="0px" xml:space="preserve" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" y="0px">
-                                        <path class="deco-layer deco-layer--1" d="M30.913,43.944c0,0,42.911-34.464,87.51-14.191c77.31,35.14,113.304-1.952,146.638-4.729&#x000A;	c48.654-4.056,69.94,16.218,69.94,16.218v54.396H30.913V43.944z" fill="#FFFFFF" opacity="0.6"></path>
-                                        <path class="deco-layer deco-layer--2" d="M-35.667,44.628c0,0,42.91-34.463,87.51-14.191c77.31,35.141,113.304-1.952,146.639-4.729&#x000A;	c48.653-4.055,69.939,16.218,69.939,16.218v54.396H-35.667V44.628z" fill="#FFFFFF" opacity="0.6"></path>
-                                        <path class="deco-layer deco-layer--3" d="M43.415,98.342c0,0,48.283-68.927,109.133-68.927c65.886,0,97.983,67.914,97.983,67.914v3.716&#x000A;	H42.401L43.415,98.342z" fill="#FFFFFF" opacity="0.7"></path>
-                                        <path class="deco-layer deco-layer--4" d="M-34.667,62.998c0,0,56-45.667,120.316-27.839C167.484,57.842,197,41.332,232.286,30.428&#x000A;	c53.07-16.399,104.047,36.903,104.047,36.903l1.333,36.667l-372-2.954L-34.667,62.998z" fill="#FFFFFF"></path>
-                                    </svg>
-                                    <input
-                                        type="hidden"
-                                        class="form-control"
-                                        name="idsalur" id="idsalur" value="<?= $result['id'] ?>" />
-                                    <h6 id="danamasuk" class="pricing-title"><?= $result['namasumberdana']; ?></h6> <br>
-                                    <div class="pricing-price">
-                                        <h6 id='nilaikas' class="" style="font-size:x-large;"><?= formatRupiah($result['sisa']); ?></h6>
-                                    </div>
-
-                                </div>
-                                <div class="body">
-                                    <small>Sisa <?= formatRupiah($result['sisa']); ?> dari <?= formatRupiah($result['nilai']); ?></small>
-                                    <div class="progress">
-                                        <div id="progress" class="progress-bar l-amber" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 70%;"></div>
-                                    </div><br>
-                                    <button class="btn btn-primary" id='buattagihan' data-id="<?php echo $result['jenis_dana']; ?>" data-toggle="modal"
-                                        data-target="#offcanvasaddtagihan">Buat Tagihan</button>
-                                </div>
-
-                            </div> -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
-                            <div class="card">
-                                <div class="body product_item">
-                                    <span class="label new">Aktif</span><br><br>
-                                    <!-- <img src="assets/images/ecommerce/1.png" alt="Product" class="img-fluid cp_img" /> -->
-                                    <div class="product_details">
-                                        <a href="ec-product-detail.html" style="font-weight: bold;"><?= $result['namasumberdana']; ?></a>
-                                        <ul class="product_price list-unstyled">
-                                            <li class="old_price"><?= formatRupiah($result['sisa']); ?></li>
-                                            <!-- <li class="new_price">$45.00</li> -->
-                                        </ul>
-                                    </div>
-                                    <div class="action">
-                                        <!-- <a href="javascript:void(0);" class="btn btn-info waves-effect"><i class="zmdi zmdi-eye"></i></a> -->
-                                        <button class="btn btn-primary" id='buattagihan' data-id="<?php echo $result['jenis_dana']; ?>" data-toggle="modal"
-                                            data-target="#offcanvasaddtagihan">Buat Tagihan</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    <?php
-                    }
-                    ?>
-                </div>
-            </form>
-        </div>
-
-        <div class="container-fluid">
+        <div class="container-fluid ">
+            <h6>List Tagihan</h6> <br>
             <form method="post" id='filtertanggal'>
-                <div class="row clearfix">
+                <div class="row clearfix flex justify-content-center">
                     <div class="col-lg-2">
                         <label for="">Dari Tanggal</label>
-                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-d", strtotime($date_start)) ?>"> <br>
+                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-01", strtotime($date_start)) ?>">
                     </div>
                     <div class="col-lg-2">
                         <label for="">Sampai Tanggal</label>
-                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d", strtotime($date_end)) ?>"> <br>
+                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d", strtotime($date_end)) ?>">
                     </div>
                     <div class="col-lg-2">
                         <br>
@@ -116,12 +35,44 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                             <div class="row">
                                 <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search"></i></button>
                                 <button class="btn btn-secondary" id="dataall"><i class="zmdi zmdi-refresh"></i></button>
+                                <button class="btn btn-danger" id="dataprint"><i class="zmdi zmdi-print"></i></button>
+                                <!-- <button class="btn btn-danger" id="dataall"><i class="zmdi zmdi-collection-pdf"></i></button> -->
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <br>
+                        <button class="btn btn-primary" id='buattagihan' data-id="<?php echo $result['jenis_dana']; ?>" data-toggle="modal"
+                            data-target="#offcanvasaddtagihan">Buat Tagihan</button>
+                    </div>
+
+                </div> <br>
+                <div class="row clearfix flex justify-content-center">
+                    <div class="col-lg-2">
+                        <label for="">REALISASI SPM</label>
+                        <input type="text" class="form-control" id="total_spm" name="total_spm" value="" disabled>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Jumlah SPM</label>
+                        <input type="text" class="form-control" id="jumlah_spm" name="jumlah_spm" value="" disabled>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <label for="">Jumlah LS</label>
+                        <input type="text" class="form-control" id="jumlah_ls" name="jumlah_ls" value="" disabled>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Jumlah GU</label>
+                        <input type="text" class="form-control" id="jumlah_gu" name="jumlah_gu" value="" disabled>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Jumlah UP</label>
+                        <input type="text" class="form-control" id="jumlah_up" name="jumlah_up" value="" disabled>
                     </div>
                 </div>
             </form>
         </div>
+        <br>
 
         <div class="container-fluid">
             <div class="row clearfix">
@@ -140,6 +91,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                             </thead>
                             <tbody>
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -150,10 +102,10 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
     </div>
 </section>
 
-
 <?php
 include 'views/footer.view.php';
 ?>
+
 
 <div class="modal fade" id="offcanvasaddtagihan" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -167,22 +119,16 @@ include 'views/footer.view.php';
                         <input
                             type="hidden"
                             class="form-control"
-                            name="nsalur" id='nsalur' readonly />
-                    </div>
-                    <div class="input-group mb-3">
-                        <input
-                            type="hidden"
-                            class="form-control"
-                            name="idspm" id='idspm' readonly />
+                            name="idspm" id='idspm' required />
                     </div>
                     <div class="input-group mb-3">
                         <input
                             type="text"
                             class="form-control"
                             name="nospm" id='nospm'
-                            placeholder="Input No SPM" readonly /> <br>
+                            placeholder="Input No SPM" required /> <br>
                         <div> <a href="" class="btn btn-primary ml-2" data-toggle="modal"
-                                data-target="#listspm">Pilih SPM</a></div>
+                                data-target="#listspm" required>Pilih SPM</a></div>
                     </div>
 
                     <div class="input-group mb-3">
@@ -191,7 +137,7 @@ include 'views/footer.view.php';
                             class="form-control"
                             name="ketspm" id='ketspm'
                             placeholder="Keterangan"
-                            rows="4" cols="50" readonly></textarea>
+                            rows="4" cols="50" required></textarea>
                         <!-- <button class="btn">...</button> -->
                     </div>
                     <div class="input-group mb-3">
@@ -199,10 +145,10 @@ include 'views/footer.view.php';
                             type="text"
                             class="form-control"
                             placeholder="Masukkan Nilai SPM"
-                            name="nilaispm" id='nilaispm' readonly />
+                            name="nilaispm" id='nilaispm' required />
                     </div>
                     <div class="input-group mb-3">
-                        <select name='dokumen' id='dokumen' class="form-control show-tick ms " readonly>
+                        <select name='dokumen' id='dokumen' class="form-control show-tick ms " required>
                             <option value="0" default>--JENIS DOKUMEN--</option>
                             <option value="LS">LS</option>
                             <option value="GU">GU</option>
@@ -210,9 +156,9 @@ include 'views/footer.view.php';
                             <option value="TU">TU</option>
                         </select>
                     </div>
-                    <label for="opd">Nama OPD</label><br>
+                    <label for="opd" id="lopd">Nama OPD</label><br>
                     <div class="input-group mb-3">
-                        <select name='opd' id='opd' class="form-control show-tick ms" readonly>
+                        <select name='opd' id='opd' class="form-control show-tick ms" required>
                             <?php
                             $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
                             while ($fetch = mysqli_fetch_array($opd)) {
@@ -223,10 +169,23 @@ include 'views/footer.view.php';
                             ?>
                         </select>
                     </div>
-                    <label for="dana">Sumber Dana</label><br>
+                    <label for="dana" id="ldana">Dana Ready</label><br>
                     <div class="input-group mb-3">
-                        <select name='namasumber' id='namasumber' class="form-control show-tick ms">
-                            <option value="">Pilih Sumberdana</option>
+                        <select name='dana' id='dana' class="form-control show-tick ms" required>
+                            <?php
+                            $opd = mysqli_query($conn, "SELECT a.jenis_dana,b.namasumberdana from t_salur a, t_sumberdana b where b.id=a.jenis_dana") or die(mysqli_error($conn));
+                            while ($fetch = mysqli_fetch_array($opd)) {
+                            ?>
+                                <option value="<?= $fetch['jenis_dana']; ?>"> <?= $fetch["namasumberdana"]; ?> </option>";
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <label for="sumberdana" id="lnamasumber">Sumber Dana</label><br>
+                    <div class="input-group mb-3">
+                        <select name='namasumber' id='namasumber' class="form-control show-tick ms" required>
+
                         </select>
                     </div>
                 </div>
@@ -240,7 +199,7 @@ include 'views/footer.view.php';
                     <button
                         type="button"
                         class="btn btn-danger waves-effect"
-                        data-dismiss="modal">
+                        data-dismiss="modal" id="keluar">
                         CLOSE
                     </button>
                 </div>
@@ -249,7 +208,6 @@ include 'views/footer.view.php';
         </form>
     </div>
 </div>
-
 
 <div class="modal fade " id="listspm" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg modal-col-pink" role="document">
@@ -285,21 +243,6 @@ include 'views/footer.view.php';
                         </div>
                     </div>
                 </div>
-                <!-- <div class="modal-footer">
-                    <button
-                        type="submit"
-                        class="btn btn-default waves-effect"
-                        id="insertBtn">
-                        SAVE
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-danger waves-effect"
-                        data-dismiss="modal">
-                        CLOSE
-                    </button>
-                </div> -->
-
             </div>
         </form>
     </div>
@@ -401,8 +344,6 @@ include 'views/footer.view.php';
     </div>
 </div>
 
-
-
 <script src="assets/bundles/datatablescripts.bundle.js"></script>
 <script src="assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
 <script src="assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
@@ -413,8 +354,18 @@ include 'views/footer.view.php';
 <script src="assets/js/pages/tables/jquery-datatable.js"></script>
 <script>
     $(document).ready(function() {
+        // sembunyi();
+        let table = new DataTable("#myTablespm");
+        let table2 = new DataTable("#nilaisumberdana");
+        /* Dengan Rupiah */
+        var nilaispm = document.getElementById('nilaispm');
+        nilaispm.addEventListener('keyup', function(e) {
+            nilaispm.value = formatRupiah(this.value, 'Rp. ');
+        })
+
         fetchspm();
         fetchVerif();
+
         $("#listspm").modal("hide");
         $('#s_sumber').show();
 
@@ -427,16 +378,57 @@ include 'views/footer.view.php';
             $('#dokumen').prop('value', '--JENIS DOKUMEN--'); // Mengosongkan input
             $('#opd').prop('value', ''); // Mengosongkan input
             $('#namasumber').prop('value', ''); // Mengosongkan input
+            $('#ketspm').prop('disabled', false);
+            $('#nospm').prop('disabled', false);
+            $('#nilaispm').prop('disabled', false);
+            $('#opd').prop('disabled', false);
         }
 
+        function sembunyi() {
+            $('#nospm').hide();
+            $('#ketspm').hide(); // Mengosongkan input // Mengosongkan input
+            $('#nilaispm').hide();
+            $('#dokumen').hide(); // Mengosongkan input
+            $('#opd').hide(); // Mengosongkan input
+            $('#dana').hide();
+            $('#namasumber').hide();
+            $('#insertBtn').hide();
+            $('#keluar').hide(); // Mengosongkan input
+            $('#lopd').hide(); // Mengosongkan input
+            $('#ldana').hide();
+            $('#lnamasumber').hide();
+        }
 
-        let table = new DataTable("#myTablespm");
-        let table2 = new DataTable("#nilaisumberdana");
-        /* Dengan Rupiah */
-        var nilaispm = document.getElementById('nilaispm');
-        nilaispm.addEventListener('keyup', function(e) {
-            nilaispm.value = formatRupiah(this.value, 'Rp. ');
-        })
+        function muncul() {
+            $('#nospm').show();
+            $('#ketspm').show(); // Mengosongkan input // Mengosongkan input
+            $('#nilaispm').show();
+            $('#dokumen').show(); // Mengosongkan input
+            $('#opd').show(); // Mengosongkan input
+            $('#dana').show();
+            $('#namasumber').show();
+            $('#insertBtn').show();
+            $('#keluar').show(); // Mengosongkan input
+            $('#lopd').show(); // Mengosongkan input
+            $('#ldana').show();
+            $('#lnamasumber').show();
+        }
+
+        function enbld() {
+            $('#ketspm').prop('disabled', false);
+            $('#nospm').prop('disabled', false);
+            $('#nilaispm').prop('disabled', false);
+            $('#dokumen').prop('disabled', false);
+            $('#opd').prop('disabled', false);
+        }
+
+        function disbled() {
+            $('#ketspm').prop('disabled', true);
+            $('#nospm').prop('disabled', true);
+            $('#nilaispm').prop('disabled', true);
+            $('#dokumen').prop('disabled', true);
+            $('#opd').prop('disabled', true);
+        }
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, "").toString(),
@@ -454,8 +446,6 @@ include 'views/footer.view.php';
             rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
             return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
         }
-
-
         // function to fetch data from database
         function fetchspm() {
             $.ajax({
@@ -470,7 +460,7 @@ include 'views/footer.view.php';
                             .add([
                                 // value.id,
                                 '<Button type="button" class="btn btn-primary btn-sm editBtnspm" data-target="#listspm" data-toggle="modal" value="' +
-                                value.id +
+                                value.id_spm +
                                 '"><i class="zmdi zmdi-assignment-check"></i></Button>',
                                 value.nomor_spm,
                                 value.keterangan_spm,
@@ -516,50 +506,65 @@ include 'views/footer.view.php';
                 }
             });
         }
+ 
+        function getFormattedDate() {
+            const today = new Date();
+            const formattedDate = today.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+            return formattedDate;
+        }
+        $("#buattagihan").on("click", function() {
+            // kosong();
+            sembunyi();
+        });
+        $("#myTablespm").on("click", ".editBtnspm   ", function() {
+            var id = $(this).val();
+            $.ajax({
+                url: "proses/transaction/expenses.php?action=fetchSingle",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    muncul();
+                    var data = response.data;
+                    var dana = data.nilai_spm;
+                    $("#insertdata #idspm").val(data.id);
+                    $("#insertdata #nospm").val(data.nomor_spm);
+                    $("#insertdata #ketspm").val(data.keterangan_spm);
+                    $("#insertdata input[name='nilaispm']").val(formatRupiah(dana, "Rp. "));
+                    $("#insertdata select[name='dokumen']").val(data.jenis_spm);
+                    $("#insertdata select[name='opd']").val(data.id_skpd);
+                    //   $("#insertdata input[name='nilai']").val(formatRupiah(dana, "Rp. "));
+                    // $("#kontrol").val('2');
 
-        // function fetchData() {
-        //     var id = $('#idopd').val();
-        //     $.ajax({
-        //         url: "proses/transaction/expenses.php?action=fetchSinglePagu",
-        //         type: "POST",
-        //         dataType: "json",
-        //         data: {
-        //             id: id
-        //         },
-        //         success: function(response) {
-        //             if (response.statusCode == 200) {
-        //                 var data = response.data;
-        //                 $("#pagu input[name='pagu']").val(formatRupiah(value.nilai, "Rp. "));
-        //                 $("#totalnya input[name='total']").val(formatRupiah(value.Total, "Rp. "));
-        //                 $("#totalnya input[name='perubahan1']").val(value.namaperubahan);
-        //                 $("#offcanvasaddsumberdanaopd input[name='namaopd']").val(value.nama_opd);
-        //                 $("#offcanvasaddsumberdanaopd input[name='idopd']").val(value.idopd);
-        //                 modaladdshow();
-        //             } else if (response.statusCode == 404) {
-        //                 Swal.fire("X", "sync untuk perubahan Baru", "warning");
-        //                 // fetchData();
-        //                 modaladdhide();
-        //             } else if (response.statusCode == 505) {
-        //                 Swal.fire("X", "OPD Belum Mempunyai Pagu", "warning");
-        //                 // fetchData();
-        //                 modaladdhide();
-        //             } else if (response.statusCode == 600) {
-        //                 Swal.fire("X", "Silahkan Memilih OPD dengan Benar", "warning");
-        //                 // fetchData();
-        //                 modaladdhide();
-        //             }
+                    if (response.statusCode == 200) {
+                        disbled();
+                    } else if (response.statusCode == 400) {
 
-        //         }
-        //     });
-        // }
+                        $("#errorToast").toast("show");
+                        $("#errorMsg").html(response.message);
+                    } else if (response.statusCode == 401) {
+
+                        $("#errorToast").toast("show");
+                        $("#errorMsg").html(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
 
         // function to edit data
-        $("#salur").on("click", "#buattagihan", function() {
-            // var select2 = $('#namasumber');
-            // e.preventDefault();
-            // var id = $('#buattagihan').attr('datanya');
-            var idsalur = $(this).data('id');
-            // select2.clear().draw();
+        $("#dana").on("change", function() {
+            var idsalur = $('#dana').val();
+            // $('#selected').text(selectedPackage);
+            // kosong();
             $.ajax({
                 url: "proses/transaction/expenses.php?action=fetchSalur",
                 type: "POST",
@@ -570,24 +575,24 @@ include 'views/footer.view.php';
                 success: function(response) {
                     var data1 = response.sum;
                     var data = response.data;
-                    // $("#nsalur").val(data.idsumberdana);
-                    // var sumberdana = $('#nsalur');
+
                     var select = $('#namasumber');
                     select.empty();
                     data.forEach(function(item) {
                         select.append(new Option(item.name, item.id));
                     });
-                    $("#nsalur").val(data1);
-                    fetchspm();
-                    kosong();
+                    // fetchspm();
+                    // kosong();
+                    // $('#idspm').val('11111');
                 }
             });
         });
-
+        // function to edit data
 
         // function to insert data to database
+        // function to insert data to database
         $("#insertdata").on("submit", function(e) {
-            $("#insertBtn").attr("disabled");
+            // $("#insertBtn").attr("disabled");
             e.preventDefault();
             $.ajax({
                 url: "proses/transaction/expenses.php?action=insertData",
@@ -600,8 +605,9 @@ include 'views/footer.view.php';
                     var response = JSON.parse(response);
                     if (response.statusCode == 200) {
                         Swal.fire("!", "Tagihan Berhasil terinput", "success");
-                        // fetchData();
+                        kosong();
                         fetchVerif();
+                        disbled();
                         // window.location.href = '/sdbpkad/expenses';
                     } else if (response.statusCode == 400) {
                         Swal.fire("!", "Alokasi Dana Belum Terinput", "warning");
@@ -611,71 +617,22 @@ include 'views/footer.view.php';
                         Swal.fire("!", "Pagu Sumberdana sudah tidak mencukupi, cek kembali sisa pagu opd bersangkutan !", "warning");
                     } else if (response.statusCode == 500) {
                         Swal.fire("!", "Perhatikan inputan anda, sepertinya ada kekeliruan", "warning");
+                    } else if (response.statusCode == 503) {
+                        Swal.fire("!", "Inputan Belum Terisi");
+                    } else if (response.statusCode == 504) {
+                        Swal.fire("!", "Function Bermasalah Segera Hubungi Admin Sistem");
                     }
-                }
-            });
-        });
-        // function to edit data
-        $("#myTablespm").on("click", ".editBtnspm   ", function() {
-            var id = $(this).val();
-            $.ajax({
-                url: "proses/transaction/expenses.php?action=fetchSingle",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    var data = response.data;
-                    var dana = data.nilai_spm;
-                    $("#insertdata #idspm").val(data.id);
-                    $("#insertdata #nospm").val(data.nomor_spm);
-                    $("#insertdata #ketspm").val(data.keterangan_spm);
-                    $("#insertdata input[name='nilaispm']").val(formatRupiah(dana, "Rp. "));
-                    $("#insertdata select[name='dokumen']").val(data.jenis_spm);
-                    $("#insertdata select[name='opd']").val(data.id_skpd);
-                    //   $("#insertdata input[name='nilai']").val(formatRupiah(dana, "Rp. "));
-
-                    if (response.statusCode == 200) {
-                        // $("#offcanvasaddtagihan").offcanvas("hide");
-                        // $("#insertBtn").removeAttr("disabled");
-                        // $("#insertdata")[0].reset();
-                        // //   $(".preview_img").attr("src", "images/default_profile.jpg");
-                        $("#successToast").toast("show");
-                        $("#successMsg").html(response.message);
-                        // Swal.fire("!", "Data Sukses Tersimpan", "success");
-                        // fetchData();
-                    } else if (response.statusCode == 400) {
-                        // $("#offcanvasaddtagihan").offcanvas("hide");
-                        // $("#insertBtn").removeAttr("disabled");
-                        // $("#insertdata")[0].reset();
-                        //   $(".preview_img").attr("src", "images/default_profile.jpg");
-                        $("#errorToast").toast("show");
-                        $("#errorMsg").html(response.message);
-                    } else if (response.statusCode == 401) {
-                        $("#insertBtn").removeAttr("disabled");
-                        $("#errorToast").toast("show");
-                        $("#errorMsg").html(response.message);
-                    }
-                },
-                error: function(error) {
-                    console.error('Error:', error);
                 }
             });
         });
 
         // function to edit data
         $("#filtertanggal").on("click", "#filter", function(e) {
-            // var select2 = $('#namasumber');
             e.preventDefault();
-            // var id = $('#buattagihan').attr('datanya');
             var start = $('#date_start').val();
             var end = $('#date_end').val();
-            // var e = "T00:00:00Z";
-            // var start = waktustart+e;
-            // var end = waktuend+e;
-            // select2.clear().draw();
-            // console.log(start);
+
+
             $.ajax({
                 url: "proses/transaction/expenses.php?action=filtertanggal",
                 type: "POST",
@@ -711,19 +668,41 @@ include 'views/footer.view.php';
             });
         });
         // function to edit data
-        $("#filtertanggal").on("click", "#dataall", function() {
-            fetchVerif();
-            var today = new Date();
-            var day = String(today.getDate()).padStart(2, '0');
-            var month = String(today.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
-            var year = today.getFullYear();
-            var currentDate = day + '/' + month + '/' + year;
+        $("#dataall").on("click", function() {
 
-            $('#date_start').val(currentDate);
-            $('#date_end').val(currentDate);
+            // var today = new date();
+            window.location.href = '/sdbpkad/expenses';
+
+            $('#date_start').val(getFormattedDate());
+            $('#date_end').val(getFormattedDate());
 
         });
+        // function print laporan 
+        $("#filtertanggal").on("click", "#dataprint", function(e) {
+            e.preventDefault();
+            var start = $('#date_start').val();
+            var end = $('#date_end').val();
 
+            $.ajax({
+                url: "proses/transaction/expenses.php?action=printData",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    start: start,
+                    end: end
+                },
+                success: function(response) {
+                    // var printWindow = window.open('', '_blank');
+                    // printWindow.document.write(response);
+                    // printWindow.document.close();
+                    // printWindow.print();
+                    window.print(response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        });
         // function to delete data
         $("#nilaisumberdana").on("click", ".deleteBtnsubsumber", function() {
             if (confirm("Apakah yakin Menghapus Beranda Anda?")) {
@@ -750,7 +729,6 @@ include 'views/footer.view.php';
                 });
             }
         });
-
         // function to edit data
         $("#nilaisumberdana").on("click", ".EditBtnsubsumber", function() {
             var id = $(this).val();

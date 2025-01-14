@@ -57,14 +57,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d") ;
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    $i = 1;
-                    $total = 0;
-                        $qry = $conn->query("SELECT r.*,c.category,c.balance from `running_balance` r inner join `categories` c on r.category_id = c.id where c.status=1 and r.balance_type = 1 and date(r.date_created) between '{$date_start}' and '{$date_end}' order by unix_timestamp(r.date_created) asc");
-                        while($row = $qry->fetch_assoc()):
-                            $row['remarks'] = (stripslashes(html_entity_decode($row['remarks'])));
-                            $total += $row['amount'];
-                    ?>
+                   
                     <tr>
                         <td class="text-center"><?php echo $i++ ?></td>
                         <td><?php echo date("M d, Y",strtotime($row['date_created'])) ?></td>
@@ -72,12 +65,11 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d") ;
                         <td class="text-right"><?php echo number_format($row['amount']) ?></td>
                         <td><div><?php echo $row['remarks'] ?></div></td>
                     </tr>
-                    <?php endwhile; ?>
-                    <?php if($qry->num_rows <= 0): ?>
+                   
                     <tr>
                         <td class="text-center" colspan="5">No Data...</td>
                     </tr>
-                    <?php endif; ?>
+                   
                 </tbody>
                 <tfoot>
                     <tr>
@@ -91,27 +83,5 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d") ;
     </div>
 </div>
 <script>
-    $(function(){
-        $('#filter-form').submit(function(e){
-            e.preventDefault()
-            location.href = "./?page=reports/budget&date_start="+$('[name="date_start"]').val()+"&date_end="+$('[name="date_end"]').val()
-        })
-
-        $('#printBTN').click(function(){
-            var rep = $('#printable').clone();
-            var ns = $('head').clone();
-            start_loader()
-            rep.prepend(ns)
-            var nw = window.document.open('','_blank','width=900,height=600')
-                nw.document.write(rep.html())
-                nw.document.close()
-                setTimeout(function(){
-                    nw.print()
-                    setTimeout(function(){
-                        nw.close()
-                        end_loader()
-                    },500)
-                },500)
-        })
-    })
+   window.print();
 </script>

@@ -1,7 +1,13 @@
 ﻿<?php
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 
 ?>
+
 <section class="content contact">
   <div class="body_scroll">
     <div class="block-header">
@@ -45,7 +51,7 @@ include 'views/header.view.php';
               <table class="table table-bordered table-striped table-hover js-basic-example dataTable" id="myTableopd">
                 <thead>
                   <tr>
-                    <th>id</th>
+                    <th>No</th>
                     <th>id_sipd</th>
                     <th>Name</th>
                     <th data-breakpoints="xs">Kode SIPD</th>
@@ -210,10 +216,13 @@ include 'views/footer.view.php';
       success: function(response) {
         var data = response.data;
         table.clear().draw();
+        var counter = 1;
         $.each(data, function(index, value) {
+  
           table.row
             .add([
-              value.id,
+              counter,
+              // value.id,
               value.id_sipd,
               value.nama_opd,
               value.kode_skpd,
@@ -224,7 +233,9 @@ include 'views/footer.view.php';
                 value.id +
                 '"><i class="zmdi zmdi-delete"></i></Button>' 
             ])
+            
             .draw(false);
+            counter++;
         });
       }
     });

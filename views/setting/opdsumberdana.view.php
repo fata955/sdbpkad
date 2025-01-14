@@ -1,6 +1,12 @@
 <?php
-include 'views/header.view.php';
+// include_once 'component/session.php';
+
+session_start(); 
 include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
+include 'views/header.view.php';
+// include 'lib/conn.php';
 $opd = mysqli_query($conn, "SELECT * from skpd");
 $sumberdana = mysqli_query($conn, "SELECT * from subssumber");
 $perubahan = mysqli_query($conn, "SELECT * from t_perubahan where status='AKTIF'");
@@ -404,6 +410,7 @@ include 'views/footer.view.php';
                     if (response.statusCode == 200) {
                         var data = response.data;
                         table.clear().draw();
+                        var counter = 1;
                         $.each(data, function(index, value) {
                             var dana = value.nilai_sumber;
                             var totallra = value.totalrealisasi;
@@ -423,7 +430,7 @@ include 'views/footer.view.php';
                             $("#offcanvasaddsumberdanaopd input[name='idopd']").val(value.idopd);
                             table.row
                                 .add([
-                                    value.id,
+                                    counter,
                                     // value.nama_opd,
                                     value.namasubsumberdana,
                                     formatRupiah(dana, "Rp. "),
@@ -438,6 +445,7 @@ include 'views/footer.view.php';
                                     // '<div class="progress"><div class="progress-bar l-blue" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: ' + progres + '%;"></div></div><br><small>' + progres + '%</small>'
                                 ])
                                 .draw(false);
+                                counter++;
 
                         });
                         modaladdshow();
@@ -450,7 +458,7 @@ include 'views/footer.view.php';
                         // fetchData();
                         modaladdhide();
                     } else if (response.statusCode == 600) {
-                        Swal.fire("X", "Silahkan Memilih OPD dengan Benar", "warning");
+                        // Swal.fire("X", "Silahkan Memilih OPD dengan Benar", "warning");
                         // fetchData();
                         modaladdhide();
                     }
@@ -476,6 +484,7 @@ include 'views/footer.view.php';
                         var data = response.data;
                         // console.log(data);
                         table.clear().draw();
+                        var counter = 1;
                         $.each(data, function(index, value) {
                             // var totalsisa = value.Total - value.totalrealisasi;
                             var totallra = value.totalrealisasi;
@@ -499,7 +508,7 @@ include 'views/footer.view.php';
                             $("#offcanvasaddsumberdanaopd input[name='idopd']").val(value.idopd);
                             table.row
                                 .add([
-                                    value.id,
+                                    counter,
                                     // value.nama_opd,
                                     value.namasubsumberdana,
                                     formatRupiah(dana, "Rp. "),
@@ -514,6 +523,7 @@ include 'views/footer.view.php';
                                     // '<div class="progress"><div class="progress-bar l-blue" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: ' + progres + '%;"></div></div><br><small>' + progres + '%</small>'
                                 ])
                                 .draw(false);
+                                counter++;
 
                         });
                         modaladdshow();

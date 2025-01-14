@@ -1,4 +1,10 @@
 <?php
+// include_once 'component/session.php';
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 
 ?>
@@ -192,6 +198,7 @@ include 'views/footer.view.php';
         success: function(response) {
           var data = response.data;
           table.clear().draw();
+          var counter = 1;
           $.each(data, function(index, value) {
             if (value.status == "NON AKTIF") {
                   '<span class="badge badge-warning">' + value.status + '</span>'
@@ -200,7 +207,7 @@ include 'views/footer.view.php';
                 }
             table.row
               .add([
-                value.id,
+                counter,
                 value.namaperubahan,
                 value.status,
                 '<Button type="button" class="btn btn-primary btn-sm editBtn" value="' +
@@ -211,6 +218,7 @@ include 'views/footer.view.php';
                 '"><i class="zmdi zmdi-delete"></i></Button>' 
               ])
               .draw(false);
+              counter++;
           });
         }
       });

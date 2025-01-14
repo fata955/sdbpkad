@@ -1,8 +1,14 @@
 <!-- Main Content -->
 <?php
+
+session_start(); 
 include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
+// include_once 'component/session.php';
+
+
 include 'header.view.php';
-session_start();
 ?>
 <section class="content">
     <div class="">
@@ -72,11 +78,18 @@ session_start();
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-12">
-                    <div class="card widget_2 big_icon sales">
+                <div class="col-lg-3 col-md-6 col-sm-12 ">
+                    <div class="card widget_2 ">
                         <div class="body">
-                            <h6>Sales</h6>
-                            <h2>12% <small class="info">of 100</small></h2>
+                            <h6>Total Income</h6>
+                            <?php
+                            $sql1 = "SELECT sum(nilai_dana) as nilai from t_salur";
+                            $dana = mysqli_query($conn,$sql1);
+                            $dana = mysqli_fetch_array($dana);
+                            $dana = $dana['nilai'];
+                            
+                            ?>
+                            <h5><?= rupiah($dana) ?></h5>
                             <small>6% higher than last month</small>
                             <div class="progress">
                                 <div class="progress-bar l-blue" role="progressbar" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100" style="width: 38%;"></div>
@@ -87,8 +100,15 @@ session_start();
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon email">
                         <div class="body">
-                            <h6>Email</h6>
-                            <h2>39 <small class="info">of 100</small></h2>
+                            <h6>TOTAL EXPENSES</h6>
+                            <?php
+                            $sql2 = "SELECT sum(nilai_spm) as realisasi from t_spm where id_user > 0";
+                            $dana1 = mysqli_query($conn,$sql2);
+                            $dana1 = mysqli_fetch_array($dana1);
+                            $dana1 = $dana1['realisasi'];
+                            
+                            ?>
+                            <h5><?= rupiah($dana1) ?></h5>
                             <small>Total Registered email</small>
                             <div class="progress">
                                 <div class="progress-bar l-purple" role="progressbar" aria-valuenow="39" aria-valuemin="0" aria-valuemax="100" style="width: 39%;"></div>

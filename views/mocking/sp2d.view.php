@@ -1,5 +1,6 @@
 
 <?php
+include_once 'component/session.php';
 include 'views/header.view.php';
 
 ?>

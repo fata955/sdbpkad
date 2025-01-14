@@ -1,4 +1,10 @@
 <?php
+// include_once 'component/session.php';
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 
 ?>
@@ -53,6 +59,12 @@ include 'views/header.view.php';
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4">Total Keseluruhan</td>
+                                        <td id="total-price"></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -102,7 +114,7 @@ include 'views/footer.view.php';
                     </div>
                     <div class="input-group mb-3">
                         <select name='status' class="form-control">
-                            <option value='NON AKTIF'> NON AKTIF</option>
+                            <option value='NON AKTIF'>NON AKTIF</option>
                             <option value='AKTIF'> AKTIF</option>
                         </select>
                     </div>
@@ -158,7 +170,7 @@ include 'views/footer.view.php';
 
                     <div class="input-group mb-3">
                         <select class="form-control ms" name="statusnya">
-                            <option value='NON AKTIF'> NON AKTIF</option>
+                            <option value='NON AKTIF'>NON AKTIF</option>
                             <option value='AKTIF'> AKTIF</option>
                         </select>
                     </div>
@@ -254,6 +266,7 @@ include 'views/footer.view.php';
                 success: function(response) {
                     var data = response.data;
                     table.clear().draw();
+                    var counter = 1;
                     $.each(data, function(index, value) {
                         var dana = value.nilai_dana;
                         var sisa = dana - value.realisasi;
@@ -261,13 +274,12 @@ include 'views/footer.view.php';
                         var realisasi = (value.realisasi).toString();
                         table.row
                             .add([
-                                value.id,
+                                counter,
                                 value.tanggal_salur,
                                 value.namasumberdana,
                                 value.tujuan_dana,
                                 formatRupiah(dana, "Rp. "),
                                 formatRupiah(realisasi, "Rp. "),
-                                
                                 formatRupiah(sisa, "Rp. "),
                                 value.status,
                                 // value.createby,
@@ -279,7 +291,10 @@ include 'views/footer.view.php';
                                 '"><i class="zmdi zmdi-delete"></i></Button>'
                             ])
                             .draw(false);
+                            counter++;
+                               
                     });
+                    $("#total-price").text(data.total);
                 }
             });
         }

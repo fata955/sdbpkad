@@ -1,4 +1,10 @@
 <?php
+// include_once 'component/session.php';
+
+session_start(); 
+include 'lib/conn.php';
+if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+    exit(); }
 include 'views/header.view.php';
 
 ?>
@@ -189,10 +195,11 @@ include 'views/footer.view.php';
       success: function(response) {
         var data = response.data;
         table.clear().draw();
+        var counter = 1;
         $.each(data, function(index, value) {
           table.row
             .add([
-              value.id,
+              counter,
               value.namasumberdana,
               value.ket,
               '<Button type="button" class="btn btn-primary btn-sm editBtn" value="' +
@@ -204,6 +211,7 @@ include 'views/footer.view.php';
 
             ])
             .draw(false);
+            counter++;
         });
       }
     });

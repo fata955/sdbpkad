@@ -1,6 +1,14 @@
 <?php
 include "../../lib/conn.php";
 
+session_start();
+$username = $_SESSION['username'];
+$mysql = "SELECT iduser from user where username=$username";
+$data = mysqli_query($conn, $mysql);
+$id = $data['iduser'];
+$nama = $data['username'];
+
+
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
   $sql = "SELECT a.id, a.nilai_dana,a.jenis_dana,b.namasumberdana from t_salur a, t_sumberdana b where a.jenis_dana=b.id AND a.status='AKTIF'";
@@ -31,39 +39,34 @@ if ($_GET["action"] === "fetchVerifikasi") {
 }
 
 // function to fetch data
-// if ($_GET["action"] === "fetchVerif") {
-//   // $start = $_POST['start'];
-//   // $end = $_POST['end'];
-//   $tanggalHariIni = date('Y-m-d');
-//   $tanggalHariawal = date('Y-m-01');
-//   // $start = $conn->real_escape_string($start);
-//   // $end = $conn->real_escape_string($end);
+if ($_GET["action"] === "fetchVerif") {
 
-//   // echo $start;
-//   // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
-//   $sql = "SELECT id_spm, nomor_spm,nama_opd,jenis_spm,nilai_spm FROM tspm where Date(createby) between '$tanggalHariawal' AND '$tanggalHariIni' AND id_user=1 ";
-//   $result = mysqli_query($conn, $sql);
-//   $data = [];
-//   while ($row = mysqli_fetch_assoc($result)) {
-//     $data[] = $row;
-//   }
-//   mysqli_close($conn);
-//   header('Content-Type: application/json');
-//   echo json_encode([
-//     "data" => $data
-//   ]);
-//   // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1";
-//   // $result = mysqli_query($conn, $sql);
-//   // $data = [];
-//   // while ($row = mysqli_fetch_assoc($result)) {
-//   //   $data[] = $row;
-//   // }
-//   // mysqli_close($conn);
-//   // header('Content-Type: application/json');
-//   // echo json_encode([
-//   //   "data" => $data
-//   // ]);
-// }
+  $tanggalHariIni = date('Y-m-d');
+  $tanggalHariawal = date('Y-m-01');
+
+  $sql = "SELECT a.id_spm,a.nomor_spm,a.nama_opd,a.jenis_spm,a.nilai_spm FROM tspm where Date(createby) between '$tanggalHariawal' AND '$tanggalHariIni' AND id_user=1 ";
+  $result = mysqli_query($conn, $sql);
+  $data = [];
+  while ($row = mysqli_fetch_assoc($result)) {
+    $data[] = $row;
+  }
+  mysqli_close($conn);
+  header('Content-Type: application/json');
+  echo json_encode([
+    "data" => $data
+  ]);
+  // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1";
+  // $result = mysqli_query($conn, $sql);
+  // $data = [];
+  // while ($row = mysqli_fetch_assoc($result)) {
+  //   $data[] = $row;
+  // }
+  // mysqli_close($conn);
+  // header('Content-Type: application/json');
+  // echo json_encode([
+  //   "data" => $data
+  // ]);
+}
 
 
 if ($_GET["action"] === "fetchSalur") {

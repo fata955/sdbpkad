@@ -2,12 +2,15 @@
 include "../../lib/conn.php";
 
 session_start();
-$username = $_SESSION['username'];
-$mysql = "SELECT iduser from user where username=$username";
-$data = mysqli_query($conn, $mysql);
-$id = $data['iduser'];
-$nama = $data['username'];
+$user = $_SESSION['username'];
+// echo $username;
 
+
+$sql2 = "SELECT * from user where username='$user'";
+$data = mysqli_query($conn, $sql2);
+$nameuser = mysqli_fetch_array($data);
+$id_user = $nameuser['iduser'];
+$nama = $nameuser['username'];
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
@@ -25,7 +28,8 @@ if ($_GET["action"] === "fetchData") {
 }
 // function to fetch data
 if ($_GET["action"] === "fetchVerifikasi") {
-  $sql = "SELECT a.id_spm,a.nomor_spm,a.nilai_spm,a.tanggal_spm, a.keterangan_spm,b.nama_opd as nama_sub_skpd,a.createby FROM tspm a, skpd b, tspmsub c where a.id_spm=c.id_spm AND a.id_skpd=b.id_sipd AND c.status=0";
+
+  $sql = "SELECT a.id_spm as id ,a.nomor_spm,a.nilai_spm,a.tanggal_spm, a.keterangan_spm,b.nama_opd as nama_sub_skpd,a.tanggal_spm FROM tspm a, skpd b, tspmsub c where a.id_spm=c.id_spm AND a.id_skpd=b.id_sipd AND c.status=0";
   $result = mysqli_query($conn, $sql);
   $data = [];
   while ($row = mysqli_fetch_assoc($result)) {
@@ -44,7 +48,37 @@ if ($_GET["action"] === "fetchVerif") {
   $tanggalHariIni = date('Y-m-d');
   $tanggalHariawal = date('Y-m-01');
 
-  $sql = "SELECT a.id_spm,a.nomor_spm,a.nama_opd,a.jenis_spm,a.nilai_spm FROM tspm where Date(createby) between '$tanggalHariawal' AND '$tanggalHariIni' AND id_user=1 ";
+  //jumlah Realisasi 
+  $sql = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm";
+  $result = mysqli_query($conn, $sql);
+  $row = mysqli_fetch_array($result);
+  $datareaslisasi = $row['realisasi'];
+
+  //jumlah jumlah SPM
+  $sql = "SELECT count(a.id_spm) as totalspm from tspm a, tspmsub b where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm";
+  $result = mysqli_query($conn, $sql);
+  $row = mysqli_fetch_assoc($result);
+  $spm = $row['totalspm'];
+
+  //jumlah jumlah LS
+  $sql = "SELECT count(a.id_spm) as totalls from tspm a, tspmsub b where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND b.status>0 AND a.id_spm=b.id_spm AND jenis='LS' ";
+  $result = mysqli_query($conn, $sql);
+  $row = mysqli_fetch_assoc($result);
+  $ls = $row['totalls'];
+
+  //jumlah jumlah gu
+  $sql = "SELECT count(a.id_spm) as totalgu from tspm a, tspmsub b where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND b.status>0 AND a.id_spm=b.id_spm AND jenis='GU'";
+  $result = mysqli_query($conn, $sql);
+  $row = mysqli_fetch_assoc($result);
+  $gu = $row['totalgu'];
+
+  //jumlah jumlah UP
+  $sql = "SELECT count(a.id_spm) as totalup from tspm a, tspmsub b where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND b.status>0 AND a.id_spm=b.id_spm AND jenis='UP'";
+  $result = mysqli_query($conn, $sql);
+  $row = mysqli_fetch_assoc($result);
+  $up = $row['totalup'];
+
+  $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where Date(a.tanggal_spm) between '$tanggalHariawal' AND '$tanggalHariIni' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND c.status>0";
   $result = mysqli_query($conn, $sql);
   $data = [];
   while ($row = mysqli_fetch_assoc($result)) {
@@ -53,8 +87,78 @@ if ($_GET["action"] === "fetchVerif") {
   mysqli_close($conn);
   header('Content-Type: application/json');
   echo json_encode([
-    "data" => $data
+    "data" => $data,
+    "realisasi" => $datareaslisasi,
+    "spm" => $spm,
+    "ls" => $ls,
+    "gu" => $gu,
+    "up" => $up
   ]);
+
+  // function to filter data
+  if ($_GET["action"] === "filtertanggal") {
+
+    // $start = $_POST['start'];
+    // $end = $_POST['end'];
+
+    $start = "2025-01-01";
+    $end = "2025-01-04";
+
+    // $start = $conn->real_escape_string($start);
+    // $end = $conn->real_escape_string($end);
+
+    //jumlah Realisasi 
+    $sql = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $datareaslisasi = $row['realisasi'];
+
+    //jumlah jumlah SPM
+    $sql = "SELECT count(*) as totalspm from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $spm = $row['totalspm'];
+
+    //jumlah jumlah LS
+    $sql = "SELECT count(*) as totalls from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='LS'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $ls = $row['totalls'];
+
+    //jumlah jumlah gu
+    $sql = "SELECT count(*) as totalgu from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='GU'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $gu = $row['totalgu'];
+
+    //jumlah jumlah UP
+    $sql = "SELECT count(*) as totalup from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='UP'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+    $up = $row['totalup'];
+    // $start = $conn->real_escape_string($start);
+    // $end = $conn->real_escape_string($end);
+
+    // echo $start;
+    // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
+    $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where Date(a.tanggal_spm) between '$start' AND '$end' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND c.status=1";
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+      $data[] = $row;
+    }
+    mysqli_close($conn);
+    header('Content-Type: application/json');
+    echo json_encode([
+      "data" => $data,
+      "realisasi" => $datareaslisasi,
+      "spm" => $spm,
+      "ls" => $ls,
+      "gu" => $gu,
+      "up" => $up
+    ]);
+  }
+
   // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1";
   // $result = mysqli_query($conn, $sql);
   // $data = [];
@@ -91,7 +195,7 @@ if ($_GET["action"] === "fetchSalur") {
 if ($_GET["action"] === "fetchSingle") {
   $id = $_POST["id"];
   // $sql = "SELECT a.id as idopd, a.nama_opd, b.id as idsumber, c.id as idperubahan, d.id, d.nilai_sumber FROM skpd a, subssumber b, t_perubahan c, t_opdsumberdana d  WHERE  a.id=d.id_opd AND b.id=d.id_subsumberdana AND c.id=d.id_perubahan AND d.id=$id";
-  $sql = "SELECT id,nomor_spm,keterangan_spm,nilai_spm,jenis_spm,id_skpd FROM t_spm  where id=$id";
+  $sql = "SELECT id_spm as id,nomor_spm,keterangan_spm,nilai_spm,jenis,id_skpd FROM tspm  where id_spm=$id";
   $result = mysqli_query($conn, $sql);
   if (mysqli_num_rows($result) > 0) {
     $data = mysqli_fetch_assoc($result);
@@ -200,11 +304,11 @@ if ($_GET["action"] === "insertData") {
         }
       }
     }
-  }else{
-     echo json_encode([
-    "statusCode" => 503,
-    "message" => "Please fill all the required fields 🙏"
-  ]);
+  } else {
+    echo json_encode([
+      "statusCode" => 503,
+      "message" => "Please fill all the required fields 🙏"
+    ]);
   }
 } else {
   // echo json_encode([
@@ -215,27 +319,6 @@ if ($_GET["action"] === "insertData") {
 
 
 
-// function to filter data
-if ($_GET["action"] === "filtertanggal") {
-  $start = $_POST['start'];
-  $end = $_POST['end'];
-  $start = $conn->real_escape_string($start);
-  $end = $conn->real_escape_string($end);
-
-  // echo $start;
-  // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
-  $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where Date(createby) between '$start' AND '$end' AND id_user=1 ";
-  $result = mysqli_query($conn, $sql);
-  $data = [];
-  while ($row = mysqli_fetch_assoc($result)) {
-    $data[] = $row;
-  }
-  mysqli_close($conn);
-  header('Content-Type: application/json');
-  echo json_encode([
-    "data" => $data
-  ]);
-}
 
 // function to delete data
 if ($_GET["action"] === "deleteSB") {

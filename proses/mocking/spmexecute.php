@@ -25,6 +25,11 @@ if ($_GET["action"] === "insertData") {
             echo $dt;
             foreach ($dt as $row) {
                 $id = $row['id_spm'];
+                $tanggal = $row['tanggal_spm'];
+                $start_position = 0; // Mulai dari karakter ke-8 (indeks mulai dari 0) 
+                $number_of_characters = 10; 
+                $tgl = substr($tanggal, $start_position, $number_of_characters);
+
                 $data = mysqli_query($conn, "SELECT * FROM tspm where id_spm=$id") or die(mysqli_error($conn));
                 $cek = mysqli_num_rows($data);
                 if ($cek != null) {
@@ -37,7 +42,7 @@ if ($_GET["action"] === "insertData") {
                         '" . $row["nomor_spm"] . "',
                         '" . $row["keterangan_spm"] . "',
                         '" . $row["nilai_spm"] . "',
-                        '" . $row["tanggal_spm"] . "',
+                        '$tgl',
                         '" . $row["id_skpd"] . "',
                         '" . $row["jenis_spm"] . "'
                       )";

@@ -822,9 +822,10 @@ include 'views/footer.view.php';
                     },
                     success: function(response) {
                         if (response.statusCode == 200) {
-                            fetchVerif();
+                            
                             Swal.fire("!", "Data Sukses Terhapus dari Beranda", "success");
                             //   window.location.href = '/sdbpkad/expenses';
+                            fetchVerif();
                         } else if (response.statusCode == 500) {
                             Swal.fire("!", "Data Gagal terhapus", "Warning");
                             fetchVerif();

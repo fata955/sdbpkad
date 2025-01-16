@@ -26,15 +26,14 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                     <button class="btn btn-primary" id='buattagihan' data-id="<?php echo $result['jenis_dana']; ?>" data-toggle="modal"
                         data-target="#listspm"><i class="zmdi zmdi-assignment"></i><br>Input Tagihan</button>
                 </div>
-            </div>
-
+            </div><br>
 
             <form method="post" id='filtertanggal'>
                 <div class="row clearfix flex justify-content-center">
                     <div class="col-lg-2">
-                        <label for="opdlg" id="oplg">Nama OPD</label><br>
+                        <label for="skpd">Nama OPD</label><br>
                         <select name='opdlg' id='opdlg' class="form-control show-tick ms select2" required>
-                            <option value="all">Konsolidasi</option>
+                            <option value="1">Konsolidasi</option>
                             <?php
                             $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
                             while ($fetch = mysqli_fetch_array($opd)) {
@@ -47,22 +46,27 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                     </div>
                     <div class="col-lg-2">
                         <label for="">Dari Tanggal</label>
-                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-01", strtotime($date_start)) ?>">
+                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-01") ?>">
+
                     </div>
                     <div class="col-lg-2">
                         <label for="">Sampai Tanggal</label>
-                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d", strtotime($date_end)) ?>">
+                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d") ?>">
+                    </div>
+                    <div class="col-lg-1">
+                        <br>
+                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search"></i>Tanggal SPM</button>
+                    </div>
+                    <div class="col-lg-1">
+                        <br>
+                        <button class="btn btn-secondary" id="tglverif"><i class="zmdi zmdi-search"></i>Tanggal Verfikasi</button>
+                    </div>
+                    <div class="col-lg-1">
+                        <br>
+                        <button class="btn btn-danger" id="dataprint"><i class="zmdi zmdi-print"></i> Rincian SPM </button>
                     </div>
 
                 </div><br>
-                <div class="row clearfix flex justify-content-center">
-                    <div class="col-md-6">
-                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search"></i>Tanggal SPM</button>
-                        <button class="btn btn-secondary" id="dataall"><i class="zmdi zmdi-search"></i>Tanggal Verfikasi</button>
-                        <button class="btn btn-danger" id="dataprint"><i class="zmdi zmdi-print"></i> Rincian </button>
-                    </div>
-
-                </div>
 
                 <div class="row clearfix flex justify-content-center">
                     <div class="col-lg-2">
@@ -114,8 +118,6 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                 </div>
             </div>
         </div>
-
-
     </div>
 </section>
 
@@ -149,7 +151,6 @@ include 'views/footer.view.php';
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -182,9 +183,7 @@ include 'views/footer.view.php';
                             class="form-control"
                             name="nospm" id='nospm'
                             placeholder="Input No SPM" required />
-
                     </div>
-
                     <div class="input-group mb-3">
                         <textarea
                             type="text"
@@ -474,7 +473,7 @@ include 'views/footer.view.php';
                     var ls = response.ls;
                     var gu = response.gu;
                     var up = response.up;
-
+                    var realisasi = formatRupiah(realisasi, "Rp.");
                     $('#total_spm').val(realisasi);
                     $('#jumlah_spm').val(spm);
                     $('#jumlah_ls').val(ls);
@@ -507,6 +506,145 @@ include 'views/footer.view.php';
                 }
             });
         }
+        // function to edit data
+        $("#filtertanggal").on("click", "#filter", function(e) {
+            e.preventDefault();
+            var start = $('#date_start').val();
+            var end = $('#date_end').val();
+            var opdlg = $('#opdlg').val();
+            $.ajax({
+                url: "proses/transaction/expenses.php?action=filtertanggal",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    start: start,
+                    end: end,
+                    opdlg: opdlg
+                },
+                success: function(response) {
+                    if (response.data == 0) {
+                        $('#total_spm').val('0');
+                        $('#jumlah_spm').val('0');
+                        $('#jumlah_ls').val('0');
+                        $('#jumlah_gu').val('0');
+                        $('#jumlah_up').val('0');
+                        table2.clear().draw();
+                    } else {
+                        var data = response.data;
+                        var realisasi = response.realisasi;
+                        var spm = response.spm;
+                        var ls = response.ls;
+                        var gu = response.gu;
+                        var up = response.up;
+                        var realisasi = formatRupiah(realisasi, "Rp.");
+                        $('#total_spm').val(realisasi);
+                        $('#jumlah_spm').val(spm);
+                        $('#jumlah_ls').val(ls);
+                        $('#jumlah_gu').val(gu);
+                        $('#jumlah_up').val(up);
+
+                        table2.clear().draw();
+                        // var counter = 1;
+                        $.each(data, function(index, value) {
+
+                            table2.row
+                                .add([
+                                    // counter,
+                                    value.nomor_spm,
+                                    value.skpd,
+                                    value.jenis,
+                                    formatRupiah(value.nilai_spm, "Rp. "),
+                                    // value.nilai_spm,
+                                    '<Button type="button" class="btn btn-warning btn-sm viewBtnsubsumber" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-eye"></i></Button>' +
+                                    '<Button type="button"  class="btn btn-primary btn-sm EditBtnsubsumber" data-toggle="modal" data-target="#offcanvaedittagihan" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-edit"></i></Button>' +
+                                    '<Button type="button" class="btn btn-danger btn-sm deleteBtnsubsumber" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-delete"></i></Button>'
+                                    // '<div class="progress"><div class="progress-bar l-blue" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: ' + progres + '%;"></div></div><br><small>' + progres + '%</small>'
+                                ])
+                                .draw(false);
+                            // counter++;
+                        });
+
+                    }
+                }
+            });
+        });
+
+
+        $("#filtertanggal").on("click", "#tglverif", function(e) {
+            e.preventDefault();
+            var start = $('#date_start').val();
+            var end = $('#date_end').val();
+            var opdlg = $('#opdlg').val();
+            $.ajax({
+                url: "proses/transaction/expenses.php?action=filtertglverif",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    start: start,
+                    end: end,
+                    opdlg: opdlg
+                },
+                success: function(response) {
+                    if (response.data == 0) {
+                        $('#total_spm').val('0');
+                        $('#jumlah_spm').val('0');
+                        $('#jumlah_ls').val('0');
+                        $('#jumlah_gu').val('0');
+                        $('#jumlah_up').val('0');
+                        table2.clear().draw();
+                    } else {
+                        var data = response.data;
+                        var realisasi = response.realisasi;
+                        var spm = response.spm;
+                        var ls = response.ls;
+                        var gu = response.gu;
+                        var up = response.up;
+                        var realisasi = formatRupiah(realisasi, "Rp.");
+                        $('#total_spm').val(realisasi);
+                        $('#jumlah_spm').val(spm);
+                        $('#jumlah_ls').val(ls);
+                        $('#jumlah_gu').val(gu);
+                        $('#jumlah_up').val(up);
+
+                        table2.clear().draw();
+                        // var counter = 1;
+                        $.each(data, function(index, value) {
+
+                            table2.row
+                                .add([
+                                    // counter,
+                                    value.nomor_spm,
+                                    value.skpd,
+                                    value.jenis,
+                                    formatRupiah(value.nilai_spm, "Rp. "),
+                                    // value.nilai_spm,
+                                    '<Button type="button" class="btn btn-warning btn-sm viewBtnsubsumber" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-eye"></i></Button>' +
+                                    '<Button type="button"  class="btn btn-primary btn-sm EditBtnsubsumber" data-toggle="modal" data-target="#offcanvaedittagihan" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-edit"></i></Button>' +
+                                    '<Button type="button" class="btn btn-danger btn-sm deleteBtnsubsumber" value="' +
+                                    value.id +
+                                    '"><i class="zmdi zmdi-delete"></i></Button>'
+                                    // '<div class="progress"><div class="progress-bar l-blue" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: ' + progres + '%;"></div></div><br><small>' + progres + '%</small>'
+                                ])
+                                .draw(false);
+                            // counter++;
+                        });
+
+                    }
+                }
+            });
+        });
+
+
 
         function getFormattedDate() {
             const today = new Date();
@@ -521,6 +659,7 @@ include 'views/footer.view.php';
             // kosong();
             fetchspm();
         });
+
         $("#myTablespm").on("click", ".editBtnspm   ", function() {
 
             var id = $(this).val();
@@ -594,6 +733,7 @@ include 'views/footer.view.php';
         // function to insert data to database
         $("#insertdata").on("submit", function(e) {
             // $("#insertBtn").attr("disabled");
+            enbld();
             e.preventDefault();
             $.ajax({
                 url: "proses/transaction/expenses.php?action=insertData",
@@ -624,61 +764,11 @@ include 'views/footer.view.php';
                         Swal.fire("!", "Function Bermasalah Segera Hubungi Admin Sistem");
                     }
                 }
+                
             });
         });
 
-        // function to edit data
-        $("#filtertanggal").on("click", "#filter", function(e) {
-            e.preventDefault();
-            var start = $('#date_start').val();
-            var end = $('#date_end').val();
-            // var start = getFormattedDate(start);
-            // var end = getFormattedDate(end);
-            $.ajax({
-                url: "proses/transaction/expenses.php?action=filtertanggal",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    start: start,
-                    end: end
-                },
-                success: function(response) {
-                    var data = response.data;
-                    var realisasi = response.realisasi;
-                    var spm = response.spm;
-                    var ls = response.ls;
-                    var gu = response.gu;
-                    var up = response.up;
 
-                    table2.clear().draw();
-                    $.each(data, function(index, value) {
-                        table2.row
-                            .add([
-                                value.nomor_spm,
-                                value.skpd,
-                                value.jenis,
-                                formatRupiah(value.nilai_spm, "Rp. "),
-                                // value.nilai_spm,
-                                '<Button type="button" class="btn btn-warning btn-sm viewBtnsubsumber" value="' +
-                                value.id +
-                                '"><i class="zmdi zmdi-eye"></i></Button>' +
-                                '<Button type="button"  class="btn btn-primary btn-sm EditBtnsubsumber" data-toggle="modal" data-target="#offcanvaedittagihan" value="' +
-                                value.id +
-                                '"><i class="zmdi zmdi-edit"></i></Button>' +
-                                '<Button type="button" class="btn btn-danger btn-sm deleteBtnsubsumber" value="' +
-                                value.id +
-                                '"><i class="zmdi zmdi-delete"></i></Button>'
-                            ])
-                            .draw(false);
-                    });
-                    $('#total_spm').val(realisasi);
-                    $('#jumlah_spm').val(spm);
-                    $('#jumlah_ls').val(ls);
-                    $('#jumlah_gu').val(gu);
-                    $('#jumlah_up').val(up);
-                }
-            });
-        });
         // function to edit data
         $("#dataall").on("click", function() {
 

@@ -38,7 +38,7 @@ if ($_GET["action"] === "fetchSinglePagu") {
     $sql = "SELECT * FROM pagu where idopd=$idopd";
     $pagu = mysqli_query($conn, $sql);
     if (mysqli_num_rows($pagu) > 0) {
-      $sql = "select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(nilai_spm),0) from t_spm where id_skpd=$opd AND id_sumberdana=c.id_subsumberdana) as realisasi,(SELECT COALESCE(sum(nilai_spm),0) from t_spm where id_skpd=$opd AND id_sumberdana > 0 ) as totalrealisasi,b.nama_opd,d.nilai, (select sum(nilai_sumber) from t_opdsumberdana where id_opd=$idopd AND id_perubahan=$perubahan) as Total, e.namaperubahan,b.id as idopd FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=$idopd AND d.idopd=c.id_opd AND e.id=c.id_perubahan AND e.status='AKTIF'";
+      $sql = "select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where z.id_spm=y.id_spm AND z.id_skpd=$opd AND y.id_sumber=c.id_subsumberdana) as realisasi,(SELECT COALESCE(sum(x.nilai_spm),0) from tspm x ,tspmsub w where x.id_spm=w.id_spm AND x.id_skpd=$opd AND w.id_sumber > 0 ) as totalrealisasi,b.nama_opd,d.nilai, (select sum(nilai_sumber) from t_opdsumberdana where id_opd=$idopd AND id_perubahan=$perubahan) as Total, e.namaperubahan,b.id as idopd FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=$idopd AND d.idopd=c.id_opd AND e.id=c.id_perubahan AND e.status='AKTIF'";
       $result = mysqli_query($conn, $sql);
       $data = [];
       if (mysqli_num_rows($result) > 0) {

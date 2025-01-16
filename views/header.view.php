@@ -23,6 +23,7 @@
 
 <link rel="stylesheet" href="assets/plugins/select2/select2.css" />
 <link rel="stylesheet" href="assets/plugins/multi-select/css/multi-select.css">
+
 </head>
 
 <body class="theme-blush">

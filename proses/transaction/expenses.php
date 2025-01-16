@@ -1,6 +1,6 @@
 <?php
 include "../../lib/conn.php";
-
+date_default_timezone_set('Asia/Makassar');
 session_start();
 $user = $_SESSION['username'];
 // echo $username;
@@ -323,6 +323,7 @@ if ($_GET["action"] === "filtertglverif") {
 
 if ($_GET["action"] === "fetchSalur") {
   $id = $_POST["idsalur"];
+  
 
   $sql = "SELECT id,namasubsumberdana as name,idsumberdana from subssumber where idsumberdana=$id";
   // $sql = "SELECT * from subssumber where idsumberdana=$id";

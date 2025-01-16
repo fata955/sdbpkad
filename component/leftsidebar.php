@@ -2,8 +2,49 @@
 <?php
 @session_start();
 // Sisa kode Anda di sini
+$level = $_SESSION['level'];
+if ($level > 1){
 ?>
 
+<aside id="leftsidebar" class="sidebar">
+    <div class="navbar-brand">
+        <button class="btn-menu ls-toggle-btn" type="button"><i class="zmdi zmdi-menu"></i></button>
+        <a href="index.html"><img src="assets/images/logo.svg" width="25" alt="Aero"><span class="m-l-10">Aero</span></a>
+    </div>
+    <div class="menu">
+        <ul class="list">
+            <li>
+                <div class="user-info">
+                    <a class="image" href="profile.html"><img src="assets/images/profile_av.jpg" alt="User"></a>
+                    <div class="detail">
+                        <h4><?php echo ($_SESSION["lengkap"]);?></h4>
+                        <small>Verifikasi</small>
+                    </div>
+                </div>
+            </li>
+            <li class="main"><a href="/sdbpkad"><i class="zmdi zmdi-home"></i><span>Dashboard</span></a></li>
+            <li class="main"><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>Transaction</span></a>
+                <ul class="ml-menu">
+                    <li class="main menu"><a href="/sdbpkad/expenses">Tagihan SPM</a></li>
+                </ul>
+            </li>
+            <li class="main"><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-copy"></i><span>Report</span></a>
+                <ul class="ml-menu">
+                    <li class="main menu"><a href="/sdbpkad/reportincome">Tagihan SPM</a></li>
+                </ul>
+            </li>
+            <li class="main"><a href="/sdbpkad/change"><i class="zmdi zmdi-key"></i><span>Ganti Password</span></a></li>
+            <li class="main"><a href="/sdbpkad/logout"><i class="zmdi zmdi-close"></i><span>Close</span></a></li>
+        </ul>
+        
+    </div>
+</aside>
+
+<?php
+}else{
+
+
+?>
 <aside id="leftsidebar" class="sidebar">
     <div class="navbar-brand">
         <button class="btn-menu ls-toggle-btn" type="button"><i class="zmdi zmdi-menu"></i></button>
@@ -64,5 +105,5 @@
         
     </div>
 </aside>
-
-
+<?php
+}?>

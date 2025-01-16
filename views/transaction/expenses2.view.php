@@ -703,6 +703,7 @@ include 'views/footer.view.php';
         // function to edit data
         $("#dana").on("change", function() {
             var idsalur = $('#dana').val();
+            var idopd = $('#opd').val();
             // $('#selected').text(selectedPackage);
             // kosong();
             $.ajax({
@@ -710,7 +711,8 @@ include 'views/footer.view.php';
                 type: "POST",
                 dataType: "json",
                 data: {
-                    idsalur: idsalur
+                    idsalur: idsalur,
+                    idopd: idopd
                 },
                 success: function(response) {
                     var data1 = response.sum;

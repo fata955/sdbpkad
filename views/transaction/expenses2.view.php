@@ -63,7 +63,15 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                     </div>
                     <div class="col-lg-1">
                         <br>
-                        <button class="btn btn-danger" id="dataprint"><i class="zmdi zmdi-print"></i> Rincian SPM </button>
+                        <button class="btn btn-success" id="dataprint"><i class="zmdi zmdi-print"></i> Rincian SPM </button>
+                    </div>
+                    <div class="col-lg-1">
+                        <br>
+                        <button class="btn btn-warning" id="dataprint"><i class="zmdi zmdi-print"></i> Laporan SumberDana </button>
+                    </div>
+                    <div class="col-lg-1">
+                        <br>
+                        <button class="btn btn-danger" id="datahapus"><i class="zmdi zmdi-delete"></i>Data terhapus </button>
                     </div>
 
                 </div><br>
@@ -94,7 +102,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
             </form>
         </div>
         <br>
-
+<br>
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12">
@@ -671,7 +679,7 @@ include 'views/footer.view.php';
                     id: id
                 },
                 success: function(response) {
-                    $("#listspm").modal('hide');
+                    
                     // muncul();
                     var data = response.data;
                     var dana = data.nilai_spm;
@@ -681,7 +689,7 @@ include 'views/footer.view.php';
                     $("#insertdata input[name='nilaispm']").val(formatRupiah(dana, "Rp. "));
                     $("#insertdata select[name='dokumen']").val(data.jenis);
                     $("#insertdata select[name='opd']").val(data.id_skpd);
-
+                    // $('#listspm').hide();
                     if (response.statusCode == 200) {
                         disbled();
                     } else if (response.statusCode == 400) {
@@ -751,6 +759,7 @@ include 'views/footer.view.php';
                         kosong();
                         fetchVerif();
                         disbled();
+                        
                         // window.location.href = '/sdbpkad/expenses';
                     } else if (response.statusCode == 400) {
                         Swal.fire("!", "Alokasi Dana Belum Terinput", "warning");
@@ -822,13 +831,14 @@ include 'views/footer.view.php';
                     },
                     success: function(response) {
                         if (response.statusCode == 200) {
-                            
+                            fetchVerif();
                             Swal.fire("!", "Data Sukses Terhapus dari Beranda", "success");
                             //   window.location.href = '/sdbpkad/expenses';
-                            fetchVerif();
+                            
                         } else if (response.statusCode == 500) {
-                            Swal.fire("!", "Data Gagal terhapus", "Warning");
                             fetchVerif();
+                            Swal.fire("!", "Data Gagal terhapus", "Warning");
+                            
                         }
                     }
                 });

@@ -120,7 +120,11 @@ if ($_GET["action"] === "insertData") {
     $perubahan = mysqli_real_escape_string($conn, $_POST["perubahan"]);
     $nilai = preg_replace("/[^0-9]/", "", $nilai);
 
-    $sql = "INSERT INTO t_opdsumberdana (id_perubahan,id_opd,id_subsumberdana,nilai_sumber) VALUES ('$perubahan','$idopd','$sumber','$nilai')";
+    $sql1 = mysqli_query($conn,"SELECT idsumberdana as id from subssumber where id=$sumber");
+    $data = mysqli_fetch_assoc($sql1);
+    $idsumber = $data['id'];
+
+    $sql = "INSERT INTO t_opdsumberdana (id_perubahan,id_opd,id_sumber,id_subsumberdana,nilai_sumber) VALUES ('$perubahan','$idopd','$idsumber','$sumber','$nilai')";
 
     if (mysqli_query($conn, $sql)) {
       echo json_encode([
@@ -177,8 +181,12 @@ if ($_GET["action"] === "updateData") {
     $id_sumber = mysqli_real_escape_string($conn, $_POST["sumber"]);
     $nilai = mysqli_real_escape_string($conn, $_POST["nilaisumber"]);
 
+    $sql = mysqli_query($conn,"SELECT idsumberdana from subssumber where id=$id_sumber");
+    $data = mysqli_fetch_assoc($sql);
+    $idsumber = $data['idsumberdana'];
+
     $nilai = preg_replace("/[^0-9]/", "", $nilai);
-    $sql = "UPDATE t_opdsumberdana SET id_subsumberdana= $id_sumber,nilai_sumber=$nilai WHERE id=$id";
+    $sql = "UPDATE t_opdsumberdana SET id_subsumberdana= $id_sumber,nilai_sumber=$nilai,id_sumber=$idsumber WHERE id=$id";
     if (mysqli_query($conn, $sql)) {
       echo json_encode([
         "statusCode" => 200,

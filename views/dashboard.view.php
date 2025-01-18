@@ -9,6 +9,15 @@ if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login');
 
 
 include 'header.view.php';
+
+$user = $_SESSION['username'];
+// echo $username;
+$sql2 = "SELECT * from user where username='$user'";
+$data = mysqli_query($conn, $sql2);
+$nameuser = mysqli_fetch_array($data);
+$id_user = $nameuser['iduser'];
+$tanggalHariIni = date('Y-m-d');
+$tanggalHariawal = date('Y-m-01');
 ?>
 <section class="content">
     <div class="">
@@ -55,8 +64,8 @@ include 'header.view.php';
                                     $pagu = mysqli_fetch_array($pagu);
                                     $pagu = $pagu['total'];
 
-
-                                    $realisasi = "SELECT COALESCE(sum(nilai_spm),0) as realisasi from t_spm where id_sumberdana > 0";
+                                    $realisasi = "SELECT COALESCE(sum(a.nilai_spm),0) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
+                                    // $realisasi = "SELECT COALESCE(sum(nilai_spm),0) as realisasi from t_spm where id_sumberdana > 0";
                                     $realisasitotal = mysqli_query($conn, $realisasi);
                                     $realisasi = mysqli_num_rows($realisasitotal);
                                     if ($realisasi == 0) {
@@ -100,9 +109,9 @@ include 'header.view.php';
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon email">
                         <div class="body">
-                            <h6>TOTAL EXPENSES</h6>
+                            <h6>TOTAL REALISASI SPM</h6>
                             <?php
-                            $sql2 = "SELECT sum(nilai_spm) as realisasi from t_spm where id_user > 0";
+                            $sql2 = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
                             $dana1 = mysqli_query($conn,$sql2);
                             $dana1 = mysqli_fetch_array($dana1);
                             $dana1 = $dana1['realisasi'];
@@ -119,8 +128,15 @@ include 'header.view.php';
                 <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="card widget_2 big_icon domains">
                         <div class="body">
-                            <h6>Domains</h6>
-                            <h2>8 <small class="info">of 10</small></h2>
+                            <h6>Total SPM</h6>
+                            <?php
+                            $sql2 = "SELECT count(a.id_spm) as totalspm from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
+                            $dana1 = mysqli_query($conn,$sql2);
+                            $dana1 = mysqli_fetch_array($dana1);
+                            $dana1 = $dana1['totalspm'];
+                            
+                            ?>
+                           <h5><?= $dana1; ?></h5>
                             <small>Total Registered Domain</small>
                             <div class="progress">
                                 <div class="progress-bar l-green" role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width: 89%;"></div>

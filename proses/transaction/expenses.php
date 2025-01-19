@@ -54,8 +54,10 @@ if ($_GET["action"] === "fetchVerif") {
   $row = mysqli_fetch_array($result);
   $datareaslisasi = $row['realisasi'];
 
-  //jumlah jumlah SPM
-  $sql = "SELECT count(a.id_spm) as totalspm from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
+  $sql =
+
+    //jumlah jumlah SPM
+    $sql = "SELECT count(a.id_spm) as totalspm from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
   $result = mysqli_query($conn, $sql);
   $row = mysqli_fetch_assoc($result);
   $spm = $row['totalspm'];
@@ -78,6 +80,15 @@ if ($_GET["action"] === "fetchVerif") {
   $row = mysqli_fetch_assoc($result);
   $up = $row['totalup'];
 
+  //menampilkan rekapan sumber dana
+  $sql = "SELECT namasumberdana, sum(nilai_sumber) as nilai, sum(realisasi) as realisasinya, sum(sisa) as sisanya from (select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND z.id_spm=y.id_spm AND  y.id_sumber=c.id_subsumberdana AND z.id_skpd=b.id_sipd AND y.status=1) as realisasi,(SELECT COALESCE(sum(x.nilai_spm),0) from tspm x ,tspmsub w where Date(w.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND x.id_spm=w.id_spm AND w.id_sumber > 0 AND x.id_skpd=b.id_sipd AND w.status=1) as totalrealisasi,b.nama_opd,c.nilai_sumber- (SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND z.id_spm=y.id_spm AND y.id_sumber=c.id_subsumberdana AND z.id_skpd=b.id_sipd AND y.status=1) as sisa,(select sum(nilai_sumber) from t_opdsumberdana where id_opd=b.id AND id_perubahan='7') as Pagu_Anggaran, f.namasumberdana FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e ,t_sumberdana f where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=b.id AND d.idopd=c.id_opd AND a.idsumberdana=f.id AND e.id=c.id_perubahan AND e.status='AKTIF') as subquery group by namasumberdana";
+  $result = mysqli_query($conn, $sql);
+  $data2 = [];
+  while ($row = mysqli_fetch_assoc($result)) {
+    $data2[] = $row;
+  }
+  // mysqli_close($conn);
+
   $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where Date(c.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND c.status=1";
   $result = mysqli_query($conn, $sql);
   $data = [];
@@ -88,6 +99,7 @@ if ($_GET["action"] === "fetchVerif") {
   header('Content-Type: application/json');
   echo json_encode([
     "data" => $data,
+    "data2" => $data2,
     "realisasi" => $datareaslisasi,
     "spm" => $spm,
     "ls" => $ls,
@@ -135,6 +147,14 @@ if ($_GET["action"] === "filtertanggal") {
     $start = $conn->real_escape_string($start);
     $end = $conn->real_escape_string($end);
 
+    //menampilkan rekapan sumber dana
+    $sql = "SELECT namasumberdana, sum(nilai_sumber) as nilai, sum(realisasi) as realisasinya, sum(sisa) as sisanya from (select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND z.id_spm=y.id_spm AND  y.id_sumber=c.id_subsumberdana AND z.id_skpd=$opd AND y.status=1) as realisasi,(SELECT COALESCE(sum(x.nilai_spm),0) from tspm x ,tspmsub w where Date(w.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND x.id_spm=w.id_spm AND w.id_sumber > 0 AND x.id_skpd=b.id_sipd AND w.status=1) as totalrealisasi,b.nama_opd,c.nilai_sumber- (SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND z.id_spm=y.id_spm AND y.id_sumber=c.id_subsumberdana AND z.id_skpd=$opd AND y.status=1) as sisa,(select sum(nilai_sumber) from t_opdsumberdana where id_opd=b.id ) as Pagu_Anggaran, f.namasumberdana FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e ,t_sumberdana f where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=b.id AND d.idopd=c.id_opd AND a.idsumberdana=f.id AND e.id=c.id_perubahan AND e.status='AKTIF') as subquery group by namasumberdana";
+    $result = mysqli_query($conn, $sql);
+    $data2 = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+      $data2[] = $row;
+    }
+
     // echo $start;
     // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
     $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where a.tanggal_spm BETWEEN '$start' AND '$end' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND id_skpd=$opd";
@@ -147,38 +167,38 @@ if ($_GET["action"] === "filtertanggal") {
     header('Content-Type: application/json');
     echo json_encode([
       "data" => $data,
+      "data2" => $data2,
       "realisasi" => $datarealisasi,
       "spm" => $spm,
       "ls" => $ls,
       "gu" => $gu,
       "up" => $up
     ]);
-
   } else {
 
     $sql = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $datarealisasi = $row['realisasi'];
-  
+
     //jumlah jumlah SPM
     $sql = "SELECT count(*) as totalspm from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $spm = $row['totalspm'];
-  
+
     //jumlah jumlah LS
     $sql = "SELECT count(*) as totalls from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='LS' AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $ls = $row['totalls'];
-  
+
     //jumlah jumlah gu
     $sql = "SELECT count(*) as totalgu from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='GU' AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $gu = $row['totalgu'];
-  
+
     //jumlah jumlah UP
     $sql = "SELECT count(*) as totalup from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='UP' AND b.status=1";
     $result = mysqli_query($conn, $sql);
@@ -186,7 +206,7 @@ if ($_GET["action"] === "filtertanggal") {
     $up = $row['totalup'];
     $start = $conn->real_escape_string($start);
     $end = $conn->real_escape_string($end);
-  
+
     // echo $start;
     // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
     $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where a.tanggal_spm BETWEEN '$start' AND '$end' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND c.status=1";
@@ -247,6 +267,15 @@ if ($_GET["action"] === "filtertglverif") {
     $start = $conn->real_escape_string($start);
     $end = $conn->real_escape_string($end);
 
+      //menampilkan rekapan sumber dana
+      $sql = "SELECT namasumberdana, sum(nilai_sumber) as nilai, sum(realisasi) as realisasinya, sum(sisa) as sisanya from (select c.id,a.namasubsumberdana,c.nilai_sumber,(SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$start' AND '$end' AND z.id_spm=y.id_spm AND  y.id_sumber=c.id_subsumberdana AND z.id_skpd=$opd AND y.status=1) as realisasi,(SELECT COALESCE(sum(x.nilai_spm),0) from tspm x ,tspmsub w where Date(w.updateby) between '$start' AND '$end' AND x.id_spm=w.id_spm AND w.id_sumber > 0 AND x.id_skpd=b.id_sipd AND w.status=1) as totalrealisasi,b.nama_opd,c.nilai_sumber- (SELECT COALESCE(sum(z.nilai_spm),0) from tspm z, tspmsub y where Date(y.updateby) between '$start' AND '$end' AND z.id_spm=y.id_spm AND y.id_sumber=c.id_subsumberdana AND z.id_skpd=$opd AND y.status=1) as sisa,(select sum(nilai_sumber) from t_opdsumberdana where id_opd=b.id ) as Pagu_Anggaran, f.namasumberdana FROM subssumber a, skpd b, t_opdsumberdana c, pagu d, t_perubahan e ,t_sumberdana f where c.id_opd=b.id AND c.id_subsumberdana=a.id AND c.id_opd=b.id AND d.idopd=c.id_opd AND b.id_sipd=$opd AND a.idsumberdana=f.id AND e.id=c.id_perubahan AND e.status='AKTIF') as subquery group by namasumberdana";
+      $result = mysqli_query($conn, $sql);
+      $data2 = [];
+      while ($row = mysqli_fetch_assoc($result)) {
+        $data2[] = $row;
+      }
+  
+
     // echo $start;
     // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
     // $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where Date(c.updateby) between '$start' AND '$end' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND status>0";
@@ -260,38 +289,38 @@ if ($_GET["action"] === "filtertglverif") {
     header('Content-Type: application/json');
     echo json_encode([
       "data" => $data,
+      "data2" => $data2,
       "realisasi" => $datarealisasi,
       "spm" => $spm,
       "ls" => $ls,
       "gu" => $gu,
       "up" => $up
     ]);
-    
   } else {
 
     $sql = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $datarealisasi = $row['realisasi'];
-  
+
     //jumlah jumlah SPM
     $sql = "SELECT count(*) as totalspm from tspm a, tspmsub b where Date(b.updateby) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $spm = $row['totalspm'];
-  
+
     //jumlah jumlah LS
     $sql = "SELECT count(*) as totalls from tspm a, tspmsub b where Date(b.updateby) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='LS' AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $ls = $row['totalls'];
-  
+
     //jumlah jumlah gu
     $sql = "SELECT count(*) as totalgu from tspm a, tspmsub b where Date(b.updateby) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='GU' AND b.status=1";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_assoc($result);
     $gu = $row['totalgu'];
-  
+
     //jumlah jumlah UP
     $sql = "SELECT count(*) as totalup from tspm a, tspmsub b where Date(b.updateby) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND jenis='UP' AND b.status=1";
     $result = mysqli_query($conn, $sql);
@@ -299,7 +328,7 @@ if ($_GET["action"] === "filtertglverif") {
     $up = $row['totalup'];
     $start = $conn->real_escape_string($start);
     $end = $conn->real_escape_string($end);
-  
+
     // echo $start;
     // $sql = "SELECT id,nomor_spm,nama_sub_skpd,jenis_spm,nilai_spm FROM sipd.t_spm where id_user=1 AND like tanggal_spm=$start between tanggal_spm=$end";
     $sql = "SELECT a.id_spm as id,a.nomor_spm,b.nama_opd as skpd,a.jenis,a.nilai_spm FROM tspm a, skpd b, tspmsub c where Date(c.updateby) BETWEEN '$start' AND '$end' AND a.id_skpd=b.id_sipd AND a.id_spm=c.id_spm AND c.id_user=$id_user AND c.status=1";
@@ -323,7 +352,7 @@ if ($_GET["action"] === "filtertglverif") {
 
 if ($_GET["action"] === "fetchSalur") {
   $id = $_POST["idsalur"];
-  
+
 
   $sql = "SELECT id,namasubsumberdana as name,idsumberdana from subssumber where idsumberdana=$id";
   // $sql = "SELECT * from subssumber where idsumberdana=$id";

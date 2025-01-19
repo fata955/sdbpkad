@@ -53,76 +53,183 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                         <label for="">Sampai Tanggal</label>
                         <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d") ?>">
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <br>
-                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search"></i>Tanggal SPM</button>
+                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal SPM</button>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <br>
-                        <button class="btn btn-secondary" id="tglverif"><i class="zmdi zmdi-search"></i>Tanggal Verfikasi</button>
+                        <button class="btn btn-secondary" id="tglverif"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal Verfikasi</button>
                     </div>
-                    <div class="col-lg-1">
-                        <br>
-                        <button class="btn btn-success" id="dataprint"><i class="zmdi zmdi-print"></i> Rincian SPM </button>
-                    </div>
-                    <div class="col-lg-1">
-                        <br>
-                        <button class="btn btn-warning" id="dataprint"><i class="zmdi zmdi-print"></i> Laporan SumberDana </button>
-                    </div>
-                    <div class="col-lg-1">
-                        <br>
-                        <button class="btn btn-danger" id="datahapus"><i class="zmdi zmdi-delete"></i>Data terhapus </button>
-                    </div>
+
+
 
                 </div><br>
 
                 <div class="row clearfix flex justify-content-center">
-                    <div class="col-lg-2">
-                        <label for="">REALISASI SPM</label>
-                        <input type="text" class="form-control" id="total_spm" name="total_spm" value="" disabled>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="card state_w1">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 id="total_spm" name="total_spm"></h6>
+                                    <span><i class="zmdi zmdi-money col-amber mr-2"></i> Realisasi SPM</span>
+                                </div>
+                                <!-- <div class="sparkline" data-type="bar" data-width="97%" data-height="55px" data-bar-Width="3" data-bar-Spacing="5" data-bar-Color="#FFC107">5,2,3,7,6,4,8,1</div> -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label for="">Jumlah SPM</label>
-                        <input type="text" class="form-control" id="jumlah_spm" name="jumlah_spm" value="" disabled>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="card state_w1">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 id="jumlah_spm" name="jumlah_spm"></h6>
+                                    <span><i class="zmdi zmdi-file col-blue mr-2"></i>SPM</span>
+                                </div>
+                                <!-- <div class="sparkline" data-type="bar" data-width="97%" data-height="55px" data-bar-Width="3" data-bar-Spacing="5" data-bar-Color="#46b6fe">8,2,6,5,1,4,4,3</div> -->
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="col-lg-2">
-                        <label for="">Jumlah LS</label>
-                        <input type="text" class="form-control" id="jumlah_ls" name="jumlah_ls" value="" disabled>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="card state_w1">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 id="jumlah_ls" name="jumlah_ls"></h6>
+                                    <span><i class="zmdi zmdi-file col-red mr-2"></i>LS</span>
+                                </div>
+                                <!-- <div class="sparkline" data-type="bar" data-width="97%" data-height="55px" data-bar-Width="3" data-bar-Spacing="5" data-bar-Color="#ee2558">4,4,3,9,2,1,5,7</div> -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label for="">Jumlah GU</label>
-                        <input type="text" class="form-control" id="jumlah_gu" name="jumlah_gu" value="" disabled>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="card state_w1">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 id="jumlah_gu" name="jumlah_gu"></h6>
+                                    <span><i class="zmdi zmdi-file text-secondary mr-2"></i>GU</span>
+                                </div>
+                                <!-- <div class="sparkline" data-type="bar" data-width="97%" data-height="55px" data-bar-Width="3" data-bar-Spacing="5" data-bar-Color="#04BE5B">7,5,3,8,4,6,2,9</div> -->
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-2">
-                        <label for="">Jumlah UP</label>
-                        <input type="text" class="form-control" id="jumlah_up" name="jumlah_up" value="" disabled>
+                    <div class="col-lg-2 col-md-6 col-sm-6">
+                        <div class="card state_w1">
+                            <div class="body d-flex justify-content-between">
+                                <div>
+                                    <h6 id="jumlah_up" name="jumlah_up"></h6>
+                                    <span><i class="zmdi zmdi-file text-success mr-2"></i>UP</span>
+                                </div>
+                                <!-- <div class="sparkline" data-type="bar" data-width="97%" data-height="55px" data-bar-Width="3" data-bar-Spacing="5" data-bar-Color="#04BE5B">7,5,3,8,4,6,2,9</div> -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
         <br>
-<br>
         <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-lg-12">
-                    <div class="table-responsive" id="tabelnya">
-                        <table class="table table-hover c_table theme-color table-striped table-hover dataTable js-exportable" id="nilaisumberdana">
-                            <thead>
-                                <tr>
-                                    <!-- <th>No</th> -->
-                                    <th>No SPM</th>
-                                    <th>Nama OPD</th>
-                                    <th>Jenis Dokumen</th>
-                                    <th>Nilai SPM</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-
-                        </table>
+                    <div class="card">
+                        <div class="body">
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#description">List SPM</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#review">Dihapus</a></li>
+                                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#about">Sumber Dana</a></li>
+                            </ul>
+                        </div>
                     </div>
+                    <div class="card">
+                        <div class="body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="description">
+                                    <div class="table-responsive" id="tabelnya">
+                                        <table class="table table-hover c_table theme-color table-striped table-hover dataTable js-exportable" id="nilaisumberdana">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th>No</th> -->
+                                                    <th>No SPM</th>
+                                                    <th>Nama OPD</th>
+                                                    <th>Jenis Dokumen</th>
+                                                    <th>Nilai SPM</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="review">
+                                    <div class="table-responsive" id="hapus">
+                                        <table class="table table-hover c_table theme-color table-striped table-hover dataTable js-exportable" id="spmterhapus">
+                                            <thead>
+                                                <tr>
+                                                    <!-- <th>No</th> -->
+                                                    <th>No SPM</th>
+                                                    <th>Nama OPD</th>
+                                                    <th>Jenis Dokumen</th>
+                                                    <th>Nilai SPM</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="about">
+                                    <ul class="nav nav-tabs p-0 mb-3">
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Rekapan Sumber Dana</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Rekapan Pembagian Sumber dana</a></li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane in active" id="home">
+                                            <div class="table-responsive" id="tabelsumberdana">
+                                                <table class="table table-hover c_table theme-color table-striped table-hover dataTable js-exportable" id="lpsumberdana">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th>No</th> -->
+                                                            <th>Sumber dana</th>
+                                                            <th>Pagu Sumberdana</th>
+                                                            <th>Realisasi</th>
+                                                            <th>Sisa Sumber Dana</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="profile">
+                                            <b>Profile Content</b>
+                                            <p> Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
+                                                Per te suavitate essent aliquid
+                                                pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
+                                                sadipscing mel. </p>
+                                        </div>
+                                        <!-- <div role="tabpanel" class="tab-pane" id="messages">
+                                            <b>Message Content</b>
+                                            <p> ius impedit mediocritatem an. Pri ut tation electram moderatius.
+                                                Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
+                                                pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
+                                                sadipscing mel. </p>
+                                        </div>
+                                        <div role="tabpanel" class="tab-pane" id="settings">
+                                            <b>Settings Content</b>
+                                            <p> Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
+                                                Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
+                                                pro. </p>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -380,6 +487,7 @@ include 'views/footer.view.php';
         // sembunyi();
         let table = new DataTable("#myTablespm");
         let table2 = new DataTable("#nilaisumberdana");
+        let rekapsumberdana = new DataTable("#lpsumberdana");
         /* Dengan Rupiah */
         var nilaispm = document.getElementById('nilaispm');
         nilaispm.addEventListener('keyup', function(e) {
@@ -476,17 +584,18 @@ include 'views/footer.view.php';
                 dataType: "json",
                 success: function(response) {
                     var data = response.data;
+                    var data2 = response.data2;
                     var realisasi = response.realisasi;
                     var spm = response.spm;
                     var ls = response.ls;
                     var gu = response.gu;
                     var up = response.up;
                     var realisasi = formatRupiah(realisasi, "Rp.");
-                    $('#total_spm').val(realisasi);
-                    $('#jumlah_spm').val(spm);
-                    $('#jumlah_ls').val(ls);
-                    $('#jumlah_gu').val(gu);
-                    $('#jumlah_up').val(up);
+                    $('#total_spm').text(realisasi);
+                    $('#jumlah_spm').text(spm);
+                    $('#jumlah_ls').text(ls);
+                    $('#jumlah_gu').text(gu);
+                    $('#jumlah_up').text(up);
 
                     table2.clear().draw();
                     $.each(data, function(index, value) {
@@ -509,6 +618,19 @@ include 'views/footer.view.php';
                             ])
                             .draw(false);
                     });
+                    rekapsumberdana.clear().draw();
+                    $.each(data2, function(index, value) {
+                        rekapsumberdana.row
+                            .add([
+                                value.namasumberdana,
+                                formatRupiah(value.nilai, "Rp. "),
+                                formatRupiah(value.realisasinya, "Rp. "),
+                                formatRupiah(value.sisanya, "Rp. "),
+                                // value.sisanya
+                            ])
+                            .draw(false);
+                    });
+
 
 
                 }
@@ -531,11 +653,11 @@ include 'views/footer.view.php';
                 },
                 success: function(response) {
                     if (response.data == 0) {
-                        $('#total_spm').val('0');
-                        $('#jumlah_spm').val('0');
-                        $('#jumlah_ls').val('0');
-                        $('#jumlah_gu').val('0');
-                        $('#jumlah_up').val('0');
+                        $('#total_spm').text('0');
+                        $('#jumlah_spm').text('0');
+                        $('#jumlah_ls').text('0');
+                        $('#jumlah_gu').text('0');
+                        $('#jumlah_up').text('0');
                         table2.clear().draw();
                     } else {
                         var data = response.data;
@@ -545,11 +667,11 @@ include 'views/footer.view.php';
                         var gu = response.gu;
                         var up = response.up;
                         var realisasi = formatRupiah(realisasi, "Rp.");
-                        $('#total_spm').val(realisasi);
-                        $('#jumlah_spm').val(spm);
-                        $('#jumlah_ls').val(ls);
-                        $('#jumlah_gu').val(gu);
-                        $('#jumlah_up').val(up);
+                        $('#total_spm').text(realisasi);
+                        $('#jumlah_spm').text(spm);
+                        $('#jumlah_ls').text(ls);
+                        $('#jumlah_gu').text(gu);
+                        $('#jumlah_up').text(up);
 
                         table2.clear().draw();
                         // var counter = 1;
@@ -578,6 +700,19 @@ include 'views/footer.view.php';
                             // counter++;
                         });
 
+                        rekapsumberdana.clear().draw();
+                        $.each(data2, function(index, value) {
+                            rekapsumberdana.row
+                                .add([
+                                    value.namasumberdana,
+                                    formatRupiah(value.nilai, "Rp. "),
+                                    formatRupiah(value.realisasinya, "Rp. "),
+                                    formatRupiah(value.sisanya, "Rp. "),
+                                    // value.sisanya
+                                ])
+                                .draw(false);
+                        });
+
                     }
                 }
             });
@@ -600,25 +735,26 @@ include 'views/footer.view.php';
                 },
                 success: function(response) {
                     if (response.data == 0) {
-                        $('#total_spm').val('0');
-                        $('#jumlah_spm').val('0');
-                        $('#jumlah_ls').val('0');
-                        $('#jumlah_gu').val('0');
-                        $('#jumlah_up').val('0');
+                        $('#total_spm').text('0');
+                        $('#jumlah_spm').text('0');
+                        $('#jumlah_ls').text('0');
+                        $('#jumlah_gu').text('0');
+                        $('#jumlah_up').text('0');
                         table2.clear().draw();
                     } else {
                         var data = response.data;
+                        var data = response.data2;
                         var realisasi = response.realisasi;
                         var spm = response.spm;
                         var ls = response.ls;
                         var gu = response.gu;
                         var up = response.up;
                         var realisasi = formatRupiah(realisasi, "Rp.");
-                        $('#total_spm').val(realisasi);
-                        $('#jumlah_spm').val(spm);
-                        $('#jumlah_ls').val(ls);
-                        $('#jumlah_gu').val(gu);
-                        $('#jumlah_up').val(up);
+                        $('#total_spm').text(realisasi);
+                        $('#jumlah_spm').text(spm);
+                        $('#jumlah_ls').text(ls);
+                        $('#jumlah_gu').text(gu);
+                        $('#jumlah_up').text(up);
 
                         table2.clear().draw();
                         // var counter = 1;
@@ -645,6 +781,19 @@ include 'views/footer.view.php';
                                 ])
                                 .draw(false);
                             // counter++;
+                        });
+
+                        rekapsumberdana.clear().draw();
+                        $.each(data2, function(index, value) {
+                            rekapsumberdana.row
+                                .add([
+                                    value.namasumberdana,
+                                    formatRupiah(value.nilai, "Rp. "),
+                                    formatRupiah(value.realisasinya, "Rp. "),
+                                    formatRupiah(value.sisanya, "Rp. "),
+                                    // value.sisanya
+                                ])
+                                .draw(false);
                         });
 
                     }
@@ -679,7 +828,7 @@ include 'views/footer.view.php';
                     id: id
                 },
                 success: function(response) {
-                    
+
                     // muncul();
                     var data = response.data;
                     var dana = data.nilai_spm;
@@ -759,7 +908,7 @@ include 'views/footer.view.php';
                         kosong();
                         fetchVerif();
                         disbled();
-                        
+
                         // window.location.href = '/sdbpkad/expenses';
                     } else if (response.statusCode == 400) {
                         Swal.fire("!", "Alokasi Dana Belum Terinput", "warning");
@@ -775,7 +924,7 @@ include 'views/footer.view.php';
                         Swal.fire("!", "Function Bermasalah Segera Hubungi Admin Sistem");
                     }
                 }
-                
+
             });
         });
 
@@ -834,11 +983,11 @@ include 'views/footer.view.php';
                             fetchVerif();
                             Swal.fire("!", "Data Sukses Terhapus dari Beranda", "success");
                             //   window.location.href = '/sdbpkad/expenses';
-                            
+
                         } else if (response.statusCode == 500) {
                             fetchVerif();
                             Swal.fire("!", "Data Gagal terhapus", "Warning");
-                            
+
                         }
                     }
                 });

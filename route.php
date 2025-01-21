@@ -3,68 +3,68 @@ include 'lib/conn.php';
 // Define your location project directory in htdocs (EX THE FULL PATH: D:\xampp\htdocs\x-kang\simple-routing-with-php)
 // if (isset($_SESSION['user'])) {
 
-$project_location = "/sdbpkad";
+$project_location = "/";
 $me = $project_location;
 
 // For get URL PATH
 $request = $_SERVER['REQUEST_URI'];
 switch ($request) {
 
-    case $me . '/':
+    case $me :
         include 'views/dashboard.view.php';
         break;
-    case $me . '/login':
+    case $me . 'login':
         require "views/login.view1.php";
         break;
-    case $me . '/logout':
+    case $me . 'logout':
         require "proses/logout.php";
         break;
-    case $me . '/register':
+    case $me . 'register':
         require "views/register.view.php";
         break;
-    case $me . '/tagihan':
+    case $me . 'tagihan':
         include 'views/mocking/spm.view.php';
         break;
-    case $me . '/skpd':
+    case $me . 'skpd':
         include 'views/master/opd.view.php';
         break;
-    case $me . '/sumberdana':
+    case $me . 'sumberdana':
         include 'views/master/sumberdana.view.php';
         break;
-    case $me . '/bagsumberdana':
+    case $me . 'bagsumberdana':
         include 'views/master/subsumberdana.view.php';
         break;
-    case $me . '/route':
+    case $me . 'route':
         include 'routeaccess.php';
         break;
-    case $me . '/perubahan':
+    case $me . 'perubahan':
         include 'views/master/perubahan.view.php';
         break;
-    case $me . '/pagu':
+    case $me . 'pagu':
         include 'views/setting/pagu.view.php';
         break;
-    case $me . '/sp2d':
+    case $me . 'sp2d':
         include 'views/mocking/sp2d.view.php';
         break;
-    case $me . '/sp2dlra':
+    case $me . 'sp2dlra':
         include 'views/mocking/sp2dlra.view.php';
         break;
-    case $me . '/expenses':
+    case $me . 'expenses':
         include 'views/transaction/expenses2.view.php';
         break;
-    case $me . '/sp2dver':
+    case $me . 'sp2dver':
         include 'views/transaction/sp2dexpenses.view.php';
         break;
-    case $me . '/lacaksalur':
+    case $me . 'lacaksalur':
         include 'views/transaction/income.view.php';
         break;
-    case $me . '/sumberdanaopd':
+    case $me . 'sumberdanaopd':
         include 'views/setting/opdsumberdana.view.php';
         break;
-    case $me . '/reportincome':
+    case $me . 'reportincome':
         include 'views/report/income.report.php';
         break;
-    case $me . '/signup':
+    case $me . 'signup':
         include 'views/register.view.php';
         break;
  

@@ -3,7 +3,7 @@
 
 session_start(); 
 include 'lib/conn.php';
-if (!isset($_SESSION['username'])) { header('Location: /sdbpkad/login'); 
+if (!isset($_SESSION['username'])) { header('Location: /login'); 
     exit(); }
 include 'views/header.view.php';
 
@@ -16,7 +16,7 @@ include 'views/header.view.php';
           <h2>SKPD</h2>
           <ul class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="/sdbpkad/"><i class="zmdi zmdi-home"></i> HOME</a>
+              <a href="/"><i class="zmdi zmdi-home"></i> HOME</a>
             </li>
             <li class="breadcrumb-item">
               <a href="javascript:void(0);">App</a>
@@ -44,77 +44,7 @@ include 'views/header.view.php';
       </div>
     </div>
     <div class="container-fluid">
-      <div class="row clearfix">
-        <div class="col-lg-3 col-md-6">
-          <div class="card">
-            <div class="body xl-blue">
-              <?php
-              include 'lib/conn.php';
-              function rupiah($angka)
-              {
 
-                $hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
-                return $hasil_rupiah;
-              }
-              $jumlahpagu = mysqli_query($conn, "SELECT SUM(nilai) as nilai FROM pagu");
-              $fetch1 = mysqli_fetch_array($jumlahpagu);
-              echo '<h5 class="m-t-0 m-b-0">' . rupiah($fetch1['nilai']) . '</h5>';
-              ?>
-              <p class="m-b-0">Total Pagu</p>
-              <div class="sparkline" data-type="line" data-spot-Radius="1" data-highlight-Spot-Color="rgb(233, 30, 99)" data-highlight-Line-Color="#222"
-                data-min-Spot-Color="rgb(233, 30, 99)" data-max-Spot-Color="rgb(0, 150, 136)" data-spot-Color="rgb(0, 188, 212)"
-                data-offset="90" data-width="100%" data-height="40px" data-line-Width="2" data-line-Color="#ffffff"
-                data-fill-Color="transparent"> 7,6,7,8,5,9,8,6,7 </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card">
-            <div class="body xl-purple">
-            <?php
-              $jumlahsp2d = mysqli_query($conn, "SELECT SUM(nilai_spm) as nilai FROM t_spm where id_user > 0");
-              $fetch2 = mysqli_fetch_array($jumlahsp2d);
-                echo '<h5 class="m-t-0 m-b-0">'. rupiah($fetch2['nilai']) .'</h5>';
-              ?>
-              
-              <p class="m-b-0 ">Total Realisasi</p>
-              <div class="sparkline" data-type="line" data-spot-Radius="1" data-highlight-Spot-Color="rgb(233, 30, 99)" data-highlight-Line-Color="#222"
-                data-min-Spot-Color="rgb(233, 30, 99)" data-max-Spot-Color="rgb(0, 150, 136)" data-spot-Color="rgb(0, 188, 212)"
-                data-offset="90" data-width="100%" data-height="42px" data-line-Width="2" data-line-Color="#ffffff"
-                data-fill-Color="transparent"> 6,5,7,4,5,3,8,6,5 </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card">
-            <div class="body xl-green">
-            <?php
-            $sisa = $fetch1['nilai'] - $fetch2['nilai']; 
-             
-                echo '<h5 class="m-t-0 m-b-0">'. rupiah($sisa) .'</h5>';
-              ?>
-              <!-- <h4 class="m-t-0 m-b-0">73</h4> -->
-              <p class="m-b-0 ">Sisa Pagu</p>
-              <div class="sparkline" data-type="line" data-spot-Radius="1" data-highlight-Spot-Color="rgb(233, 30, 99)" data-highlight-Line-Color="#222"
-                data-min-Spot-Color="rgb(233, 30, 99)" data-max-Spot-Color="rgb(0, 150, 136)" data-spot-Color="rgb(0, 188, 212)"
-                data-offset="90" data-width="100%" data-height="45px" data-line-Width="2" data-line-Color="#ffffff"
-                data-fill-Color="transparent"> 8,7,7,5,5,4,8,7,5 </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <div class="card">
-            <div class="body xl-pink">
-              <h5 class="m-t-0 m-b-0">15</h5>
-              <p class="m-b-0">Categories</p>
-              <div class="sparkline" data-type="line" data-spot-Radius="1" data-highlight-Spot-Color="rgb(233, 30, 99)" data-highlight-Line-Color="#222"
-                data-min-Spot-Color="rgb(233, 30, 99)" data-max-Spot-Color="rgb(0, 150, 136)" data-spot-Color="rgb(0, 188, 212)"
-                data-offset="90" data-width="100%" data-height="45px" data-line-Width="2" data-line-Color="#ffffff"
-                data-fill-Color="transparent"> 7,6,7,8,5,9,8,6,7 </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="container-fluid">
       <div class="row clearfix">

@@ -144,7 +144,7 @@ if (isset($_SESSION['username'])) {
                         var response = JSON.parse(response);
                         if (response.statusCode == 200) {
                             // liveToast.show();
-                            window.location.href = '/sdbpkad/';
+                            window.location.href = '/';
                         } else if (response.statusCode == 500) {
                             approve.show();
                             reset();

@@ -4,7 +4,7 @@
 session_start();
 include 'lib/conn.php';
 if (!isset($_SESSION['username'])) {
-    header('Location: /sdbpkad/login');
+    header('Location: /login');
     exit();
 }
 include 'views/header.view.php';

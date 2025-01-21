@@ -39,7 +39,7 @@ if (isset($_SESSION['username'])) {
                     <form class="card auth_form" id="logIn" method="POST">
                         <div class="header">
                             <img class="logo" src="assets/images/logo.svg" alt="">
-                            <h5>Masuklah</h5>
+                            <h5>Sign In</h5>
                         </div>
                         <div class="body">
                             <div class="input-group mb-3">

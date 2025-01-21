@@ -27,8 +27,6 @@ if (isset($_SESSION['username'])) {
 
     <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
-    <!-- <link rel="stylesheet" href="assets/plugins/select2/select2.css" /> -->
-    <!-- <link rel="stylesheet" href="assets/plugins/multi-select/css/multi-select.css"> -->
 </head>
 
 <body class="theme-blush">
@@ -41,7 +39,7 @@ if (isset($_SESSION['username'])) {
                     <form class="card auth_form" id="logIn" method="POST">
                         <div class="header">
                             <img class="logo" src="assets/images/logo.svg" alt="">
-                            <h5>Log in</h5>
+                            <h5>Masuk</h5>
                         </div>
                         <div class="body">
                             <div class="input-group mb-3">
@@ -56,17 +54,9 @@ if (isset($_SESSION['username'])) {
                                     <span class="input-group-text"><a href="forgot-password.html" class="forgot" title="Forgot Password"><i class="zmdi zmdi-lock"></i></a></span>
                                 </div>
                             </div>
-                            <!-- <div class="checkbox">
-                            <input id="remember_me" type="checkbox">
-                            <label for="remember_me">Remember Me</label>
-                        </div> -->
+
                             <Button class="btn btn-primary btn-block waves-effect waves-light" type="submit">SignIn</Button>
-                            <!-- <div class="signin_with mt-3">
-                            <p class="mb-0">or <a href="/sdbpkad/register"> Sign Up</a> using</p>
-                            <button class="btn btn-primary btn-icon btn-icon-mini btn-round facebook"><i class="zmdi zmdi-facebook"></i></button>
-                            <button class="btn btn-primary btn-icon btn-icon-mini btn-round twitter"><i class="zmdi zmdi-twitter"></i></button>
-                            <button class="btn btn-primary btn-icon btn-icon-mini btn-round google"><i class="zmdi zmdi-google-plus"></i></button>
-                        </div> -->
+
                         </div>
                     </form>
                     <div class="copyright text-center">

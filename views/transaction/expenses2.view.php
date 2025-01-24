@@ -33,7 +33,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                     <div class="col-lg-2">
                         <label for="skpd">Nama OPD</label><br>
                         <select name='opdlg' id='opdlg' class="form-control show-tick ms select2" required>
-                            <option value="1">Konsolidasi</option>
+                            <option value="1">Semua OPD</option>
                             <?php
                             $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
                             while ($fetch = mysqli_fetch_array($opd)) {
@@ -659,8 +659,22 @@ include 'views/footer.view.php';
                         $('#jumlah_gu').text('0');
                         $('#jumlah_up').text('0');
                         table2.clear().draw();
+                        rekapsumberdana.clear().draw();
+                        var data2 = response.data2;
+                        $.each(data2, function(index, value) {
+                            rekapsumberdana.row
+                                .add([
+                                    value.namasumberdana,
+                                    formatRupiah(value.nilai, "Rp. "),
+                                    formatRupiah(value.realisasinya, "Rp. "),
+                                    formatRupiah(value.sisanya, "Rp. "),
+                                    // value.sisanya
+                                ])
+                                .draw(false);
+                        });
                     } else {
                         var data = response.data;
+                        var data2 = response.data2;
                         var realisasi = response.realisasi;
                         var spm = response.spm;
                         var ls = response.ls;
@@ -741,9 +755,22 @@ include 'views/footer.view.php';
                         $('#jumlah_gu').text('0');
                         $('#jumlah_up').text('0');
                         table2.clear().draw();
+                        var data2 = response.data2;
+                        rekapsumberdana.clear().draw();
+                        $.each(data2, function(index, value) {
+                            rekapsumberdana.row
+                                .add([
+                                    value.namasumberdana,
+                                    formatRupiah(value.nilai, "Rp. "),
+                                    formatRupiah(value.realisasinya, "Rp. "),
+                                    formatRupiah(value.sisanya, "Rp. "),
+                                    // value.sisanya
+                                ])
+                                .draw(false);
+                        });
                     } else {
                         var data = response.data;
-                        var data = response.data2;
+                        var data2 = response.data2;
                         var realisasi = response.realisasi;
                         var spm = response.spm;
                         var ls = response.ls;

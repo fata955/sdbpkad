@@ -30,8 +30,6 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body class="theme-blush">
-
-
     <div class="authentication">
         <div class="container">
             <div class="row">
@@ -54,7 +52,6 @@ if (isset($_SESSION['username'])) {
                                     <span class="input-group-text"><a href="forgot-password.html" class="forgot" title="Forgot Password"><i class="zmdi zmdi-lock"></i></a></span>
                                 </div>
                             </div>
-
                             <Button class="btn btn-primary btn-block waves-effect waves-light" type="submit">SignIn</Button>
 
                         </div>

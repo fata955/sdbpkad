@@ -64,8 +64,8 @@ if ($level > 1){
             <li class="main"><a href="/"><i class="zmdi zmdi-home"></i><span>Dashboard</span></a></li>
             <li class="main"><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-apps"></i><span>Master</span></a>
                 <ul class="ml-menu">
-                    <li><a href="/skpd">Opd</a></li>
-                    <li><a href="/sumberdana">Sumber Dana</a></li>
+                    <li class="main menu"><a href="/skpd">Opd</a></li>
+                    <li class="main menu"><a href="/sumberdana">Sumber Dana</a></li>
                     <li class="main menu"><a href="/bagsumberdana">Sub Sumber Dana</a></li>
                     <li class="main menu"><a href="/perubahan">Jenis Perubahan</a></li>
                 </ul>

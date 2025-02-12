@@ -181,7 +181,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                                 </div>
                                 <div class="tab-pane" id="about">
                                     <ul class="nav nav-tabs p-0 mb-3">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Rekapan Sumber Dana</a></li>
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#home">Sumber Dana Per OPD</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#profile">Rekapan Pembagian Sumber dana</a></li>
                                     </ul>
                                     <!-- Tab panes -->
@@ -192,10 +192,11 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                                                     <thead>
                                                         <tr>
                                                             <!-- <th>No</th> -->
-                                                            <th>Sumber dana</th>
-                                                            <th>Pagu Sumberdana</th>
-                                                            <th>Realisasi</th>
-                                                            <th>Sisa Sumber Dana</th>
+                                                            <th>Nama OPD</th>
+                                                            <th>Alokasi Pagu</th>
+                                                            <th>DAU BG</th>
+                                                            <th>PAD</th>
+                                                            <!-- <th>DBH PROV</th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -583,8 +584,21 @@ include 'views/footer.view.php';
                 type: "POST",
                 dataType: "json",
                 success: function(response) {
-                    var data = response.data;
+                    rekapsumberdana.clear().draw();
                     var data2 = response.data2;
+                    $.each(data2, function(index, value) {
+                        rekapsumberdana.row
+                            .add([
+                                value.skpd, 
+                                formatRupiah(value.pagu, "Rp. "),
+                                formatRupiah(value.daubg, "Rp. "),
+                                formatRupiah(value.pad, "Rp. ")
+                                // value.sisanya
+                            ])
+                            .draw(false);
+                    });
+                    var data = response.data;
+                    
                     var realisasi = response.realisasi;
                     var spm = response.spm;
                     var ls = response.ls;
@@ -618,18 +632,7 @@ include 'views/footer.view.php';
                             ])
                             .draw(false);
                     });
-                    rekapsumberdana.clear().draw();
-                    $.each(data2, function(index, value) {
-                        rekapsumberdana.row
-                            .add([
-                                value.namasumberdana,
-                                formatRupiah(value.nilai, "Rp. "),
-                                formatRupiah(value.realisasinya, "Rp. "),
-                                formatRupiah(value.sisanya, "Rp. "),
-                                // value.sisanya
-                            ])
-                            .draw(false);
-                    });
+                   
 
 
 

@@ -1,6 +1,6 @@
 
 <?php
-include_once 'component/session.php';
+// include_once 'component/session.php';
 include 'views/header.view.php';
 
 ?>
@@ -45,6 +45,8 @@ include 'views/header.view.php';
         <div class="container-fluid">
             <form method="POST" id="insertForm">
                 <div class="row clearfix">
+                    <input class="form-control" type="text" name="idsp2d" id="idsp2d" placeholder="id Sp2d Urlnya"> <br>
+                    <br>
                    <textarea class="form-control" name="datasp2d" placeholder="Masukkan Json" rows="20"></textarea>
                 </div> <br>
                 <div class="col-md-2">
@@ -118,10 +120,26 @@ include 'views/footer.view.php';
             ]
         });
 
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
         // function to fetch data from database
         function fetchData() {
             $.ajax({
-                url: "proses/mocking/registersp2d.php?action=fetchData",
+                url: "proses/mocking/sp2dexecute.php?action=fetchData",
                 type: "POST",
                 dataType: "json",
                 success: function(response) {
@@ -131,12 +149,12 @@ include 'views/footer.view.php';
                         table.row
                             .add([
                                 value.id,
-                                value.id_sp_2_d,
-                                value.jenis_sp_2_d,
-                                value.nomor_sp_2_d,
-                                value.keterangan_sp_2_d,
-                                value.nama_sub_skpd,
-                                value.nilai_sp_2_d
+                                value.idsp2d,
+                                value.jenis,
+                                value.nomor_sp2d,
+                                value.keterangan_sp2d,
+                                value.nama_skpd,
+                                formatRupiah(value.nilai_sp2d, "Rp. ")
                             ])
                             .draw(false);
                     });
@@ -149,7 +167,7 @@ include 'views/footer.view.php';
             $("#insertBtn").attr("disabled");
             e.preventDefault();
             $.ajax({
-                url: "proses/mocking/registersp2d.php?action=insertData",
+                url: "proses/mocking/sp2dexecute.php?action=insertData",
                 type: "POST",
                 data: new FormData(this),
                 contentType: false,

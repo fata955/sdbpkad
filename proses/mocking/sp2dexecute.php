@@ -3,7 +3,7 @@ include "../../lib/conn.php";
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
-    $sql = "SELECT id,nomor_sp2d,keterangan_sp2d,nama_skpd,nilai_sp2d,jenis FROM sipd.sp2d where status='0'";
+    $sql = "SELECT id, idhalaman as idsp2d, jenis, nomor_sp2d,keterangan_sp2d,nama_skpd,nilai_sp2d FROM sp2d where status='0'";
     $result = mysqli_query($conn, $sql);
     $data = [];
     while ($row = mysqli_fetch_assoc($result)) {
@@ -17,8 +17,8 @@ if ($_GET["action"] === "fetchData") {
 }
 
 if ($_GET["action"] === "insertData") {
-    if (!empty($_POST["datasp2dlra"])) {
-        $datasp2dlra = $_POST["datasp2dlra"];
+    if (!empty($_POST["datasp2d"])) {
+        $datasp2dlra = $_POST["datasp2d"];
         $idsp2d = $_POST["idsp2d"];
         // $dt=[];
         $dt = json_decode($datasp2dlra, true);
@@ -54,7 +54,7 @@ function save($id, $jenis)
     $servername = "localhost";
     $username = "root";
     $password = "nadirad3mi208";
-    $database = "sipd";
+    $database = "spm";
     // Create connection
     $conn = new mysqli($servername, $username, $password, $database);
     // $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJTSVBEX0FVVEhfU0VSVklDRSIsInN1YiI6IjEzNDQ0Ni4zNDIiLCJleHAiOjE3MjUzNjI0NDQsImlhdCI6MTcyNTE0NjQ0NCwidGFodW4iOjIwMjQsImlkX3VzZXIiOjEzNDQ0NiwiaWRfZGFlcmFoIjozNDIsImtvZGVfcHJvdmluc2kiOiI3MiIsImlkX3NrcGQiOjAsImlkX3JvbGUiOjExLCJpZF9wZWdhd2FpIjoxMjYyNDgsInN1Yl9kb21haW5fZGFlcmFoIjoicGFsdSJ9.XyYIS3yULX63_B1bZCL0tgH-EXyZNoQ04A63WgbK8HA';
@@ -71,7 +71,7 @@ function save($id, $jenis)
 
     if ($jenis1 == "LS") {
         
-        $datasp2dlra = $_POST["datasp2dlra"];
+        $datasp2dlra = $_POST["datasp2d"];
         $dt = json_decode($datasp2dlra, true);
 
         $jenis = $dt["jenis"];
@@ -234,7 +234,7 @@ function save($id, $jenis)
                 "message" => "Data Sudah Ada 😓"
             ]);
         } else {
-            $datasp2dlra = $_POST["datasp2dlra"];
+            $datasp2dlra = $_POST["datasp2d"];
             $dt = json_decode($datasp2dlra, true);
 
 
@@ -370,7 +370,7 @@ function save($id, $jenis)
                 "message" => "Data sudah Terinput 😀"
             ]);
         } else {
-            $datasp2dlra = $_POST["datasp2dlra"];
+            $datasp2dlra = $_POST["datasp2d"];
             $dt = json_decode($datasp2dlra, true);
 
             $jenis = $dt["jenis"];

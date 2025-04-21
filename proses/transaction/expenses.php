@@ -174,6 +174,7 @@ if ($_GET["action"] === "filtertanggal") {
       "gu" => $gu,
       "up" => $up
     ]);
+    
   } else {
 
     $sql = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(a.tanggal_spm) between '$start' AND '$end' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND b.status=1";

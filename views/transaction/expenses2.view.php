@@ -29,42 +29,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
             </div><br>
 
             <form method="post" id='filtertanggal'>
-                <div class="row clearfix flex justify-content-center">
-                    <div class="col-lg-2">
-                        <label for="skpd">Nama OPD</label><br>
-                        <select name='opdlg' id='opdlg' class="form-control show-tick ms select2" required>
-                            <option value="1">Semua OPD</option>
-                            <?php
-                            $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
-                            while ($fetch = mysqli_fetch_array($opd)) {
-                            ?>
-                                <option value="<?= $fetch['id_sipd']; ?>"> <?= $fetch["nama_opd"]; ?> </option>";
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label for="">Dari Tanggal</label>
-                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-01") ?>">
-
-                    </div>
-                    <div class="col-lg-2">
-                        <label for="">Sampai Tanggal</label>
-                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d") ?>">
-                    </div>
-                    <div class="col-lg-2">
-                        <br>
-                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal SPM</button>
-                    </div>
-                    <div class="col-lg-2">
-                        <br>
-                        <button class="btn btn-secondary" id="tglverif"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal Verfikasi</button>
-                    </div>
-
-
-
-                </div><br>
+                <br>
 
                 <div class="row clearfix flex justify-content-center">
                     <div class="col-lg-2 col-md-6 col-sm-6">
@@ -122,6 +87,43 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="row clearfix flex justify-content-center">
+                    <div class="col-lg-2">
+                        <label for="skpd">Nama OPD</label><br>
+                        <select name='opdlg' id='opdlg' class="form-control show-tick ms select2" required>
+                            <option value="1">Semua OPD</option>
+                            <?php
+                            $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
+                            while ($fetch = mysqli_fetch_array($opd)) {
+                            ?>
+                                <option value="<?= $fetch['id_sipd']; ?>"> <?= $fetch["nama_opd"]; ?> </option>";
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Dari Tanggal</label>
+                        <input type="date" class="form-control" id="date_start" name="date_start" value="<?php echo date("Y-m-01") ?>">
+
+                    </div>
+                    <div class="col-lg-2">
+                        <label for="">Sampai Tanggal</label>
+                        <input type="date" class="form-control" id="date_end" name="date_end" value="<?php echo date("Y-m-d") ?>">
+                    </div>
+                    <div class="col-lg-2">
+                        <br>
+                        <button class="btn btn-info" id="filter"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal SPM</button>
+                    </div>
+                    <div class="col-lg-2">
+                        <br>
+                        <button class="btn btn-secondary" id="tglverif"><i class="zmdi zmdi-search mr-2"></i>Berdasarkan Tanggal Verfikasi</button>
+                    </div>
+
+
+
                 </div>
             </form>
         </div>
@@ -494,7 +496,6 @@ include 'views/footer.view.php';
         nilaispm.addEventListener('keyup', function(e) {
             nilaispm.value = formatRupiah(this.value, 'Rp. ');
         })
-
         fetchspm();
         fetchVerif();
 
@@ -589,7 +590,7 @@ include 'views/footer.view.php';
                     $.each(data2, function(index, value) {
                         rekapsumberdana.row
                             .add([
-                                value.skpd, 
+                                value.skpd,
                                 formatRupiah(value.pagu, "Rp. "),
                                 formatRupiah(value.daubg, "Rp. "),
                                 formatRupiah(value.pad, "Rp. ")
@@ -598,7 +599,7 @@ include 'views/footer.view.php';
                             .draw(false);
                     });
                     var data = response.data;
-                    
+
                     var realisasi = response.realisasi;
                     var spm = response.spm;
                     var ls = response.ls;
@@ -632,7 +633,7 @@ include 'views/footer.view.php';
                             ])
                             .draw(false);
                     });
-                   
+
 
 
 
@@ -789,7 +790,6 @@ include 'views/footer.view.php';
                         table2.clear().draw();
                         // var counter = 1;
                         $.each(data, function(index, value) {
-
                             table2.row
                                 .add([
                                     // counter,
@@ -830,9 +830,6 @@ include 'views/footer.view.php';
                 }
             });
         });
-
-
-
         function getFormattedDate() {
             const today = new Date();
             const formattedDate = today.toLocaleDateString('en-US', {

@@ -53,8 +53,6 @@ if ($_GET["action"] === "insertData") {
   }
 }
 
-
-
 // fetch data of individual user for edit form
 if ($_GET["action"] === "fetchSingle") {
   $id = $_POST["id"];
@@ -75,8 +73,6 @@ if ($_GET["action"] === "fetchSingle") {
   }
   mysqli_close($conn);
 }
-
-
 
 // function to update data
 if ($_GET["action"] === "updateData") {

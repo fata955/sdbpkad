@@ -4,10 +4,11 @@
     // insert data to database
     session_start();
     if ($_GET["action"] === "insertData") {
-        if (!empty($_POST["nm_pengguna"]) && !empty($_POST["username"]) && !empty($_POST["pwd_password"])  != 0) {
+        if (!empty($_POST["nm_pengguna"]) && !empty($_POST["username"]) && !empty($_POST["pwd_password"]) && !empty($_POST["current_pwd"]) ) {
             $nama = mysqli_real_escape_string($conn, $_POST["nm_pengguna"]);
             $namauser = mysqli_real_escape_string($conn, $_POST["username"]);
             $passworduser = mysqli_real_escape_string($conn, $_POST["pwd_password"]);
+            $currentuser = mysqli_real_escape_string($conn, $_POST["current_pwd"]);
 
             $sql = "SELECT username as nama from user where username='$namauser'";
             $koneksi = mysqli_query($conn, $sql);
@@ -26,7 +27,7 @@
                     $hashpassword = password_hash($salted_password, PASSWORD_BCRYPT);
                     $token = password_hash("BPKAD", PASSWORD_BCRYPT);
 
-                    $sql = "INSERT INTO user (namalengkap,username,password,token,status,tanggal) VALUES ('$nama','$namauser','$hashpassword','$token','0','$tanggal')";
+                    $sql = "INSERT INTO user (namalengkap,username,password,token,status) VALUES ('$nama','$namauser','$hashpassword','$token','3')";
                     
                     if (mysqli_query($conn, $sql)) {
                         echo json_encode([

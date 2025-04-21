@@ -18,11 +18,11 @@
 
 <body class="theme-blush">
 
-    <div class="authentication">
+    <div class="authentication"> 
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-sm-12">
-                    <form class="card auth_form" id="formData">
+                    <form class="card auth_form" id="formData" method="POST">
                         <div class="header">
                             <img class="logo" src="assets/images/logo.svg" alt="">
                             <h5>Sign Up</h5>
@@ -30,19 +30,25 @@
                         </div>
                         <div class="body">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="nm_pengguna" placeholder="Nama Pengguna">
+                                <input type="text" class="form-control" id="nm_pengguna" name="nm_pengguna" placeholder="Nama Pengguna">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-account-circle"></i></span>
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="username" placeholder="Username">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-account"></i></span>
                                 </div>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="pwd_password" placeholder="Password">
+                                <input type="text" class="form-control" id="pwd_password" name="pwd_password" placeholder="Password">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+                                </div>
+                            </div>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="current_pwd" name="current_pwd" placeholder="Password">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
                                 </div>
@@ -111,6 +117,7 @@
             $("#nm_pengguna").val('');
             $("#username").val('');
             $("#pwd_password").val('');
+            $("#current_pwd").val('');
             
         }
 

@@ -82,6 +82,7 @@ if ($level > 1){
                 <ul class="ml-menu">
                     <li class="main menu"><a href="/lacaksalur">Income</a></li>
                     <li class="main menu"><a href="/expenses">Expense</a></li>
+                    <li class="main menu"><a href="/penguji">Daftar Penguji</a></li>
                 </ul>
             </li>
             <li class="main"><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-copy"></i><span>Report</span></a>

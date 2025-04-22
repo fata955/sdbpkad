@@ -350,7 +350,7 @@ include 'views/footer.view.php';
                                 <option value="<?= $fetch['jenis_dana']; ?>"> <?= $fetch["namasumberdana"]; ?> </option>";
                             <?php
                             }
-                            ?>
+                            ?> 
                         </select>
                     </div>
                     <label for="sumberdana" id="lnamasumber">Alokasi Sumber Dana</label><br>

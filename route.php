@@ -67,6 +67,9 @@ switch ($request) {
     case $me . 'signup':
         include 'views/register.view.php';
         break;
+    case $me . 'penguji':
+        include 'views/transaction/transfer.view.php';
+        break;
  
     default:
         http_response_code(404);

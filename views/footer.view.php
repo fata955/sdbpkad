@@ -1,3 +1,4 @@
+
 <!-- Jquery Core Js -->
 <script src="assets/bundles/libscripts.bundle.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
@@ -13,10 +14,10 @@
 <script src="assets/DataTables/datatables.min.js"></script>
 <script src="assets/js/pages/index.js"></script>
 <script src="assets/plugins/select2/select2.min.js"></script>
-<script src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js --> 
-<script src="assets/plugins/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js --> 
-<script src="assets/js/pages/forms/advanced-form-elements.js"></script> 
-<script src="lib/formatrupiah.js"></script> 
+<script src="assets/plugins/jquery-inputmask/jquery.inputmask.bundle.js"></script> <!-- Input Mask Plugin Js -->
+<script src="assets/plugins/multi-select/js/jquery.multi-select.js"></script> <!-- Multi Select Plugin Js -->
+<script src="assets/js/pages/forms/advanced-form-elements.js"></script>
+<script src="lib/formatrupiah.js"></script>
 
 </body>
 

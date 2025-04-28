@@ -30,7 +30,7 @@ include 'views/header.view.php';
                     </button>
                 </div>
                 <div class="col-lg-5 col-md-6 col-sm-12">
-                    <button
+                    <!-- <button
                         class="btn btn-primary btn-icon float-right right_icon_toggle_btn"
                         type="button">
                         <i class="zmdi zmdi-arrow-right"></i>
@@ -41,7 +41,7 @@ include 'views/header.view.php';
                         data-toggle="modal"
                         data-target="#offcanvasaddpagu">
                         <i class="zmdi zmdi-plus"></i>
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -62,59 +62,48 @@ include 'views/header.view.php';
                 </thead>
                 <tbody></tbody>
               </table>
-            </div>
+            </div> 
           </div>
         </div>
       </div>
     </div> -->
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
-                <form method="POST" id="insertForm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="title" id="largeModalLabel">Cari Data SPM</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="input-group mb-3">
-                                <select name='dspm' id='dspm' class="form-control show-tick ms select2">
-                                    <?php
-                                    include '../../lib/conn.php';
-                                    $skpd = mysqli_query($conn, "SELECT * FROM t_spm");
-                                    while ($fetch = mysqli_fetch_array($skpd)) {
-                                        echo "<option value='$fetch[id]'> $fetch[nomor_spm] ** $fetch[nama_sub_skpd] ** $fetch[nilai_spm]  </option>";
-                                    }
-                                    ?>
-                                </select>
+                <div class="col-lg-8 d-flex align-items-center">
+                    <div class="container-fluid p-3 mb-2 bg-light text-dark">
+                        <div class="row input-group-prepend">
+                            <div class="col-lg-3">
+                                <label for="nomorpenguji">No. Penguji</label>
+                                <input type="text" class="form-control" placeholder="Nomor Penguji" aria-label="penguji" aria-describedby="inputGroup-sizing-sm">
                             </div>
-                            <div class="input-group mb-3">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Keterangan"
-                                    name="nilai" />
+                            <div class="col-lg-3">
+                                <label for="tanggal">Tanggal</label>
+                                <input type="text" class="form-control " placeholder="Tanggal" aria-label="tanggal" aria-describedby="inputGroup-sizing-sm">
                             </div>
-                            <div class="input-group mb-3">
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Nilai SPM"
-                                    name="nilai" />
+                            <div class="col-lg-3">
+                                <label for="jam">Jam</label>
+                                <input type="text" class="form-control" placeholder="Jam" aria-label="jam" aria-describedby="inputGroup-sizing-sm">
                             </div>
-                            
-                        </div>
-                        
-                        <div class="modal-footer">
-                            <button
-                                type="submit"
-                                class="btn btn-default btn-round waves-effect"
-                                id="insertBtn">
-                                Simpan
-                            </button>
-                           
+                            <div class="col-lg-3">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="inputGroup-sizing-sm">
+                            </div>
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="col-lg-4 p-3 mb-2 bg-dark text-white">
+                    <label for="exampleInputEmail1">Nominal</label>
+                    <input type="text" class="form-control" placeholder="Rp.-" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Nomor SPM" aria-label="Nomor SPM" aria-describedby="inputGroup-sizing-sm">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary">Cari</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -419,7 +408,7 @@ include 'views/footer.view.php';
         });
 
         $("#dspm").on("change", function() {
-         
+
             // $('#selected').text(selectedPackage);
             // kosong();
             $.ajax({

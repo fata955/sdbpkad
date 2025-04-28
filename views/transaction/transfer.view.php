@@ -29,44 +29,8 @@ include 'views/header.view.php';
                         <i class="zmdi zmdi-sort-amount-desc"></i>
                     </button>
                 </div>
-                <div class="col-lg-5 col-md-6 col-sm-12">
-                    <!-- <button
-                        class="btn btn-primary btn-icon float-right right_icon_toggle_btn"
-                        type="button">
-                        <i class="zmdi zmdi-arrow-right"></i>
-                    </button>
-                    <button
-                        class="btn btn-success btn-icon float-right"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#offcanvasaddpagu">
-                        <i class="zmdi zmdi-plus"></i>
-                    </button> -->
-                </div>
             </div>
         </div>
-        <!-- <div class="container-fluid">
-      <div class="row clearfix">
-        <div class="col-lg-12">
-          <div class="card" id="">
-            <div class="table-responsive">
-              <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="myTablepagu">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>NAMA OPD</th>
-                    <th>NILAI PAGU</th>
- 
-                    <th data-breakpoints="xs">Action</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div> 
-          </div>
-        </div>
-      </div>
-    </div> -->
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-8 d-flex align-items-center">
@@ -96,14 +60,110 @@ include 'views/header.view.php';
                     <input type="text" class="form-control" placeholder="Rp.-" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Nomor SPM" aria-label="Nomor SPM" aria-describedby="inputGroup-sizing-sm">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary">Cari</button>
-                        </div>
+            <br>
+            <div class="row border border-warning bg-light mb-3">
+                <div class="col-lg-4 align-items-center mt-3">
+                    <div class="input-group mb-3 ">
+                        <select name='dspm' id='dspm' class="form-control show-tick ms select2 ">
+                            <?php
+                            include '../../lib/conn.php';
+                            $skpd = mysqli_query($conn, "SELECT * FROM t_spm");
+                            while ($fetch = mysqli_fetch_array($skpd)) {
+                                echo "<option value='$fetch[id]'> $fetch[nomor_spm] ** $fetch[nama_sub_skpd] ** $fetch[nilai_spm]  </option>";
+                            }
+                            ?>
+                        </select>
                     </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <textarea class="form-control" placeholder="Keterangan SPM"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Brutto" aria-label="brutto" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Potongan" aria-label="potongan" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="nilai" aria-label="nilai" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+            </div>
+            <div class="row border border-warning d-flex align-items-center">
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Nomor Sp2d" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Bank Mandiri" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="col-lg-1 d-flex align-items-center">
+                    <div class="input-group ">
+                        <button type="button" class="btn btn-info btn-sm btn-block">Add</button>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-info btn-sm btn-block"><i class="zmdi zmdi-close"></i></button>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-warning btn-sm btn-block"><i class="zmdi zmdi-save"></i></button>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <div class="input-group">
+                        <button type="button" class="btn btn-danger btn-sm btn-block"><i class="zmdi zmdi-search"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Keterangan</th>
+                                <th scope="col">sp2d</th>
+                                <th scope="col">opd</th>
+                                <th scope="col">Nilai</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                                <td>dinas</td>
+                                <td>@mdo</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>Jacob</td>
+                                <td>Thornton</td>
+                                <td>Dinas</td>
+                                <td>@fat</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>John</td>
+                                <td>Doe</td>
+                                <td>Dinas</td>
+                                <td>@social</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

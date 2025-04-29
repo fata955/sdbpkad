@@ -10,7 +10,7 @@ $me = $project_location;
 $request = $_SERVER['REQUEST_URI'];
 switch ($request) {
 
-    case $me :
+    case $me:
         include 'views/dashboard.view.php';
         break;
     case $me . 'login':
@@ -24,6 +24,9 @@ switch ($request) {
         break;
     case $me . 'tagihan':
         include 'views/mocking/spm.view.php';
+        break;
+    case $me . 'tagihandetail':
+        include 'views/mocking/spmbelanja.view.php';
         break;
     case $me . 'skpd':
         include 'views/master/opd.view.php';
@@ -70,7 +73,7 @@ switch ($request) {
     case $me . 'penguji':
         include 'views/transaction/transfer.view.php';
         break;
- 
+
     default:
         http_response_code(404);
         require "views/error.view.php";

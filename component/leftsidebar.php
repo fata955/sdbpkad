@@ -94,7 +94,7 @@ if ($level > 1){
             </li>
             <li class="main"> <a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-assignment"></i><span>Mock API SIPD</span></a>
                 <ul class="ml-menu">
-                    <li class="main menu"><a href="/tagihan">SPM</a></li>
+                    <li class="main menu"><a href="/tagihandetail">SPM</a></li>
                     <li class="main menu"><a href="/sp2d">SP2D</a></li>
                     <li class="main menu"><a href="ticket-list.html">Relisasi Belanja</a></li>
                     <li class="main menu"><a href="ticket-detail.html">Realisasi Potongan</a></li>

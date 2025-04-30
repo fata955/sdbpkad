@@ -1,6 +1,6 @@
 <?php
 include "../../lib/conn.php";
-session_start(); 
+session_start();
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
@@ -20,11 +20,11 @@ if ($_GET["action"] === "fetchData") {
 if ($_GET["action"] === "insertData") {
     if (!empty($_POST["dataspmdetail"])) {
         $dataspmdetail = $_POST["dataspmdetail"];
-        $idsp2d = $_POST["idsp2d"];
+        $idspm = $_POST["idspm"];
         $dt = json_decode($dataspmdetail, true);
         $idl = $dt['jenis'];
 
-        save($idsp2d, $idl);
+        save($idspm, $idl);
 
         echo json_encode([
             "statusCode" => 200,
@@ -62,7 +62,7 @@ function save($id, $jenis)
 
 
     if ($jenis1 == "LS") {
-        
+
         $dataspmdetail = $_POST["dataspmdetail"];
         $dt = json_decode($dataspmdetail, true);
 
@@ -90,7 +90,7 @@ function save($id, $jenis)
         $detail = $dt["ls"]["detail"];
         $pajak_potongan = $dt["ls"]["pajak_potongan"];
 
-        $idskpd = mysqli_query($conn,"SELECT id_sipd FROM skpd where nama_opd='$nama_skpd'")or die(mysqli_error($conn));
+        $idskpd = mysqli_query($conn, "SELECT id_sipd FROM skpd where nama_opd='$nama_skpd'") or die(mysqli_error($conn));
         $idskpd = mysqli_fetch_array($idskpd);
         $id_skpd = $idskpd['id_sipd'];
 
@@ -179,13 +179,35 @@ function save($id, $jenis)
                     $expotongan = mysqli_query($conn, $potonganpjk) or die(mysqli_error($conn));
                 }
             }
+            if ($dasarpembayaran == null) {
+                echo json_encode([
+                    "statusCode" => 500,
+                    "message" => "Data dasar pembayaran tidak ada 😀"
+                ]);
+            } else {
+                foreach ($dasarpembayaran as $row1) {
+                    // $billing = str_replace("'", "", $row1["id_billing"]);
+                    $dsrpembayaran = "INSERT INTO spd (
+                                    nomor_spd,
+                                    tanggal_spd,
+                                    total_spd,
+                                    id_spm
+                                )VALUES (
+                                    '" . $row1["nomor_spd"] . "',
+                                    '" . $row1["tanggal_spd"] . "',
+                                    '" . $row1["total_spd"] . "',
+                                    '$id'
+                                )";
+                    $expotongan = mysqli_query($conn, $potonganpjk) or die(mysqli_error($conn));
+                }
+            }
             echo json_encode([
                 "statusCode" => 200,
                 "message" => "Data inserted successfully 😀"
             ]);
         }
     } elseif ($jenis1 == "GU") {
-        $data = mysqli_query($conn, "SELECT * FROM sp2d where idhalaman=$id") or die(mysqli_error($conn));
+        $data = mysqli_query($conn, "SELECT * FROM tspm where id_spm=$id") or die(mysqli_error($conn));
         $hal = mysqli_num_rows($data);
         if ($hal != null) {
             echo json_encode([
@@ -193,19 +215,25 @@ function save($id, $jenis)
                 "message" => "Data Sudah Ada 😓"
             ]);
         } else {
-            $datasp2dlra = $_POST["datasp2d"];
-            $dt = json_decode($datasp2dlra, true);
+            $dataspmdetail = $_POST["dataspmdetail"];
+            $dt = json_decode($dataspmdetail, true);
 
 
             $jenis = $dt["jenis"];
             $tahun = $dt["gu"]["tahun"];
+            $nomor_spm= $dt["gu"]["nomor_spm"];
+            $tanggal_spm = $dt["gu"]["tanggal_spm"];
+            $keterangan_spm = $dt["gu"]["keterangan_spm"];
+            $nilai_spm = $dt["gu"]["nilai_spm"];
+            
+
             $rekening = $dt["gu"]["nomor_rekening"];
             $nama_bank = $dt["gu"]["nama_bank"];
             $nomor_sp_2_d = $dt["gu"]["nomor_sp_2_d"];
             $tanggal_sp_2_d = $dt["gu"]["tanggal_sp_2_d"];
             $nama_skpd = $dt["gu"]["nama_skpd"];
             $keterangan_sp2d = $dt["gu"]["keterangan_sp2d"];
-            $nilai_sp2d = $dt["gu"]["nilai_sp2d"];
+            
             $nomor_spm = $dt["gu"]["nomor_spm"];
             $tanggal_spm = $dt["gu"]["tanggal_spm"];
             $nama_ibu_kota = $dt["gu"]["nama_ibu_kota"];

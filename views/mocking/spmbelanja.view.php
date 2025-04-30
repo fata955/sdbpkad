@@ -1,10 +1,11 @@
-
 <?php
 // include_once 'component/session.php';
-session_start(); 
+session_start();
 include 'lib/conn.php';
-if (!isset($_SESSION['username'])) { header('Location: /login'); 
-    exit(); }
+if (!isset($_SESSION['username'])) {
+    header('Location: /login');
+    exit();
+}
 include 'views/header.view.php';
 
 ?>
@@ -40,11 +41,22 @@ include 'views/header.view.php';
         <div class="container-fluid">
             <form method="POST" id="insertForm">
                 <div class="row clearfix">
-                   <textarea class="form-control" name="dataspmdetail" placeholder="Masukkan Json" rows="20"></textarea>
-                </div> <br>
-                <div class="col-md-2">
+                    <div class="col-lg-12">
+                        <input class="form-control" name="idspm" placeholder="Masukkan id spm"></input>
+                    </div>
+                </div>
+                <br>
+                <div class="row clearfix">
+                    <div class="col-lg-12">
+                        <textarea class="form-control" name="dataspmdetail" placeholder="Masukkan Json" rows="20"></textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="row clearfix">
+                    <div class="col-lg-12 d-flex justify-content-center">
                         <button class="btn btn-primary" type="submit" id='insertBtn'>Tarik Data SPM</button>
                     </div>
+                </div>
             </form>
             <div class="row clearfix">
                 <div class="col-lg-12">
@@ -64,7 +76,7 @@ include 'views/header.view.php';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -81,31 +93,31 @@ include 'views/footer.view.php';
 
 <!-- Toast container  -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <!-- Success toast  -->
-  <div class="toast align-items-center text-bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
-    <div class="d-flex">
-      <div class="toast-body">
-        <strong>Success!</strong>
-        <span id="successMsg"></span>
-      </div>
-      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <!-- Success toast  -->
+    <div class="toast align-items-center text-bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
+        <div class="d-flex">
+            <div class="toast-body">
+                <strong>Success!</strong>
+                <span id="successMsg"></span>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
     </div>
-  </div>
-  <!-- Error toast  -->
-  <div class="toast align-items-center text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
-    <div class="d-flex">
-      <div class="toast-body">
-        <strong>Error!</strong>
-        <span id="errorMsg"></span>
-      </div>
-      <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    <!-- Error toast  -->
+    <div class="toast align-items-center text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
+        <div class="d-flex">
+            <div class="toast-body">
+                <strong>Error!</strong>
+                <span id="errorMsg"></span>
+            </div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
     </div>
-  </div>
 </div>
 <script>
     $(document).ready(function() {
         fetchData();
-        
+
         let table = new DataTable("#myTablespmdetail", {
             "order": [
                 [4, "desc"]
@@ -124,7 +136,7 @@ include 'views/footer.view.php';
                     table.clear().draw();
                     $.each(data, function(index, value) {
                         var ket = value.keterangan_spm;
-                        var slice = ket.slice(0,70);
+                        var slice = ket.slice(0, 70);
 
                         table.row
                             .add([
@@ -146,7 +158,7 @@ include 'views/footer.view.php';
             $("#insertBtn").attr("disabled", "disabled");
             e.preventDefault();
             $.ajax({
-                url: "proses/mocking/spmexecute.php?action=insertData",
+                url: "proses/mocking/spmdetail.php?action=insertData",
                 type: "POST",
                 data: new FormData(this),
                 contentType: false,

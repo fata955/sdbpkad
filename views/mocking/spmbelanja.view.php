@@ -42,13 +42,13 @@ include 'views/header.view.php';
             <form method="POST" id="insertForm">
                 <div class="row clearfix">
                     <div class="col-lg-12">
-                        <input class="form-control" name="idspm" placeholder="Masukkan id spm"></input>
+                        <input class="form-control" id="idspm" name="idspm" placeholder="Masukkan id spm"></input>
                     </div>
                 </div>
                 <br>
                 <div class="row clearfix">
                     <div class="col-lg-12">
-                        <textarea class="form-control" name="dataspmdetail" placeholder="Masukkan Json" rows="20"></textarea>
+                        <textarea class="form-control" id="dataspmdetail" name="dataspmdetail" placeholder="Masukkan Json" rows="20"></textarea>
                     </div>
                 </div>
                 <br>
@@ -86,12 +86,6 @@ include 'views/header.view.php';
         </div>
     </div>
 </section>
-
-<?php
-include 'views/footer.view.php';
-?>
-
-<!-- Toast container  -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <!-- Success toast  -->
     <div class="toast align-items-center text-bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
@@ -108,12 +102,26 @@ include 'views/footer.view.php';
         <div class="d-flex">
             <div class="toast-body">
                 <strong>Error!</strong>
-                <span id="errorMsg"></span>
+                <span id="errorMsg">Data sudah Terinput</span>
             </div>
             <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
+
+<?php
+include 'views/footer.view.php';
+?>
+<script src="assets/bundles/datatablescripts.bundle.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/buttons.flash.min.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/buttons.html5.min.js"></script>
+<script src="assets/plugins/jquery-datatable/buttons/buttons.print.min.js"></script>
+<!-- <script src="assets/js/pages/tables/jquery-datatable.js"></script> -->
+<!-- Toast container  -->
+
 <script>
     $(document).ready(function() {
         fetchData();
@@ -155,7 +163,7 @@ include 'views/footer.view.php';
 
         // function to insert data to database
         $("#insertForm").on("submit", function(e) {
-            $("#insertBtn").attr("disabled", "disabled");
+            // $("#insertBtn").attr("disabled", "disabled");
             e.preventDefault();
             $.ajax({
                 url: "proses/mocking/spmdetail.php?action=insertData",
@@ -165,15 +173,25 @@ include 'views/footer.view.php';
                 cache: false,
                 processData: false,
                 success: function(response) {
-                    var response = JSON.parse(response);
-                    if (response.statusCode == 200) {
+                    var response = JSON.parse(response.statusCode);
+                   
+                    if (response == 200) {
+                        Swal.fire("!", "Data Sukses Terupdate", "success");
                         $("#successToast").toast("show");
+                        $('#idspm').prop('value', ''); // Mengosongkan input
+                        $('#dataspmdetail').prop('value', ''); // Mengosongkan input
+                        
+                        // window('')
                         // Swal.fire("!", "Data Sukses Tersimpan", "success");
-                        // fetchData();
-                    } else if (response.statusCode == 500) {
+                        fetchData();
+                    } else if (response == 500) {
+                        Swal.fire("!", "Data sudah ada", "warning");
+                        $('#idspm').prop('value', ''); // Mengosongkan input
+                        $('#dataspmdetail').prop('value', ''); // Mengosongkan input
+                        fetchData();
+                    } else if (response == 400) {
                         $("#errorToast").toast("show");
-                    } else if (response.statusCode == 400) {
-                        $("#errorToast").toast("show");
+                        fetchData();
                     }
                 }
             });

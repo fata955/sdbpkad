@@ -11,6 +11,7 @@ if ($_GET["action"] === "fetchData") {
         $data[] = $row;
     }
     mysqli_close($conn);
+
     header('Content-Type: application/json');
     echo json_encode([
         "data" => $data
@@ -24,449 +25,191 @@ if ($_GET["action"] === "insertData") {
         $dt = json_decode($dataspmdetail, true);
         $idl = $dt['jenis'];
 
-        save($idspm, $idl);
+        // mengambil nilai id opd/skpd di database
+        if ($idl == "LS") {
+            $nama_skpd = $dt["ls"]["header"]["nama_skpd"];
 
-        echo json_encode([
-            "statusCode" => 200,
-            "message" => "Data Sukses Tersimpan 🙏"
-        ]);
+            $idskpd = mysqli_query($conn, "SELECT id_sipd FROM skpd where nama_opd='$nama_skpd'") or die(mysqli_error($conn));
+            $idskpd = mysqli_fetch_array($idskpd);
+            $id_skpd = $idskpd['id_sipd'];
+        } elseif ($idl == "GU") {
+            $nama_skpd = $dt["gu"]["nama_skpd"];
 
-        // }
+            $idskpd = mysqli_query($conn, "SELECT id_sipd FROM skpd where nama_opd='$nama_skpd'") or die(mysqli_error($conn));
+            $idskpd = mysqli_fetch_array($idskpd);
+            $id_skpdgu = $idskpd['id_sipd'];
+        } elseif ($idl == "UP"){
+
+        }
+
+
+
+        // mengecek apakah ada yang sama didalam database menghindar double data
+        $data = mysqli_query($conn, "SELECT * FROM tspm where id_spm=$idspm") or die(mysqli_error($conn));
+        $hal = mysqli_num_rows($data);
+
+        if ($hal != null) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                "statusCode" => 500,
+                "message" => "Data Sudah Terinput"
+            ]);
+            return;
+        } else {
+            if ($idl == "LS") {
+                $jenis = $dt["jenis"];
+                $tahun = $dt["ls"]["header"]["tahun"];
+                $nomor_spm = $dt["ls"]["header"]["nomor_spm"];
+                $tanggal_spm = $dt["ls"]["header"]["tanggal_spm"];
+                $nama_skpd = $dt["ls"]["header"]["nama_skpd"];
+                $nama_sub_skpd = $dt["ls"]["header"]["nama_sub_skpd"];
+                $nama_pihak_ketiga = $dt["ls"]["header"]["nama_pihak_ketiga"];
+                $no_rek_pihak_ketiga = $dt["ls"]["header"]["no_rek_pihak_ketiga"];
+                $nama_rek_pihak_ketiga = $dt["ls"]["header"]["nama_rek_pihak_ketiga"];
+                $bank_pihak_ketiga = $dt["ls"]["header"]["bank_pihak_ketiga"];
+                $npwp_pihak_ketiga = $dt["ls"]["header"]["npwp_pihak_ketiga"];
+                $keterangan_spm = $dt["ls"]["header"]["keterangan_spm"];
+                $nilai_spm = $dt["ls"]["header"]["nilai_spm"];
+                $nomor_spp = $dt["ls"]["header"]["nomor_spp"];
+                $tanggal_spp = $dt["ls"]["header"]["tanggal_spp"];
+                $nama_ibu_kota = $dt["ls"]["header"]["nama_ibukota"];
+                $nama_pa_kpa = $dt["ls"]["header"]["nama_pa_kpa"];
+                $nip_pa_kpa = $dt["ls"]["header"]["nip_pa_kpa"];
+                $jabatan_pa_kpa = $dt["ls"]["header"]["jabatan_pa_kpa"];
+                $dasarpembayaran = $dt["ls"]["dasar_pembayaran"];
+                $detail = $dt["ls"]["detail"];
+                $pajak_potongan = $dt["ls"]["pajak_potongan"];
+
+                $angka1 = str_replace("'", "", $no_rek_pihak_ketiga);
+                $keteranganspm = str_replace("'", "", $keterangan_spm);
+                $namapenerima = str_replace("'", "", $nama_pihak_ketiga);
+                $namarekening = str_replace("'", "",  $nama_rek_pihak_ketiga);
+
+                $insertspm = "INSERT INTO tspm 
+                        (id_spm,nomor_spm,tanggal_spm,id_skpd,keterangan_spm,nilai_spm,no_rek_pihak_ketiga,nama_rek_pihak_ketiga,bank_pihak_ketiga,
+                        npwp_pihak_ketiga,nama_pa_kpa,nip_pa_kpa,jabatan_pa_kpa,nomor_spp,tanggal_spp,jenis,nama_bp_bpp,nip_bp_bpp,jabatan_bp_bpp )
+                        Values(
+                                '$idspm','$nomor_spm','$tanggal_spm','$id_skpd','$keteranganspm','$nilai_spm','$no_rek_pihak_ketiga','$namarekening',
+                                '$bank_pihak_ketiga','$npwp_pihak_ketiga','$nama_pa_kpa','$nip_pa_kpa','$jabatan_pa_kpa','$nomor_spp','$tanggal_spp',
+                                '$idl','0','0','0'
+                            )";
+                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana)
+                        VALUES (
+                        '$idspm','0','0','0','0')";
+
+                $spm = mysqli_query($conn, $insertspm) or die(mysqli_error($conn));
+                $subspm = mysqli_query($conn, $insertsubspm) or die(mysqli_error($conn));
+
+                foreach ($detail as $row) {
+                    $insertbelanja = "INSERT INTO belanja (norekening,uraian,nilai,id_spm)
+                VALUES (
+                '" . $row["kode_rekening"] . "',
+                '" . $row["uraian"] . "',
+                '" . $row["jumlah"] . "',
+                '$idspm'
+                )";
+                    $belanja = mysqli_query($conn, $insertbelanja) or die(mysqli_error($conn));
+                }
+
+                if ($pajak_potongan == null) {
+                } else {
+                    foreach ($pajak_potongan as $row1) {
+                        $billing = str_replace("'", "", $row1["id_billing"]);
+                        $insertpotongan = "INSERT INTO potongan (uraian,nilai,id_spm,billing)
+                        VALUES (
+                                    '" . $row1["nama_pajak_potongan"] . "',
+                                    '" . $row1["nilai_spp_pajak_potongan"] . "',
+                                    '$idspm',
+                                    '$billing'
+                                )";
+                        $billing = str_replace("'", "", $row1["id_billing"]);
+                        $spmpotongan = mysqli_query($conn, $insertpotongan) or die(mysqli_error($conn));
+                    }
+                }
+                if ($dasarpembayaran == null) {
+                } else {
+
+                    $insertspd = "INSERT INTO spd (nomor_spd,tanggal_spd,total_spd,id_spm)
+                VALUES (
+                            '" . $dasarpembayaran["nomor_spd"] . "',
+                            '" . $dasarpembayaran["tanggal_spd"] . "',
+                            '" . $dasarpembayaran["total_spd"] . "',
+                            '$idspm'
+                        )";
+
+                    $spd = mysqli_query($conn, $insertspd) or die(mysqli_error($conn));
+                }
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    "statusCode" => 200,
+                    "message" => "Data inserted successfully 😀"
+                ]);
+            } elseif ($idl == "GU") {
+                $jenis = $dt["jenis"];
+                $tahun = $dt["gu"]["tahun"];
+                $nomor_spm = $dt["gu"]["nomor_spm"];
+                $tanggal_spm = $dt["gu"]["tanggal_spm"];
+                $nama_skpd = $dt["gu"]["nama_skpd"];
+                $nama_sub_skpd = $dt["gu"]["nama_sub_skpd"];
+                $no_rek_pihak_ketiga = $dt["gu"]["no_rek_bp_bpp"];
+                $nama_rek_pihak_ketiga = $dt["gu"]["nama_rek_bp_bpp"];
+                $bank_pihak_ketiga = $dt["gu"]["bank_bp_bpp"];
+                $npwp_pihak_ketiga = $dt["gu"]["npwp_bp_bpp"];
+                $keterangan_spm = $dt["gu"]["keterangan_spm"];
+                $nilai_spm = $dt["gu"]["nilai_spm"];
+                $nomor_spp = $dt["gu"]["nomor_spp"];
+                $tanggal_spp = $dt["gu"]["tanggal_spp"];
+                $nama_ibu_kota = $dt["gu"]["nama_ibu_kota"];
+                $nama_pa_kpa = $dt["gu"]["nama_pa_kpa"];
+                $nip_pa_kpa = $dt["gu"]["nip_pa_kpa"];
+                $jabatan_pa_kpa = $dt["gu"]["jabatan_pa_kpa"];
+                $nama_bp_bpp = $dt["gu"]["nama_bp_bpp"];
+                $nip_bp_bpp = $dt["gu"]["nip_bp_bpp"];
+                $jabatan_bp_bpp = $dt["gu"]["jabatan_bp_bpp"];
+                $detailgu = $dt["gu"]["detail"];
+
+                $keteranganspm = str_replace("'", "", $keterangan_spm);
+                $namarekening = str_replace("'", "",  $nama_rek_pihak_ketiga);
+                $insertspm = "INSERT INTO tspm (id_spm,nomor_spm,tanggal_spm,id_skpd,keterangan_spm,nilai_spm,no_rek_pihak_ketiga,nama_rek_pihak_ketiga,
+                    bank_pihak_ketiga,npwp_pihak_ketiga,nama_pa_kpa,nip_pa_kpa,jabatan_pa_kpa,nomor_spp,tanggal_spp,jenis,nama_bp_bpp,nip_bp_bpp,jabatan_bp_bpp )
+                    Values(
+                            '$idspm','$nomor_spm','$tanggal_spm','$id_skpdgu','$keteranganspm','$nilai_spm','$no_rek_pihak_ketiga','$namarekening','$bank_pihak_ketiga',
+                            '$npwp_pihak_ketiga','$nama_pa_kpa','$nip_pa_kpa','$jabatan_pa_kpa','$nomor_spp','$tanggal_spp','$idl','$nama_bp_bpp',
+                            '$nip_bp_bpp','$jabatan_bp_bpp'
+                        )";
+                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana)
+                        VALUES (
+                        '$idspm','0','0','0','0')";
+
+
+                $insertspm = mysqli_query($conn, $insertspm) or die(mysqli_error($conn));
+                $insertsubspm = mysqli_query($conn, $insertsubspm) or die(mysqli_error($conn));
+                foreach ($detailgu as $row) {
+                    $insertbelanja = "INSERT INTO belanja (norekening,uraian,nilai,id_spm)
+                    VALUES (
+                        '" . $row["kode_rekening"] . "',
+                        '" . $row["uraian"] . "',
+                        '" . $row["nilai"] . "',
+                        '$idspm')";
+                    $belanja = mysqli_query($conn, $insertbelanja) or die(mysqli_error($conn));
+                }
+
+                header('Content-Type: application/json');
+                echo json_encode([
+                    "statusCode" => 200,
+                    "message" => "Data inserted successfully 😀"
+                ]);
+            } elseif ($idl == "UP") {
+                
+            } elseif ($idl == "TU") {
+            }
+        }
     } else {
+        header('Content-Type: application/json');
         echo json_encode([
             "statusCode" => 400,
             "message" => "Please fill all the required fields 🙏"
         ]);
-    }
-}
-
-
-function save($id, $jenis)
-{
-    $servername = "localhost";
-    $username = "root";
-    $password = "nadirad3mi208";
-    $database = "spm";
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $database);
-    // $token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJTSVBEX0FVVEhfU0VSVklDRSIsInN1YiI6IjEzNDQ0Ni4zNDIiLCJleHAiOjE3MjUzNjI0NDQsImlhdCI6MTcyNTE0NjQ0NCwidGFodW4iOjIwMjQsImlkX3VzZXIiOjEzNDQ0NiwiaWRfZGFlcmFoIjozNDIsImtvZGVfcHJvdmluc2kiOiI3MiIsImlkX3NrcGQiOjAsImlkX3JvbGUiOjExLCJpZF9wZWdhd2FpIjoxMjYyNDgsInN1Yl9kb21haW5fZGFlcmFoIjoicGFsdSJ9.XyYIS3yULX63_B1bZCL0tgH-EXyZNoQ04A63WgbK8HA';
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    // echo "Connected successfully";
-
-
-    $jenis1 = $jenis;
-
-
-    if ($jenis1 == "LS") {
-
-        $dataspmdetail = $_POST["dataspmdetail"];
-        $dt = json_decode($dataspmdetail, true);
-
-        $jenis = $dt["jenis"];
-        $tahun = $dt["ls"]["header"]["tahun"];
-        $nomor_spm = $dt["ls"]["header"]["nomor_spm"];
-        $tanggal_spm = $dt["ls"]["header"]["tanggal_sp_2_d"];
-        $nama_skpd = $dt["ls"]["header"]["nama_skpd"];
-        $nama_sub_skpd = $dt["ls"]["header"]["nama_sub_skpd"];
-        $nama_pihak_ketiga = $dt["ls"]["header"]["nama_pihak_ketiga"];
-        $no_rek_pihak_ketiga = $dt["ls"]["header"]["no_rek_pihak_ketiga"];
-        $nama_rek_pihak_ketiga = $dt["ls"]["header"]["nama_rek_pihak_ketiga"];
-        $bank_pihak_ketiga = $dt["ls"]["header"]["bank_pihak_ketiga"];
-        $npwp_pihak_ketiga = $dt["ls"]["header"]["npwp_pihak_ketiga"];
-        $keterangan_spm = $dt["ls"]["header"]["keterangan_spm"];
-        $nilai_spm = $dt["ls"]["header"]["nilai_spm"];
-        $nomor_spp = $dt["ls"]["header"]["nomor_spp"];
-        $tanggal_spp = $dt["ls"]["header"]["tanggal_spp"];
-        $nama_ibu_kota = $dt["ls"]["header"]["nama_ibu_kota"];
-        $nama_pa_kpa = $dt["ls"]["header"]["nama_pa_kpa"];
-        $nip_pa_kpa = $dt["ls"]["header"]["nip_pa_kpa"];
-        $jabatan_pa_kpa = $dt["ls"]["header"]["jabatan_pa_kpa"];
-        // $jabatan_bud_kbud = $dt["ls"]["header"]["jabatan_bud_kbud"];
-        $dasarpembayaran = $dt["ls"]["dasar_pembayaran"];
-        $detail = $dt["ls"]["detail"];
-        $pajak_potongan = $dt["ls"]["pajak_potongan"];
-
-        $idskpd = mysqli_query($conn, "SELECT id_sipd FROM skpd where nama_opd='$nama_skpd'") or die(mysqli_error($conn));
-        $idskpd = mysqli_fetch_array($idskpd);
-        $id_skpd = $idskpd['id_sipd'];
-
-        $data = mysqli_query($conn, "SELECT * FROM tspm where idhalaman=$id") or die(mysqli_error($conn));
-        $hal = mysqli_num_rows($data);
-
-
-        if ($hal != null) {
-            echo "<h1>DATA SUDAH TERINPUT</h1>";
-        } else {
-            $angka1 = str_replace("'", "", $no_rek_pihak_ketiga);
-            $keteranganspm = str_replace("'", "", $keterangan_spm);
-            $namapenerima = str_replace("'", "", $nama_pihak_ketiga);
-            $namarekening = str_replace("'", "",  $nama_rek_pihak_ketiga);
-            // $namapihakketiga = str_replace("'", "",  $nama_pihak_ketiga);
-            $spm = mysqli_query(
-                $conn,
-                "INSERT INTO tspm (
-                    nomor_spm,
-                    tanggal_spm,
-                    id_skpd,
-                    keterangan_spm,
-                    nilai_spm,
-                    no_rek_pihak_ketiga,
-                    nama_rek_pihak_ketiga,
-                    bank_pihak_ketiga,
-                    npwp_pihak_ketiga,
-                    nama_pa_kpa,
-                    nip_pa_kpa,
-                    jabatan_pa_kpa,
-                    nomor_spp,
-                    tanggal_spp,
-                    jenis )Values(
-                            '$nomor_spm',
-                            '$tanggal_spm',
-                            '$id_skpd',
-                            '$keteranganspm',
-                            '$nilai_spm',
-                            '$no_rek_pihak_ketiga',
-                            '$namarekening',
-                            '$bank_pihak_ketiga',
-                            '$npwp_pihak_ketiga',
-                            '$nama_pa_kpa',
-                            '$nip_pa_kpa',
-                            '$jabatan_pa_kpa',
-                            '$nomor_spp',
-                            '$tanggal_spp',
-                            '$jenis1'
-                        )"
-            ) or die(mysqli_error($conn));
-
-            foreach ($detail as $row) {
-                $belanja = "INSERT INTO belanja (
-                        norekening,
-                        uraian,
-                        nilai,
-                        id_spm
-                        )VALUES (
-                        '" . $row["kode_rekening"] . "',
-                        '" . $row["uraian"] . "',
-                        '" . $row["jumlah"] . "',
-                        '$id'
-                        )";
-                $exbelanja = mysqli_query($conn, $belanja) or die(mysqli_error($conn));
-            }
-
-            if ($pajak_potongan == null) {
-                echo json_encode([
-                    "statusCode" => 500,
-                    "message" => "Data tidak punya potongan 😀"
-                ]);
-            } else {
-                foreach ($pajak_potongan as $row1) {
-                    $billing = str_replace("'", "", $row1["id_billing"]);
-                    $potonganpjk = "INSERT INTO potongan (
-                                    uraian,
-                                    nilai,
-                                    id_sp2d,
-                                    billing
-                                )VALUES (
-                                    '" . $row1["nama_pajak_potongan"] . "',
-                                    '" . $row1["nilai_sp2d_pajak_potongan"] . "',
-                                    '$id',
-                                    '$billing'
-                                )";
-                    $expotongan = mysqli_query($conn, $potonganpjk) or die(mysqli_error($conn));
-                }
-            }
-            if ($dasarpembayaran == null) {
-                echo json_encode([
-                    "statusCode" => 500,
-                    "message" => "Data dasar pembayaran tidak ada 😀"
-                ]);
-            } else {
-                foreach ($dasarpembayaran as $row1) {
-                    // $billing = str_replace("'", "", $row1["id_billing"]);
-                    $dsrpembayaran = "INSERT INTO spd (
-                                    nomor_spd,
-                                    tanggal_spd,
-                                    total_spd,
-                                    id_spm
-                                )VALUES (
-                                    '" . $row1["nomor_spd"] . "',
-                                    '" . $row1["tanggal_spd"] . "',
-                                    '" . $row1["total_spd"] . "',
-                                    '$id'
-                                )";
-                    $expotongan = mysqli_query($conn, $potonganpjk) or die(mysqli_error($conn));
-                }
-            }
-            echo json_encode([
-                "statusCode" => 200,
-                "message" => "Data inserted successfully 😀"
-            ]);
-        }
-    } elseif ($jenis1 == "GU") {
-        $data = mysqli_query($conn, "SELECT * FROM tspm where id_spm=$id") or die(mysqli_error($conn));
-        $hal = mysqli_num_rows($data);
-        if ($hal != null) {
-            echo json_encode([
-                "statusCode" => 500,
-                "message" => "Data Sudah Ada 😓"
-            ]);
-        } else {
-            $dataspmdetail = $_POST["dataspmdetail"];
-            $dt = json_decode($dataspmdetail, true);
-
-
-            $jenis = $dt["jenis"];
-            $tahun = $dt["gu"]["tahun"];
-            $nomor_spm= $dt["gu"]["nomor_spm"];
-            $tanggal_spm = $dt["gu"]["tanggal_spm"];
-            $keterangan_spm = $dt["gu"]["keterangan_spm"];
-            $nilai_spm = $dt["gu"]["nilai_spm"];
-            
-
-            $rekening = $dt["gu"]["nomor_rekening"];
-            $nama_bank = $dt["gu"]["nama_bank"];
-            $nomor_sp_2_d = $dt["gu"]["nomor_sp_2_d"];
-            $tanggal_sp_2_d = $dt["gu"]["tanggal_sp_2_d"];
-            $nama_skpd = $dt["gu"]["nama_skpd"];
-            $keterangan_sp2d = $dt["gu"]["keterangan_sp2d"];
-            
-            $nomor_spm = $dt["gu"]["nomor_spm"];
-            $tanggal_spm = $dt["gu"]["tanggal_spm"];
-            $nama_ibu_kota = $dt["gu"]["nama_ibu_kota"];
-            $nama_bud_kbud = $dt["gu"]["nama_bud_kbud"];
-            $nip_bud_kbud = $dt["gu"]["nip_bud_kbud"];
-            $jabatan_bud_kbud = $dt["gu"]["jabatan_bud_kbud"];
-            $nama_bp_bpp = $dt["gu"]["nama_bp_bpp"];
-            $nip_bp_bpp = $dt["gu"]["nip_bp_bpp"];
-            $jabatan_bp_bpp = $dt["gu"]["jabatan_bp_bpp"];
-            $no_rek_bp_bpp = $dt["gu"]["no_rek_bp_bpp"];
-            $nama_rek_bp_bpp = $dt["gu"]["nama_rek_bp_bpp"];
-            $bank_bp_bpp = $dt["gu"]["bank_bp_bpp"];
-            $npwp_bp_bpp = $dt["gu"]["npwp_bp_bpp"];
-            $detail_belanjagu = $dt["gu"]["detail"];
-
-            // $kode = $detail_belanja['kode_rekening'];
-            // $uraian = $detail_belanja['uraian'];
-            // $jumlah = $detail_belanja['jumlah'];
-
-            // $nm_potongan = $pajak_potongan['nama_pajak_potongan'];
-            // $biling = $pajak_potongan['id_billing'];
-            // $nilaipotongan = $pajak_potongan['nilai_sp2d_pajak_potongan'];
-
-            $sp2d = mysqli_query(
-                $conn,
-                "INSERT INTO sp2d (
-                        idhalaman,
-                        jenis,
-                        tahun,
-                        nomor_rekening,
-                        nama_bank,
-                        nomor_sp2d,
-                        tanggal_sp2d,
-                        nama_skpd,
-                        nama_sub_skpd,
-                        nama_pihak_ketiga,
-                        no_rek_pihak_ketiga,
-                        nama_rek_pihak_ketiga,
-                        bank_pihak_ketiga,
-                        npwp_pihak_ketiga,
-                        keterangan_sp2d,
-                        nilai_sp2d,
-                        nomor_spm,
-                        tanggal_spm,
-                        nama_ibu_kota,
-                        nama_bud_kbud,
-                        nip_bud_kbud,
-                        jabatan_bud_kbud,
-                        nama_bp_bpp,
-                        nip_bp_bpp,
-                        jabatan_bp_bpp,
-                        no_rek_bp_bpp,
-                        nama_rek_bp_bpp,
-                        bank_bp_bpp,
-                        npwp_bp_bpp,
-                        id_sumber_sub,
-                        id_opd,
-                        status
-                        )Values(
-                            '$id',
-                            '$jenis',
-                            '$tahun',
-                            '$rekening',
-                            '$nama_bank',
-                            '$nomor_sp_2_d',
-                            '$tanggal_sp_2_d',
-                            '$nama_skpd',
-                            '0',
-                            '0',
-                            '0',
-                            '0',
-                            '0',
-                            '0',
-                            '$keterangan_sp2d',
-                            '$nilai_sp2d',
-                            '$nomor_spm',
-                            '$tanggal_spm',
-                            '$nama_ibu_kota',
-                            '$nama_bud_kbud',
-                            '$nip_bud_kbud',
-                            '$jabatan_bud_kbud',
-                            '$nama_bp_bpp',
-                            '$nip_bp_bpp',
-                            '$jabatan_bp_bpp',
-                            '$no_rek_bp_bpp',
-                            '$nama_rek_bp_bpp',
-                            '$bank_bp_bpp',
-                            '$npwp_bp_bpp',
-                            '0',
-                            '0',
-                            '0'
-                        )"
-            ) or die(mysqli_error($conn));
-
-            foreach ($detail_belanjagu as $row) {
-                $belanja = "INSERT INTO belanja (
-                            norekening,
-                            uraian,
-                            nilai,
-                            id_sp2d
-                            )VALUES (
-                            '" . $row["kode_rekening"] . "',
-                            '" . $row["uraian"] . "',
-                            '" . $row["nilai"] . "',
-                            '$id'
-                            )";
-                $exbelanja = mysqli_query($conn, $belanja) or die(mysqli_error($conn));
-            }
-
-            echo json_encode([
-                "statusCode" => 200,
-                "message" => "Data inserted successfully 😀"
-            ]);
-        }
-    } elseif ($jenis1 == "UP") {
-        $data = mysqli_query($conn, "SELECT * FROM sp2d where idhalaman=$id") or die(mysqli_error($conn));
-        $hal = mysqli_num_rows($data);
-        if ($hal != null) {
-            echo json_encode([
-                "statusCode" => 500,
-                "message" => "Data sudah Terinput 😀"
-            ]);
-        } else {
-            $datasp2dlra = $_POST["datasp2d"];
-            $dt = json_decode($datasp2dlra, true);
-
-            $jenis = $dt["jenis"];
-            $tahun = $dt["up"]["tahun"];
-            $rekening = $dt["up"]["nomor_rekening"];
-            $nama_bank = $dt["up"]["nama_bank"];
-            $nomor_sp_2_d = $dt["up"]["nomor_sp_2_d"];
-            $tanggal_sp_2_d = $dt["up"]["tanggal_sp_2_d"];
-            $nama_skpd = $dt["up"]["nama_skpd"];
-            $keterangan_sp2d = $dt["up"]["keterangan_sp2d"];
-            $nilai_sp2d = $dt["up"]["nilai_sp2d"];
-            $nomor_spm = $dt["up"]["nomor_spm"];
-            $tanggal_spm = $dt["up"]["tanggal_spm"];
-            $nama_ibu_kota = $dt["up"]["nama_ibu_kota"];
-            $nama_bud_kbud = $dt["up"]["nama_bud_kbud"];
-            $nip_bud_kbud = $dt["up"]["nip_bud_kbud"];
-            $jabatan_bud_kbud = $dt["up"]["jabatan_bud_kbud"];
-            $nama_bp_bpp = $dt["up"]["nama_bp_bpp"];
-            $nip_bp_bpp = $dt["up"]["nip_bp_bpp"];
-            $jabatan_bp_bpp = $dt["up"]["jabatan_bp_bpp"];
-            $no_rek_bp_bpp = $dt["up"]["no_rek_bp_bpp"];
-            $nama_rek_bp_bpp = $dt["up"]["nama_rek_bp_bpp"];
-            $bank_bp_bpp = $dt["up"]["bank_bp_bpp"];
-            $npwp_bp_bpp = $dt["up"]["npwp_bp_bpp"];
-
-            // $kode = $detail_belanja['kode_rekening'];
-            // $uraian = $detail_belanja['uraian'];
-            // $jumlah = $detail_belanja['jumlah'];
-
-            // $nm_potongan = $pajak_potongan['nama_pajak_potongan'];
-            // $biling = $pajak_potongan['id_billing'];
-            // $nilaipotongan = $pajak_potongan['nilai_sp2d_pajak_potongan'];
-
-            $sp2d = mysqli_query(
-                $conn,
-                "INSERT INTO sp2d (
-                            idhalaman,
-                            jenis,
-                            tahun,
-                            nomor_rekening,
-                            nama_bank,
-                            nomor_sp2d,
-                            tanggal_sp2d,
-                            nama_skpd,
-                            nama_sub_skpd,
-                            nama_pihak_ketiga,
-                            no_rek_pihak_ketiga,
-                            nama_rek_pihak_ketiga,
-                            bank_pihak_ketiga,
-                            npwp_pihak_ketiga,
-                            keterangan_sp2d,
-                            nilai_sp2d,
-                            nomor_spm,
-                            tanggal_spm,
-                            nama_ibu_kota,
-                            nama_bud_kbud,
-                            nip_bud_kbud,
-                            jabatan_bud_kbud,
-                            nama_bp_bpp,
-                            nip_bp_bpp,
-                            jabatan_bp_bpp,
-                            no_rek_bp_bpp,
-                            nama_rek_bp_bpp,
-                            bank_bp_bpp,
-                            npwp_bp_bpp,
-                            id_sumber_sub,
-                            id_opd,
-                            status
-                            )Values(
-                                '$id',
-                                '$jenis',
-                                '$tahun',
-                                '$rekening',
-                                '$nama_bank',
-                                '$nomor_sp_2_d',
-                                '$tanggal_sp_2_d',
-                                '$nama_skpd',
-                                '0',
-                                '0',
-                                '0',
-                                '0',
-                                '0',
-                                '0',
-                                '$keterangan_sp2d',
-                                '$nilai_sp2d',
-                                '$nomor_spm',
-                                '$tanggal_spm',
-                                '$nama_ibu_kota',
-                                '$nama_bud_kbud',
-                                '$nip_bud_kbud',
-                                '$jabatan_bud_kbud',
-                                '$nama_bp_bpp',
-                                '$nip_bp_bpp',
-                                '$jabatan_bp_bpp',
-                                '$no_rek_bp_bpp',
-                                '$nama_rek_bp_bpp',
-                                '$bank_bp_bpp',
-                                '$npwp_bp_bpp',
-                                '0',
-                                '0',
-                                '0'
-                            )"
-            ) or die(mysqli_error($conn));
-            echo json_encode([
-                "statusCode" => 200,
-                "message" => "Data inserted successfully 😀"
-            ]);
-        }
-    } else {
-        echo "data tidak ditemukan";
     }
 }

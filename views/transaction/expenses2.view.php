@@ -773,6 +773,7 @@ include 'views/footer.view.php';
                                 .draw(false);
                         });
                     } else {
+
                         var data = response.data;
                         var data2 = response.data2;
                         var realisasi = response.realisasi;
@@ -781,18 +782,20 @@ include 'views/footer.view.php';
                         var gu = response.gu;
                         var up = response.up;
                         var realisasi = formatRupiah(realisasi, "Rp.");
+
+
                         $('#total_spm').text(realisasi);
                         $('#jumlah_spm').text(spm);
                         $('#jumlah_ls').text(ls);
                         $('#jumlah_gu').text(gu);
                         $('#jumlah_up').text(up);
 
+
                         table2.clear().draw();
-                        // var counter = 1;
                         $.each(data, function(index, value) {
                             table2.row
                                 .add([
-                                    // counter,
+                                    
                                     value.nomor_spm,
                                     value.skpd,
                                     value.jenis,

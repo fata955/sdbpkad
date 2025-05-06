@@ -38,15 +38,15 @@ include 'views/header.view.php';
                         <div class="row input-group-prepend">
                             <div class="col-lg-3">
                                 <label for="nomorpenguji">No. Penguji</label>
-                                <input type="text" class="form-control" placeholder="Nomor Penguji" aria-label="penguji" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" id="nomorpenguji" placeholder="Nomor Penguji" aria-label="penguji" aria-describedby="inputGroup-sizing-sm">
                             </div>
                             <div class="col-lg-3">
                                 <label for="tanggal">Tanggal</label>
-                                <input type="text" class="form-control " placeholder="Tanggal" aria-label="tanggal" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control " id="tanggal" placeholder="Tanggal" aria-label="tanggal" aria-describedby="inputGroup-sizing-sm">
                             </div>
                             <div class="col-lg-3">
                                 <label for="jam">Jam</label>
-                                <input type="text" class="form-control" placeholder="Jam" aria-label="jam" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control" id="jam" placeholder="Jam" aria-label="jam" aria-describedby="inputGroup-sizing-sm">
                             </div>
                             <div class="col-lg-3">
                                 <label for="username">Username</label>
@@ -65,13 +65,7 @@ include 'views/header.view.php';
                 <div class="col-lg-4 align-items-center mt-3">
                     <div class="input-group mb-3 ">
                         <select name='dspm' id='dspm' class="form-control show-tick ms select2 ">
-                            <?php
-                            include '../../lib/conn.php';
-                            $skpd = mysqli_query($conn, "SELECT * FROM t_spm");
-                            while ($fetch = mysqli_fetch_array($skpd)) {
-                                echo "<option value='$fetch[id]'> $fetch[nomor_spm] ** $fetch[nama_sub_skpd] ** $fetch[nilai_spm]  </option>";
-                            }
-                            ?>
+
                         </select>
                     </div>
                 </div>
@@ -105,6 +99,13 @@ include 'views/header.view.php';
                 <div class="col-lg-2 mt-3">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" placeholder="Bank Mandiri" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
+                    </div>
+                </div>
+                <div class="col-lg-2 mt-3">
+                    <div class="input-group mb-3">
+                        <select name='sumberdana' class="form-control show-tick ms select2">
+
+                        </select>
                     </div>
                 </div>
                 <div class="col-lg-1 d-flex align-items-center">
@@ -304,42 +305,97 @@ include 'views/footer.view.php';
 
 <script>
     $(document).ready(function() {
-        fetchData();
+        fetchspm();
+        nomorpenguji();
+        defau();
 
         let table = new DataTable("#myTablepagu");
 
 
+        // Tampilan Tanggal
+        function tanggal() {
+            arrbulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            date = new Date();
+            millisecond = date.getMilliseconds();
+            detik = date.getSeconds();
+            menit = date.getMinutes();
+            jam = date.getHours();
+            hari = date.getDay();
+            tanggal = date.getDate();
+            bulan = date.getMonth();
+            tahun = date.getFullYear();
+            // document.write(tanggal + "-" + arrbulan[bulan] + "-" + tahun + "<br/>" + jam + " : " + menit + " : " + detik + "." + millisecond);
+            $("#tanggal").val(tanggal + "/" + arrbulan[bulan] + "/" + tahun);
+            $("#jam").val(jam + ":" + menit);
+        }
+        setInterval(tanggal, 100);
         // function to fetch data from database
-        function fetchData() {
+        function fetchspm() {
             $.ajax({
-                url: "proses/pagu/executepagu.php?action=fetchData",
+                url: "proses/transaction/transfer.php?action=spmaktif",
                 type: "POST",
                 dataType: "json",
                 success: function(response) {
                     var data = response.data;
-                    table.clear().draw();
-                    var counter = 1;
-                    $.each(data, function(index, value) {
-                        var dana = value.nilai;
-                        table.row
-                            .add([
-                                counter,
-                                value.nama_opd,
-                                formatRupiah(dana, "Rp. "),
-                                // value.idsumberdana,
-                                '<Button type="button" class="btn btn-primary btn-sm editBtn" value="' +
-                                value.id +
-                                '"><i class="zmdi zmdi-edit"></i></Button>' +
-                                '<Button type="button" class="btn btn-danger btn-sm deleteBtnpagu" value="' +
-                                value.id +
-                                '"><i class="zmdi zmdi-delete"></i></Button>'
-                            ])
-                            .draw(false);
-                        counter++;
+                    // table.clear().draw();
+                    // var counter = 1;
+                    var select = $('#dspm');
+                    select.empty();
+                    data.forEach(function(item) {
+                        select.append(new Option(item.nomor_spm + '-----' + item.namaopd + '-----' + item.nilai_spm, item.id_spm));
                     });
                 }
             });
         }
+
+        function nomorpenguji() {
+            $.ajax({
+                url: "proses/transaction/transfer.php?action=cekid",
+                type: "POST",
+                dataType: "json",
+                success: function(response) {
+                    var data = response.data;
+                    $('#nomorpenguji').val(data);
+                }
+            })
+        }
+
+        function defau() {
+            $('#nomorpenguji').attr("disabled", true);
+            $('#tanggal').attr("disabled", true);
+            $('#jam').attr("disabled", true);
+        }
+
+
+        $("#dspm").on("change", function() {
+
+            // $('#selected').text(selectedPackage);
+            // kosong();
+            $.ajax({
+                url: "proses/transaction/transfer.php?action=dataspm",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    idspm: dspm
+                    // idopd: idopd
+                },
+                success: function(response) {
+                    var data1 = response.sum;
+                    var data = response.data;
+
+                    var select = $('#namasumber');
+                    select.empty();
+                    data.forEach(function(item) {
+                        select.append(new Option(item.name, item.id));
+                    });
+                    // fetchspm();
+                    // kosong();
+                    // $('#idspm').val('11111');
+                }
+            });
+        });
+
+
 
         // function to insert data to database
         $("#insertForm").on("submit", function(e) {
@@ -467,32 +523,6 @@ include 'views/footer.view.php';
             }
         });
 
-        $("#dspm").on("change", function() {
 
-            // $('#selected').text(selectedPackage);
-            // kosong();
-            $.ajax({
-                url: "proses/transaction/transfer.php?action=dataspm",
-                type: "POST",
-                dataType: "json",
-                data: {
-                    idspm: dspm
-                    // idopd: idopd
-                },
-                success: function(response) {
-                    var data1 = response.sum;
-                    var data = response.data;
-
-                    var select = $('#namasumber');
-                    select.empty();
-                    data.forEach(function(item) {
-                        select.append(new Option(item.name, item.id));
-                    });
-                    // fetchspm();
-                    // kosong();
-                    // $('#idspm').val('11111');
-                }
-            });
-        });
     });
 </script>

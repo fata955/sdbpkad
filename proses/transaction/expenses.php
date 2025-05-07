@@ -367,9 +367,8 @@ if ($_GET["action"] === "filtertglverif") {
 }
 
 if ($_GET["action"] === "fetchSalur") {
+  
   $id = $_POST["idsalur"];
-
-
   $sql = "SELECT id,namasubsumberdana as name,idsumberdana from subssumber where idsumberdana=$id";
   // $sql = "SELECT * from subssumber where idsumberdana=$id";
   $result = mysqli_query($conn, $sql);
@@ -384,6 +383,7 @@ if ($_GET["action"] === "fetchSalur") {
     "sum" => $id
   ]);
 }
+
 
 // fetch data of individual user for edit form
 if ($_GET["action"] === "fetchSingle") {
@@ -406,6 +406,8 @@ if ($_GET["action"] === "fetchSingle") {
   }
   mysqli_close($conn);
 }
+
+
 // insert data to database
 if ($_GET["action"] === "insertData") {
   if (!empty($_POST["idspm"]) && !empty($_POST["nospm"]) && !empty($_POST["ketspm"]) && !empty($_POST["nilaispm"]) && !empty($_POST["dokumen"]) && !empty($_POST["opd"]) && !empty($_POST["dana"]) && !empty($_POST["namasumber"])  != 0) {

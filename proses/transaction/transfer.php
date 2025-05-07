@@ -20,29 +20,22 @@ if ($_GET["action"] === "spmaktif") {
 
 //cek Nomor Penguji terakhir
 
+
 if ($_GET["action"] === "cekid"){
     $sql = "SELECT * FROM tbt_penguji";
     
 
     $kode = mysqli_query($conn, $sql);
+    // $identitas1 = mysqli_fetch_array($kode);
     $identitas = mysqli_num_rows($kode);
-
-    if ($identitas == null) {
-        $kode = "10101";
-    }else{
-        $sql1 = "SELECT * FROM tbt_penguji order by id asc limit 1";
-        $kode = mysqli_query($conn, $sql1);
-        $identitas = mysqli_fetch_array($kode);
-        $kode =$identitas['id'];
-        $kode = $kode++;
-    }
-    mysqli_close($conn);
+   
     header('Content-Type: application/json');
     echo json_encode([
-        "data" => $kode
+        "data" => $identitas
     ]);
 }
 
+
+
 if ($_GET["action"] === "dataspm"){
-    
 }

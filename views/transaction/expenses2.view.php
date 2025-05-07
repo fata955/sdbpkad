@@ -336,7 +336,7 @@ include 'views/footer.view.php';
                             ?>
                                 <option value="<?= $fetch['id_sipd']; ?>"> <?= $fetch["nama_opd"]; ?> </option>";
                             <?php
-                            }
+                                }
                             ?>
                         </select>
                     </div>
@@ -344,13 +344,13 @@ include 'views/footer.view.php';
                     <div class="input-group mb-3">
                         <select name='dana' id='dana' class="form-control show-tick ms" required>
                             <?php
-                            $opd = mysqli_query($conn, "SELECT a.jenis_dana,b.namasumberdana from t_salur a, t_sumberdana b where b.id=a.jenis_dana") or die(mysqli_error($conn));
-                            while ($fetch = mysqli_fetch_array($opd)) {
+                                $opd = mysqli_query($conn, "SELECT a.jenis_dana,b.namasumberdana from t_salur a, t_sumberdana b where b.id=a.jenis_dana") or die(mysqli_error($conn));
+                                while ($fetch = mysqli_fetch_array($opd)) {
                             ?>
                                 <option value="<?= $fetch['jenis_dana']; ?>"> <?= $fetch["namasumberdana"]; ?> </option>";
                             <?php
-                            }
-                            ?> 
+                                }
+                            ?>
                         </select>
                     </div>
                     <label for="sumberdana" id="lnamasumber">Alokasi Sumber Dana</label><br>
@@ -795,7 +795,7 @@ include 'views/footer.view.php';
                         $.each(data, function(index, value) {
                             table2.row
                                 .add([
-                                    
+
                                     value.nomor_spm,
                                     value.skpd,
                                     value.jenis,
@@ -833,6 +833,7 @@ include 'views/footer.view.php';
                 }
             });
         });
+
         function getFormattedDate() {
             const today = new Date();
             const formattedDate = today.toLocaleDateString('en-US', {

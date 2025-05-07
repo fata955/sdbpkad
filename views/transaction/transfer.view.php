@@ -31,143 +31,145 @@ include 'views/header.view.php';
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-8 d-flex align-items-center">
-                    <div class="container-fluid p-3 mb-2 bg-light text-dark">
-                        <div class="row input-group-prepend">
-                            <div class="col-lg-3">
-                                <label for="nomorpenguji">No. Penguji</label>
-                                <input type="text" class="form-control" id="nomorpenguji" placeholder="Nomor Penguji" aria-label="penguji" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="tanggal">Tanggal</label>
-                                <input type="text" class="form-control " id="tanggal" placeholder="Tanggal" aria-label="tanggal" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="jam">Jam</label>
-                                <input type="text" class="form-control" id="jam" placeholder="Jam" aria-label="jam" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                            <div class="col-lg-3">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="inputGroup-sizing-sm">
+        <form action="" method="post">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8 d-flex align-items-center">
+                        <div class="container-fluid p-3 mb-2 bg-light text-dark">
+                            <div class="row input-group-prepend">
+                                <div class="col-lg-3">
+                                    <label for="nomorpenguji">No. Penguji</label>
+                                    <input type="text" class="form-control" id="nomorpenguji" placeholder="Nomor Penguji" aria-label="penguji" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="tanggal">Tanggal</label>
+                                    <input type="text" class="form-control " id="tanggal" placeholder="Tanggal" aria-label="tanggal" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="jam">Jam</label>
+                                    <input type="text" class="form-control" id="jam" placeholder="Jam" aria-label="jam" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="col-lg-3">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="inputGroup-sizing-sm">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-4 p-3 mb-2 bg-dark text-white">
+                        <label for="exampleInputEmail1">Nominal</label>
+                        <input type="text" class="form-control" placeholder="Rp.-" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
+                    </div>
                 </div>
-                <div class="col-lg-4 p-3 mb-2 bg-dark text-white">
-                    <label for="exampleInputEmail1">Nominal</label>
-                    <input type="text" class="form-control" placeholder="Rp.-" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
-                </div>
-            </div>
-            <br>
-            <div class="row border border-warning bg-light mb-3">
-                <div class="col-lg-4 align-items-center mt-3">
-                    <div class="input-group mb-3 ">
-                        <select name='dspm' id='dspm' class="form-control show-tick ms select2 ">
+                <br>
+                <div class="row border border-warning bg-light mb-3">
+                    <div class="col-lg-4 align-items-center mt-3">
+                        <div class="input-group mb-3 ">
+                            <select name='dspm' id='dspm' class="form-control show-tick ms select2 ">
 
-                        </select>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <textarea class="form-control" placeholder="Keterangan SPM"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Brutto" aria-label="brutto" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Potongan" aria-label="potongan" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="nilai" aria-label="nilai" aria-describedby="inputGroup-sizing-sm">
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <textarea class="form-control" placeholder="Keterangan SPM"></textarea>
+                <div class="row border border-warning d-flex align-items-center">
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Nomor Sp2d" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Brutto" aria-label="brutto" aria-describedby="inputGroup-sizing-sm">
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Bank Mandiri" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Potongan" aria-label="potongan" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="nilai" aria-label="nilai" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                </div>
-            </div>
-            <div class="row border border-warning d-flex align-items-center">
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Nomor Sp2d" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Bank Mandiri" aria-label="Nomor Sp2d" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                </div>
-                <div class="col-lg-2 mt-3">
-                    <div class="input-group mb-3">
-                        <select name='sumberdana' class="form-control show-tick ms select2">
+                    <div class="col-lg-2 mt-3">
+                        <div class="input-group mb-3">
+                            <select name='sumberdana' class="form-control show-tick ms select2">
 
-                        </select>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 d-flex align-items-center">
+                        <div class="input-group ">
+                            <button type="button" class="btn btn-info btn-sm btn-block">Add</button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-info btn-sm btn-block"><i class="zmdi zmdi-close"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-warning btn-sm btn-block"><i class="zmdi zmdi-save"></i></button>
+                        </div>
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="input-group">
+                            <button type="button" class="btn btn-danger btn-sm btn-block"><i class="zmdi zmdi-search"></i></button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-1 d-flex align-items-center">
-                    <div class="input-group ">
-                        <button type="button" class="btn btn-info btn-sm btn-block">Add</button>
-                    </div>
-                </div>
-                <div class="col-lg-1">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-info btn-sm btn-block"><i class="zmdi zmdi-close"></i></button>
-                    </div>
-                </div>
-                <div class="col-lg-1">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-warning btn-sm btn-block"><i class="zmdi zmdi-save"></i></button>
-                    </div>
-                </div>
-                <div class="col-lg-1">
-                    <div class="input-group">
-                        <button type="button" class="btn btn-danger btn-sm btn-block"><i class="zmdi zmdi-search"></i></button>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">No</th>
+                                    <th scope="col">Keterangan</th>
+                                    <th scope="col">sp2d</th>
+                                    <th scope="col">opd</th>
+                                    <th scope="col">Nilai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>dinas</td>
+                                    <td>@mdo</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>Dinas</td>
+                                    <td>@fat</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">3</th>
+                                    <td>John</td>
+                                    <td>Doe</td>
+                                    <td>Dinas</td>
+                                    <td>@social</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Keterangan</th>
-                                <th scope="col">sp2d</th>
-                                <th scope="col">opd</th>
-                                <th scope="col">Nilai</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>dinas</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>Dinas</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>John</td>
-                                <td>Doe</td>
-                                <td>Dinas</td>
-                                <td>@social</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </section>
 

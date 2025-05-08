@@ -58,12 +58,13 @@ include 'views/header.view.php';
                     </div>
                     <div class="col-lg-4 p-3 mb-2 bg-dark text-white">
                         <label for="exampleInputEmail1">Nominal</label>
-                        <input type="text" class="form-control" placeholder="Rp.-" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
+                        <input type="text" class="form-control" aria-label="Nominal" aria-describedby="basic-addon2" style="font-size: x-large;">
                     </div>
                 </div>
                 <br>
                 <div class="row border border-warning bg-light mb-3">
                     <div class="col-lg-4 align-items-center mt-3">
+                        <label>Data SPM</label>
                         <div class="input-group mb-3 ">
                             <select name='dspm' id='dspm' class="form-control show-tick ms select2 ">
 
@@ -71,23 +72,103 @@ include 'views/header.view.php';
                         </div>
                     </div>
                     <div class="col-lg-2 mt-3">
+                        <label for="ket">Keterangan SPM</label>
                         <div class="input-group mb-3">
-                            <textarea class="form-control" placeholder="Keterangan SPM"></textarea>
+                            <textarea class="form-control" id="keterangan"></textarea>
                         </div>
                     </div>
                     <div class="col-lg-2 mt-3">
+                        <label for="nilai">Bruto</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Brutto" aria-label="brutto" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" id="nilai" aria-label="nilai" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 mt-3">
+                        <label for="potongam">potongan</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="potongan" aria-label="potongan" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-2 mt-3">
+                        <label for="bruto">Netto</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Potongan" aria-label="potongan" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="bruto" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
-                    <div class="col-lg-2 mt-3">
+
+                </div>
+                <div class="row border border-warning bg-light mb-3">
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">PPH 21</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="nilai" aria-label="nilai" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="pph" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">IWP 8%</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="delapan" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">JK 4%</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="empat" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">JKK</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="jkk" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">JKM</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="jkm" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">IWP 1%</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="satu" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">Tamperum</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="tamperum" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">Taspen</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="taspen" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">Bulog</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="bulog" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">Zakat</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="zakat" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">PPH</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="pajaknilai" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </div>
+                    <div class="col-lg-1 mt-2">
+                        <label for="bruto">Pasal 22</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" aria-label="brutto" id="pajak22" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                 </div>
@@ -313,6 +394,22 @@ include 'views/footer.view.php';
 
         let table = new DataTable("#myTablepagu");
 
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, "").toString(),
+                split = number_string.split(","),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? "." : "";
+                rupiah += separator + ribuan.join(".");
+            }
+
+            rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+            return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+        }
 
         // Tampilan Tanggal
         function tanggal() {
@@ -339,8 +436,6 @@ include 'views/footer.view.php';
                 dataType: "json",
                 success: function(response) {
                     var data = response.data;
-                    // table.clear().draw();
-                    // var counter = 1;
                     var select = $('#dspm');
                     select.empty();
                     data.forEach(function(item) {
@@ -366,15 +461,20 @@ include 'views/footer.view.php';
             $('#nomorpenguji').attr("disabled", true);
             $('#tanggal').attr("disabled", true);
             $('#jam').attr("disabled", true);
+            $('#keterangan').attr("disabled", true);
+            $('#bruto').attr("disabled", true);
+            $('#potongan').attr("disabled", true);
+            $('#nilai').attr("disabled", true);
         }
 
 
         $("#dspm").on("change", function() {
-
+            var dspm = $(this).val();
             // $('#selected').text(selectedPackage);
             // kosong();
+            // alert('Tidak tau');
             $.ajax({
-                url: "proses/transaction/transfer.php?action=dataspm",
+                url: "proses/transaction/transfer.php?action=data_spm",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -382,19 +482,29 @@ include 'views/footer.view.php';
                     // idopd: idopd
                 },
                 success: function(response) {
-                    var data1 = response.sum;
                     var data = response.data;
+                    var potongan = response.sum;
+                    var nilai = data.nilai_spm;
+                    // console.log(potongan);
+                    var bruto = nilai - potongan;
+                    $("#keterangan").val(data.keterangan_spm);
+                    $("#nilai").val(formatRupiah(data.nilai_spm));
+                    $("#bruto").val(bruto);
+                    if (potongan != null) {
+                        $("#potongan").val(formatRupiah(potongan));
+                    } else {
+                        $("#potongan").val('0');
+                    }
 
-                    var select = $('#namasumber');
-                    select.empty();
-                    data.forEach(function(item) {
-                        select.append(new Option(item.name, item.id));
-                    });
+
+
+                    //  console.log(idspm)
                     // fetchspm();
                     // kosong();
                     // $('#idspm').val('11111');
                 }
             });
+
         });
 
 

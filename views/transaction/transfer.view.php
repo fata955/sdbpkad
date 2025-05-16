@@ -98,17 +98,17 @@ include 'views/header.view.php';
                     </div>
 
                 </div>
-                <div class="row border border-warning bg-light mb-3">
+                <div class="row border border-warning bg-light mb-3 display-6">
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">PPH 21</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="pph" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="pph" name="pph" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">IWP 8%</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="delapan" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="delapan" name="delapan" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
@@ -485,8 +485,11 @@ include 'views/footer.view.php';
                     var data = response.data;
                     var potongan = response.sum;
                     var nilai = data.nilai_spm;
+                    var pph = response.pph;
+                    var iwp8 = response.iwp8;
                     // console.log(potongan);
                     var bruto = nilai - potongan;
+                    // $("#pph").val(formatRupiah(pph));
                     $("#keterangan").val(data.keterangan_spm);
                     $("#nilai").val(formatRupiah(data.nilai_spm));
                     $("#bruto").val(bruto);
@@ -494,6 +497,17 @@ include 'views/footer.view.php';
                         $("#potongan").val(formatRupiah(potongan));
                     } else {
                         $("#potongan").val('0');
+                    }
+
+                    if (pph != null) {
+                        $("#pph").val(formatRupiah(pph));
+                    } else {
+                         $("#pph").val('0');
+                    }
+                    if (iwp8 != null) {
+                        $("#delapan").val(formatRupiah(iwp8));
+                    } else {
+                         $("#delapan").val('0');
                     }
 
 

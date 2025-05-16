@@ -46,15 +46,22 @@ if ($_GET["action"] === "data_spm"){
     $data = mysqli_query($conn, $sql);
     $data = mysqli_fetch_array($data);
     // $data = $data['keterangan_spm'];
-    $sql1= "SELECT (sum(nilai)) as nilaipotongan from potongan where id_spm='$id'";
+    $sql1= "SELECT (sum(nilai)) as nilaipotongan, (select nilai from potongan where id_spm='$id' AND uraian like '%PPH 21%') as PPH_21, (select nilai from potongan where id_spm='$id' AND uraian like '%Iuran Wajib Pegawai 8%') as IWP8 from potongan where id_spm='$id'";
     $data1 = mysqli_query($conn, $sql1);
     $data1 = mysqli_fetch_array($data1);
-    $data1 = $data1['nilaipotongan'];
+    $sum = $data1['nilaipotongan'];
+    $pph = $data1['PPH_21'];
+    $iwp8 = $data1['IWP8'];
+
+    $sql2 = "SELECT nilai from potongan where id_spm='$id' AND uraian like '%PPH 21%'";
 
     mysqli_close($conn);
     header('Content-Type: application/json');
     echo json_encode([
         "data" => $data,
-        "sum" => $data1
+        "sum" => $sum,
+        "pph" => $pph,
+        "iwp8" => $iwp8
     ]);
 }
+

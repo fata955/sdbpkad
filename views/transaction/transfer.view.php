@@ -114,37 +114,37 @@ include 'views/header.view.php';
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">JK 4%</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="empat" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="empat" name="empat" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">JKK</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="jkk" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="jkk" name="jkk" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">JKM</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="jkm" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="jkm" name="jkm" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">IWP 1%</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="satu" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="satu" name="satu" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">Tamperum</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="tamperum" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="tamperum" name="tamperum" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
                         <label for="bruto">Taspen</label>
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" aria-label="brutto" id="taspen" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="form-control" aria-label="brutto" id="taspen" name="taspen" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
@@ -160,13 +160,13 @@ include 'views/header.view.php';
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
-                        <label for="bruto">PPH</label>
+                        <label for="bruto">PPN</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" aria-label="brutto" id="pajaknilai" aria-describedby="inputGroup-sizing-sm">
                         </div>
                     </div>
                     <div class="col-lg-1 mt-2">
-                        <label for="bruto">Pasal 22</label>
+                        <label for="bruto">PPh 22</label>
                         <div class="input-group mb-3">
                             <input type="text" class="form-control" aria-label="brutto" id="pajak22" aria-describedby="inputGroup-sizing-sm">
                         </div>
@@ -186,18 +186,18 @@ include 'views/header.view.php';
                     <div class="col-lg-2 mt-3">
                         <div class="input-group mb-3">
                             <select name='sumberdana' class="form-control show-tick ms select2">
-
+                                
                             </select>
                         </div>
                     </div>
                     <div class="col-lg-1 d-flex align-items-center">
                         <div class="input-group ">
-                            <button type="button" class="btn btn-info btn-sm btn-block">Add</button>
+                            <button type="button" class="btn btn-info btn-sm btn-block" id="tambah">Add</button>
                         </div>
                     </div>
                     <div class="col-lg-1">
                         <div class="input-group">
-                            <button type="button" class="btn btn-info btn-sm btn-block"><i class="zmdi zmdi-close"></i></button>
+                            <button type="button" class="btn btn-info btn-sm btn-block" id="batal"><i class="zmdi zmdi-close"></i></button>
                         </div>
                     </div>
                     <div class="col-lg-1">
@@ -487,6 +487,16 @@ include 'views/footer.view.php';
                     var nilai = data.nilai_spm;
                     var pph = response.pph;
                     var iwp8 = response.iwp8;
+                    var ijk4 = response.ijk4;
+                    var jkk = response.jkk;
+                    var jkm = response.jkm;
+                    var iwp1 = response.iwp;
+                    var tamperum = response.tamperum;
+                    var taspen = response.taspen;
+                    var beras = response.beras;
+                    var zakat = response.zakat;
+                    var ppn = response.ppn;
+                    var pph22 = response.pph22;
                     // console.log(potongan);
                     var bruto = nilai - potongan;
                     // $("#pph").val(formatRupiah(pph));
@@ -502,12 +512,62 @@ include 'views/footer.view.php';
                     if (pph != null) {
                         $("#pph").val(formatRupiah(pph));
                     } else {
-                         $("#pph").val('0');
+                        $("#pph").val('0');
                     }
                     if (iwp8 != null) {
                         $("#delapan").val(formatRupiah(iwp8));
                     } else {
-                         $("#delapan").val('0');
+                        $("#delapan").val('0');
+                    }
+                    if (ijk4 != null) {
+                        $("#empat").val(formatRupiah(ijk4));
+                    } else {
+                        $("#empat").val('0');
+                    }
+                    if (jkk != null) {
+                        $("#jkk").val(formatRupiah(jkk));
+                    } else {
+                        $("#jkk").val('0');
+                    }
+                    if (jkm != null) {
+                        $("#jkm").val(formatRupiah(jkm));
+                    } else {
+                        $("#jkm").val('0');
+                    }
+                    if (iwp1 != null) {
+                        $("#satu").val(formatRupiah(iwp1));
+                    } else {
+                        $("#satu").val('0');
+                    }
+                    if (tamperum != null) {
+                        $("#tamperum").val(formatRupiah(tamperum));
+                    } else {
+                        $("#tamperum").val('0');
+                    }
+                    if (taspen != null) {
+                        $("#taspen").val(formatRupiah(taspen));
+                    } else {
+                        $("#taspen").val('0');
+                    }
+                    if (beras != null) {
+                        $("#bulog").val(formatRupiah(beras));
+                    } else {
+                        $("#bulog").val('0');
+                    }
+                    if (zakat != null) {
+                        $("#zakat").val(formatRupiah(zakat));
+                    } else {
+                        $("#zakat").val('0');
+                    }
+                    if (ppn != null) {
+                        $("#pajaknilai").val(formatRupiah(ppn));
+                    } else {
+                        $("#pajaknilai").val('0');
+                    }
+                    if (pph22 != null) {
+                        $("#pajak22").val(formatRupiah(pph22));
+                    } else {
+                        $("#pajak22").val('0');
                     }
 
 

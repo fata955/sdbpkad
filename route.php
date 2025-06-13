@@ -71,7 +71,7 @@ switch ($request) {
         include 'views/register.view.php';
         break;
     case $me . 'penguji':
-        include 'views/transaction/transfer.view.php';
+        include 'views/transaction/daftarpenguji.view.php';
         break;
 
     default:

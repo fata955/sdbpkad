@@ -105,7 +105,7 @@ $date_end = isset($_GET['date_end']) ? $_GET['date_end'] :  date("Y-m-d");
                         </select>
                     </div> -->
                     <div class="col-lg-2">
-                         <label for="">Nomor Penguji</label>
+                        <label for="">Nomor Penguji</label>
                         <input type="text" class="form-control" placeholder="Masukkan Nomor Penguji" aria-label="Masukkan Nomor Penguji" aria-describedby="button-addon2">
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2">Cari</button>
 

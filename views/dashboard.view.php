@@ -1,10 +1,12 @@
 <!-- Main Content -->
 <?php
 
-session_start(); 
+session_start();
 include 'lib/conn.php';
-if (!isset($_SESSION['username'])) { header('Location: /login'); 
-    exit(); }
+if (!isset($_SESSION['username'])) {
+    header('Location: /login');
+    exit();
+}
 // include_once 'component/session.php';
 
 
@@ -43,40 +45,40 @@ $tanggalHariawal = date('Y-m-01');
                         <div class="body">
                             <h6>TOTAL ALOKASI DANA</h6>
                             <?php
-                                    function rupiah($angka)
-                                    {
+                            function rupiah($angka)
+                            {
 
-                                        $hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
-                                        return $hasil_rupiah;
-                                    }
+                                $hasil_rupiah = "Rp " . number_format($angka, 0, ',', '.');
+                                return $hasil_rupiah;
+                            }
 
-                                    function calculateRealizationPercentage($realized, $target)
-                                    {
-                                        if ($target == 0) {
-                                            return "Target cannot be zero.";
-                                        }
-                                        $percentage = ($realized / $target) * 100;
-                                        return $percentage;
-                                    }
+                            function calculateRealizationPercentage($realized, $target)
+                            {
+                                if ($target == 0) {
+                                    return "Target cannot be zero.";
+                                }
+                                $percentage = ($realized / $target) * 100;
+                                return $percentage;
+                            }
 
-                                    $pagu = "SELECT sum(nilai) as total from pagu";
-                                    $pagu = mysqli_query($conn, $pagu);
-                                    $pagu = mysqli_fetch_array($pagu);
-                                    $pagu = $pagu['total'];
+                            $pagu = "SELECT sum(nilai) as total from pagu";
+                            $pagu = mysqli_query($conn, $pagu);
+                            $pagu = mysqli_fetch_array($pagu);
+                            $pagu = $pagu['total'];
 
-                                    $realisasi = "SELECT COALESCE(sum(a.nilai_spm),0) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
-                                    // $realisasi = "SELECT COALESCE(sum(nilai_spm),0) as realisasi from t_spm where id_sumberdana > 0";
-                                    $realisasitotal = mysqli_query($conn, $realisasi);
-                                    $realisasi = mysqli_num_rows($realisasitotal);
-                                    if ($realisasi == 0) {
-                                        $realisasi = 0;
-                                    } else {
-                                        $realisasi = mysqli_fetch_assoc($realisasitotal);
-                                        $realisasi = $realisasi['realisasi'];
-                                    }
+                            $realisasi = "SELECT COALESCE(sum(a.nilai_spm),0) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
+                            // $realisasi = "SELECT COALESCE(sum(nilai_spm),0) as realisasi from t_spm where id_sumberdana > 0";
+                            $realisasitotal = mysqli_query($conn, $realisasi);
+                            $realisasi = mysqli_num_rows($realisasitotal);
+                            if ($realisasi == 0) {
+                                $realisasi = 0;
+                            } else {
+                                $realisasi = mysqli_fetch_assoc($realisasitotal);
+                                $realisasi = $realisasi['realisasi'];
+                            }
 
-                                    // $persentase = ($realisasi / $pagu )*100;
-                                    $persen = calculateRealizationPercentage($realisasi, $pagu);
+                            // $persentase = ($realisasi / $pagu )*100;
+                            $persen = calculateRealizationPercentage($realisasi, $pagu);
                             ?>
 
                             <h5><?= rupiah($pagu) ?></h5>
@@ -93,10 +95,10 @@ $tanggalHariawal = date('Y-m-01');
                             <h6>Total Income</h6>
                             <?php
                             $sql1 = "SELECT sum(nilai_dana) as nilai from t_salur";
-                            $dana = mysqli_query($conn,$sql1);
+                            $dana = mysqli_query($conn, $sql1);
                             $dana = mysqli_fetch_array($dana);
                             $dana = $dana['nilai'];
-                            
+
                             ?>
                             <h5><?= rupiah($dana) ?></h5>
                             <small>6% higher than last month</small>
@@ -112,10 +114,10 @@ $tanggalHariawal = date('Y-m-01');
                             <h6>TOTAL REALISASI SPM</h6>
                             <?php
                             $sql2 = "SELECT sum(a.nilai_spm) as realisasi from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
-                            $dana1 = mysqli_query($conn,$sql2);
+                            $dana1 = mysqli_query($conn, $sql2);
                             $dana1 = mysqli_fetch_array($dana1);
                             $dana1 = $dana1['realisasi'];
-                            
+
                             ?>
                             <h5><?= rupiah($dana1) ?></h5>
                             <small>Total Registered email</small>
@@ -131,12 +133,12 @@ $tanggalHariawal = date('Y-m-01');
                             <h6>Total SPM</h6>
                             <?php
                             $sql2 = "SELECT count(a.id_spm) as totalspm from tspm a, tspmsub b where Date(b.updateby) between '$tanggalHariawal' AND '$tanggalHariIni' AND b.id_user=$id_user AND a.id_spm=b.id_spm AND status=1";
-                            $dana1 = mysqli_query($conn,$sql2);
+                            $dana1 = mysqli_query($conn, $sql2);
                             $dana1 = mysqli_fetch_array($dana1);
                             $dana1 = $dana1['totalspm'];
-                            
+
                             ?>
-                           <h5><?= $dana1; ?></h5>
+                            <h5><?= $dana1; ?></h5>
                             <small>Total Registered Domain</small>
                             <div class="progress">
                                 <div class="progress-bar l-green" role="progressbar" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100" style="width: 89%;"></div>

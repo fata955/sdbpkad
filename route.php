@@ -22,6 +22,9 @@ switch ($request) {
     case $me . 'register':
         require "views/register.view.php";
         break;
+    case $me . 'registerberkas':
+        require "views/registerberkas.view.php";
+        break;
     case $me . 'tagihan':
         include 'views/mocking/spm.view.php';
         break;
@@ -72,6 +75,9 @@ switch ($request) {
         break;
     case $me . 'penguji':
         include 'views/transaction/penguji.view.php';
+        break;
+    case $me . 'masuk':
+        include 'views/berkas/loginberkas.view.php';
         break;
 
     default:

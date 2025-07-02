@@ -22,10 +22,10 @@ if (isset($_SESSION['username'])) {
     <!-- Font Awesome  -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
     <!-- Custom Css -->
-    <link rel="stylesheet" href="assets/css/style.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.min.css">
     <!-- <link rel="stylesheet" href="assets/css/styles.css"> -->
 
-    <link href="assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+    <link href="../../assets/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
 </head>
 
@@ -37,7 +37,7 @@ if (isset($_SESSION['username'])) {
                     <form class="card auth_form" id="logIn" method="POST">
                         <div class="header">
                             <img class="logo" src="assets/images/logo.svg" alt="">
-                            <h5>Sign In</h5>
+                            <h5>SendBerkas</h5>
                         </div>
                         <div class="body">
                             <div class="input-group mb-3">
@@ -51,9 +51,22 @@ if (isset($_SESSION['username'])) {
                                 <div class="input-group-append">
                                     <span class="input-group-text"><a href="forgot-password.html" class="forgot" title="Forgot Password"><i class="zmdi zmdi-lock"></i></a></span>
                                 </div>
+
+                            </div>
+                            <div class="input-group mb-3">
+                                <select name='opd' id='opd' class="form-control show-tick ms">
+                                    <option value="0">--PILIH OPD --</option>
+                                    <?php
+                                    $opd = mysqli_query($conn, "SELECT * from skpd") or die(mysqli_error($conn));
+                                    while ($fetch = mysqli_fetch_array($opd)) {
+                                    ?>
+                                        <option value="<?= $fetch['id_sipd']; ?>"> <?= $fetch["nama_opd"]; ?> </option>";
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </div>
                             <Button class="btn btn-primary btn-block waves-effect waves-light" type="submit">SignIn</Button>
-                            <a href="/masuk" class="btn btn-primary btn-block waves-effect waves-light">Login Berkas</a>
 
                         </div>
                     </form>
@@ -102,7 +115,7 @@ if (isset($_SESSION['username'])) {
     <?php
     include 'views/footer.view.php';
     ?>
-     <script src="../assets/js/jquery-3.6.0.min.js"></script>
+    <script src="../../assets/js/jquery-3.6.0.min.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -122,12 +135,17 @@ if (isset($_SESSION['username'])) {
             $("#logIn").on("submit", function(e) {
                 // $("#insertBtn").attr("disabled", "disabled");
                 e.preventDefault();
-                const username = $('#signinSrUsername').val(); 
+                const username = $('#signinSrUsername').val();
                 const password = $('#signinSrPassword').val();
+                const opd = $('#opd').val();
                 $.ajax({
-                    url: "proses/sign-in.php?action=LoginData",
+                    url: "proses/loginberkas.php?action=LoginData",
                     type: "POST",
-                    data: { username: username, password: password }, 
+                    data: {
+                        username: username,
+                        password: password,
+                        opd: opd
+                    },
                     success: function(response) {
                         var response = JSON.parse(response);
                         if (response.statusCode == 200) {

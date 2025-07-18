@@ -7,9 +7,12 @@ if ($_GET["action"] === "LoginData") {
     if (!empty($_POST["username"]) && !empty($_POST["password"])  != 0) {
         $namauser = mysqli_real_escape_string($conn, $_POST["username"]);
         $passworduser = $_POST["password"];
+
+        // $sql1 = mysqli_query($conn,"select a.namalengkap as lengkap, a.username as nama, a.password as katasandi, a.status, a.level, b.id_skpd as opd from user a, manageuser b where a.username='$namauser' AND a.id=b.id_user") or die (mysqli_error($conn));
+        
         // cek data
         $sql = mysqli_query($conn, "SELECT namalengkap as lengkap, username as nama, password as katasandi, status, level from user where username='$namauser'") or die(mysqli_error($conn));
-        $rows = mysqli_num_rows($sql);
+        $rows = mysqli_num_rows($sql);          
 
         if ($rows > 0) {
             $data = mysqli_fetch_array($sql);
@@ -53,6 +56,7 @@ if ($_GET["action"] === "LoginData") {
     } else {
         echo json_encode([
             "statusCode" => 400,
+
             "message" => "Please fill all the required fields 🙏"
 
         ]);

@@ -1,8 +1,8 @@
-<?php 
-session_start(); 
-if (isset($_SESSION['username'])) { 
-      header('Location: /sdbpkad/home'); 
-  exit();
+<?php
+session_start();
+if (isset($_SESSION['username'])) {
+    header('Location: /sdbpkad/home');
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -21,11 +21,6 @@ if (isset($_SESSION['username'])) {
     <div class="container">
         <div class="login-section">
             <header>Login</header>
-
-            <!-- <div class="social-buttons">
-                <button><i class='bx bxl-google'></i> Use Google</button>
-                <button><i class='bx bxl-apple'></i> Use Apple</button>
-            </div> -->
 
             <div class="separator">
                 <div class="line"></div>

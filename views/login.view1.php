@@ -75,30 +75,6 @@ if (isset($_SESSION['username'])) {
     </div>
 
 
-    <!-- Toast container  -->
-    <!-- <div class="toast-container position-fixed bottom-0 end-0 p-3"> -->
-    <!-- Success toast  -->
-    <!-- <div class="toast align-items-center text-bg-success" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong>Success!</strong>
-                    <span id="successMsg"></span>
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div> -->
-    <!-- Error toast  -->
-    <!-- <div class="toast align-items-center text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong>Error!</strong>
-                    <span id="errorMsg"></span>
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div> -->
-    <!-- </div> -->
-
     <?php
     include 'views/footer.view.php';
     ?>

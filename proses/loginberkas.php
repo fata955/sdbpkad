@@ -4,12 +4,12 @@ include "../lib/conn.php";
 session_start(); 
 
 if ($_GET["action"] === "LoginData") {
-    if (!empty($_POST["username"]) && !empty($_POST["password"])  != 0) {
+    if (!empty($_POST["username"]) && !empty($_POST["password"]) && !empty($_POST["opd"]) != 0) {
         $namauser = mysqli_real_escape_string($conn, $_POST["username"]);
         $opd = $_POST["opd"];
         $passworduser = $_POST["password"];
         // cek data
-        $sql = mysqli_query($conn, "SELECT namalengkap as lengkap, username as nama, password as katasandi, status, level from user where username='$namauser'") or die(mysqli_error($conn));
+        $sql = mysqli_query($conn, "SELECT a.namalengkap as lengkap, a.username as nama, a.password as katasandi, a.status, a.level, b.id_skpd as skpd from user a, manageuser b where a.username='$namauser' AND a.iduser=b.id_user AND b.id_skpd='$opd'") or die(mysqli_error($conn));
         $rows = mysqli_num_rows($sql);
 
         if ($rows > 0) {
@@ -19,6 +19,7 @@ if ($_GET["action"] === "LoginData") {
             $pass = $data["katasandi"];
             $status = $data["status"];
             $level = $data["level"];
+            $skpd = $data["skpd"];
 
             $salted_password = $passworduser;
 
@@ -32,11 +33,14 @@ if ($_GET["action"] === "LoginData") {
                     $_SESSION["lengkap"] = $namalengkap;
                     $_SESSION["username"] = $namauser;
                     $_SESSION["level"] = $level;
+                    $_SESSION["opd"] = $skpd;
+
                     echo json_encode([
                         "statusCode" => 200,
                         "message" => "Anda Sukses Login 🙏"
                     ]);
                 } else {
+                    
                     session_unset();
                     echo json_encode([
                         "statusCode" => 300,

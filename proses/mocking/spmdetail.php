@@ -1,6 +1,7 @@
 <?php
 include "../../lib/conn.php";
 session_start();
+$user = $_SESSION['username'];
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
@@ -93,9 +94,9 @@ if ($_GET["action"] === "insertData") {
                                 '$bank_pihak_ketiga','$npwp_pihak_ketiga','$nama_pa_kpa','$nip_pa_kpa','$jabatan_pa_kpa','$nomor_spp','$tanggal_spp',
                                 '$idl','0','0','0'
                             )";
-                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana)
+                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana,statuspenguji)
                         VALUES (
-                        '$idspm','0','0','0','0')";
+                        '$idspm','0','0','0','0','1')";
 
                 $spm = mysqli_query($conn, $insertspm) or die(mysqli_error($conn));
                 $subspm = mysqli_query($conn, $insertsubspm) or die(mysqli_error($conn));
@@ -178,9 +179,9 @@ if ($_GET["action"] === "insertData") {
                             '$npwp_pihak_ketiga','$nama_pa_kpa','$nip_pa_kpa','$jabatan_pa_kpa','$nomor_spp','$tanggal_spp','$idl','$nama_bp_bpp',
                             '$nip_bp_bpp','$jabatan_bp_bpp'
                         )";
-                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana)
+                $insertsubspm = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana,statuspenguji)
                         VALUES (
-                        '$idspm','0','0','0','0')";
+                        '$idspm','0','0','0','0','1')";
 
 
                 $insertspm = mysqli_query($conn, $insertspm) or die(mysqli_error($conn));

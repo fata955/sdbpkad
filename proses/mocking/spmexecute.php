@@ -1,6 +1,7 @@
 <?php
 include "../../lib/conn.php";
 session_start(); 
+$user = $_SESSION['username'];
 
 // function to fetch data
 if ($_GET["action"] === "fetchData") {
@@ -47,7 +48,7 @@ if ($_GET["action"] === "insertData") {
                         '" . $row["jenis_spm"] . "'
                       )";
 
-                        $table2 = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana) VALUES ($id,0,0,0,0)";
+                        $table2 = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana,statuspenguji) VALUES ($id,0,0,$user,0,1)";
                         $eksekusi = mysqli_query($conn, $table2);
 
                     if (mysqli_query($conn, $tarik)) {

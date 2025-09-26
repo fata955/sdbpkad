@@ -48,7 +48,7 @@ if ($_GET["action"] === "insertData") {
                         '" . $row["jenis_spm"] . "'
                       )";
 
-                        $table2 = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana,statuspenguji) VALUES ($id,0,0,$user,0,1)";
+                        $table2 = "INSERT INTO tspmsub (id_spm,status,id_sumber,id_user,id_dana,statuspenguji,status_berkas,id_sp2d) VALUES ($id,0,0,0,0,1)";
                         $eksekusi = mysqli_query($conn, $table2);
 
                     if (mysqli_query($conn, $tarik)) {

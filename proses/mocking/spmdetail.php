@@ -85,6 +85,7 @@ if ($_GET["action"] === "insertData") {
                 $keteranganspm = str_replace("'", "", $keterangan_spm);
                 $namapenerima = str_replace("'", "", $nama_pihak_ketiga);
                 $namarekening = str_replace("'", "",  $nama_rek_pihak_ketiga);
+                $nama_pa_kpa = str_replace("'", "",  $nama_pa_kpa);
 
                 $insertspm = "INSERT INTO tspm 
                         (id_spm,nomor_spm,tanggal_spm,id_skpd,keterangan_spm,nilai_spm,no_rek_pihak_ketiga,nama_rek_pihak_ketiga,bank_pihak_ketiga,

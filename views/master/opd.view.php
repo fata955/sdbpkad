@@ -1,9 +1,11 @@
 ﻿<?php
 
-session_start(); 
+session_start();
 include 'lib/conn.php';
-if (!isset($_SESSION['username'])) { header('Location: /login'); 
-    exit(); }
+if (!isset($_SESSION['username'])) {
+  header('Location: /login');
+  exit();
+}
 include 'views/header.view.php';
 
 ?>
@@ -21,7 +23,7 @@ include 'views/header.view.php';
             <li class="breadcrumb-item">
               <a href="javascript:void(0);">OPD</a>
             </li>
-           
+
           </ul>
           <button class="btn btn-primary btn-icon mobile_menu" type="button">
             <i class="zmdi zmdi-sort-amount-desc"></i>
@@ -55,6 +57,8 @@ include 'views/header.view.php';
                     <th>id_sipd</th>
                     <th>Name</th>
                     <th data-breakpoints="xs">Kode SIPD</th>
+                    <th>Nama Bendahara</th>
+                    <th>Icon</th>
                     <th data-breakpoints="xs">Action</th>
                   </tr>
                 </thead>
@@ -108,6 +112,21 @@ include 'views/footer.view.php';
               placeholder="KODE SIPD"
               name="kodeopd" />
           </div>
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Nama Bendahara"
+              name="bendahara" />
+          </div>
+          <div class="input-group mb-3">
+            <input
+              type="file"
+              name="fileimage"
+              accept="application/jpg"
+              class="form-control" />
+
+          </div>
         </div>
         <div class="modal-footer">
           <button
@@ -141,7 +160,7 @@ include 'views/footer.view.php';
             <input
               type="hidden"
               class="form-control"
-              name="idsipd" disabled/>
+              name="idsipd" disabled />
           </div>
           <div class="input-group mb-3">
             <input
@@ -156,6 +175,24 @@ include 'views/footer.view.php';
               placeholder="KODE SIPD"
               name="kodeopd" />
           </div>
+           <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              name="bendahara" />
+          </div>
+           <div class="input-group mb-3">
+            <input
+              type="file"
+              name="fileimageupdate"
+          
+              class="form-control " />
+
+          </div>
+          <div class="input-group mb-3 preview_img">
+            <img />
+          </div>
+          
         </div>
         <div class="modal-footer">
           <button
@@ -203,174 +240,178 @@ include 'views/footer.view.php';
 
 <script>
   $(document).ready(function() {
-  fetchData();
+    fetchData();
 
-  let table = new DataTable("#myTableopd");
+    let table = new DataTable("#myTableopd");
 
-  // function to fetch data from database
-  function fetchData() {
-    $.ajax({
-      url: "proses/opd/executeopd.php?action=fetchData",
-      type: "POST",
-      dataType: "json",
-      success: function(response) {
-        var data = response.data;
-        table.clear().draw();
-        var counter = 1;
-        $.each(data, function(index, value) {
-  
-          table.row
-            .add([
-              counter,
-              // value.id,
-              value.id_sipd,
-              value.nama_opd,
-              value.kode_skpd,
-              '<Button type="button" class="btn btn-primary btn-sm editBtn" value="' +
+    // function to fetch data from database
+    function fetchData() {
+      $.ajax({
+        url: "proses/opd/executeopd.php?action=fetchData",
+        type: "POST",
+        dataType: "json",
+        success: function(response) {
+          var data = response.data;
+          table.clear().draw();
+          var counter = 1;
+          $.each(data, function(index, value) {
+
+            table.row
+              .add([
+                counter,
+                // value.id,
+                value.id_sipd,
+                value.nama_opd,
+                value.kode_skpd,
+                value.bendahara,
+                value.image,
+                '<Button type="button" class="btn btn-primary btn-sm editBtn" value="' +
                 value.id +
                 '"><i class="zmdi zmdi-edit"></i></Button>' +
-              '<Button type="button" class="btn btn-danger btn-sm deleteBtn" value="' +
+                '<Button type="button" class="btn btn-danger btn-sm deleteBtn" value="' +
                 value.id +
-                '"><i class="zmdi zmdi-delete"></i></Button>' 
-            ])
-            
-            .draw(false);
+                '"><i class="zmdi zmdi-delete"></i></Button>'
+              ])
+
+              .draw(false);
             counter++;
-        });
-      }
-    });
-  }
-
-  // function to insert data to database
-  $("#insertForm").on("submit", function(e) {
-    $("#insertBtn").attr("disabled", "disabled");
-    e.preventDefault();
-    $.ajax({
-      url: "proses/opd/executeopd.php?action=insertData",
-      type: "POST",
-      data: new FormData(this),
-      contentType: false,
-      cache: false,
-      processData: false,
-      success: function(response) {
-        var response = JSON.parse(response);
-        if (response.statusCode == 200) {
-          $("#offcanvasAddUser").offcanvas("hide");
-          $("#insertBtn").removeAttr("disabled");
-          $("#insertForm")[0].reset();
-          //   $(".preview_img").attr("src", "images/default_profile.jpg");
-          // $("#successToast").toast("show");
-          // $("#successMsg").html(response.message);
-          Swal.fire("!", "Data Sukses Tersimpan", "success");
-          fetchData();
-        } else if (response.statusCode == 500) {
-          $("#offcanvasAddUser").offcanvas("hide");
-          $("#insertBtn").removeAttr("disabled");
-          $("#insertForm")[0].reset();
-          Swal.fire("!", "Data Erro Disimpan", "Warning");
-          fetchData();
-          //   $(".preview_img").attr("src", "images/default_profile.jpg");
-          // $("#errorToast").toast("show");
-          // $("#errorMsg").html(response.message);
-        } else if (response.statusCode == 400) {
-          $("#insertBtn").removeAttr("disabled");
-          Swal.fire("!", "Data Masih Kosong", "Warning");
-          // $("#errorToast").toast("show");
-          // $("#errorMsg").html(response.message);
+          });
         }
-      }
-    });
-  });
+      });
+    }
 
-  // function to edit data
-  $("#myTableopd").on("click", ".editBtn", function() {
-    var id = $(this).val();
-    $.ajax({
-      url: "proses/opd/executeopd.php?action=fetchSingle",
-      type: "POST",
-      dataType: "json",
-      data: {
-        id: id
-      },
-      success: function(response) {
-        var data = response.data;
-        $("#editForm #id").val(data.id);
-        $("#editForm input[name='idsipd']").val(data.id_sipd);
-        $("#editForm input[name='namaopd']").val(data.nama_opd);
-        $("#editForm input[name='kodeopd']").val(data.kode_skpd);
-        // $("#editForm select[name='country']").val(data.country);
-        // $("#editForm .preview_img").attr("src", "uploads/" + data.image + "");
-        // $("#editForm #image_old").val(data.image);
-        // if (data.gender === "male") {
-        //   $("#editForm input[name='gender'][value='male']").attr("checked", true);
-        // } else if(data.gender === "female") {
-        //   $("#editForm input[name='gender'][value='female']").attr("checked", true);
-        // }
-        // show the edit user offcanvas
-        $("#offcanvasEditUser").modal("show");
-      }
-    });
-  });
-
-  // function to update data in database
-  $("#editForm").on("submit", function(e) {
-    $("#editBtn").attr("disabled");
-    e.preventDefault();
-    $.ajax({
-      url: "proses/opd/executeopd.php?action=updateData",
-      type: "POST",
-      data: new FormData(this),
-      contentType: false,
-      cache: false,
-      processData: false,
-      success: function(response) {
-        var response = JSON.parse(response);
-        if (response.statusCode == 200) {
-          Swal.fire("!", "Data Sukses Terupdate", "success");
-          fetchData();
-          $("#offcanvasEditUser").modal("hide");
-        } else if (response.statusCode == 500) {
-          $("#offcanvasEditUser").offcanvas("hide");
-          $("#editBtn").removeAttr("disabled");
-          $("#editForm")[0].reset();
-          //   $(".preview_img").attr("src", "images/default_profile.jpg");
-          $("#errorToast").toast("show");
-          $("#errorMsg").html(response.message);
-        } else if (response.statusCode == 400) {
-          // $("#editBtn").removeAttr("disabled");
-          $("#errorToast").toast("show");
-          $("#errorMsg").html(response.message);
-        }
-      }
-    });
-  });
-
-  // function to delete data
-  $("#myTableopd").on("click", ".deleteBtn", function() {
-    if (confirm("Apakah yakin Menghapus Data Ini?")) {
-      var id = $(this).val();
-      //   var delete_image = $(this).closest("td").find(".delete_image").val();
+    // function to insert data to database
+    $("#insertForm").on("submit", function(e) {
+      $("#insertBtn").attr("disabled", "disabled");
+      e.preventDefault();
       $.ajax({
-        url: "proses/opd/executeopd.php?action=deleteData",
+        url: "proses/opd/executeopd.php?action=insertData",
+        type: "POST",
+        data: new FormData(this),
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+          var response = JSON.parse(response);
+          if (response.statusCode == 200) {
+            $("#offcanvasAddUser").offcanvas("hide");
+            $("#insertBtn").removeAttr("disabled");
+            $("#insertForm")[0].reset();
+            //   $(".preview_img").attr("src", "images/default_profile.jpg");
+            // $("#successToast").toast("show");
+            // $("#successMsg").html(response.message);
+            Swal.fire("!", "Data Sukses Tersimpan", "success");
+            fetchData();
+          } else if (response.statusCode == 500) {
+            $("#offcanvasAddUser").offcanvas("hide");
+            $("#insertBtn").removeAttr("disabled");
+            $("#insertForm")[0].reset();
+            Swal.fire("!", "Data Erro Disimpan", "Warning");
+            fetchData();
+            //   $(".preview_img").attr("src", "images/default_profile.jpg");
+            // $("#errorToast").toast("show");
+            // $("#errorMsg").html(response.message);
+          } else if (response.statusCode == 400) {
+            $("#insertBtn").removeAttr("disabled");
+            Swal.fire("!", "Data Masih Kosong", "Warning");
+            // $("#errorToast").toast("show");
+            // $("#errorMsg").html(response.message);
+          }
+        }
+      });
+    });
+
+    // function to edit data
+    $("#myTableopd").on("click", ".editBtn", function() {
+      var id = $(this).val();
+      $.ajax({
+        url: "proses/opd/executeopd.php?action=fetchSingle",
         type: "POST",
         dataType: "json",
         data: {
-          id
-          //   delete_image
+          id: id
         },
         success: function(response) {
+          var data = response.data;
+          $("#editForm #id").val(data.id);
+          $("#editForm input[name='idsipd']").val(data.id_sipd);
+          $("#editForm input[name='namaopd']").val(data.nama_opd);
+          $("#editForm input[name='kodeopd']").val(data.kode_skpd);
+          $("#editForm input[name='bendahara']").val(data.bendahara);
+          // $("#editForm input[name='bendahara']").val(data.bendahara);
+          $("#editForm .preview_img").attr("src", "../../uploads/Logo" + data.image + "");
+          // $("#editForm select[name='country']").val(data.country);
+          // $("#editForm .preview_img").attr("src", "uploads/" + data.image + "");
+          // $("#editForm #image_old").val(data.image);
+          // if (data.gender === "male") {
+          //   $("#editForm input[name='gender'][value='male']").attr("checked", true);
+          // } else if(data.gender === "female") {
+          //   $("#editForm input[name='gender'][value='female']").attr("checked", true);
+          // }
+          // show the edit user offcanvas
+          $("#offcanvasEditUser").modal("show");
+        }
+      });
+    });
+
+    // function to update data in database
+    $("#editForm").on("submit", function(e) {
+      $("#editBtn").attr("disabled");
+      e.preventDefault();
+      $.ajax({
+        url: "proses/opd/executeopd.php?action=updateData",
+        type: "POST",
+        data: new FormData(this),
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+          var response = JSON.parse(response);
           if (response.statusCode == 200) {
+            Swal.fire("!", "Data Sukses Terupdate", "success");
             fetchData();
-            $("#successToast").toast("show");
-            $("#successMsg").html(response.message);
+            $("#offcanvasEditUser").modal("hide");
           } else if (response.statusCode == 500) {
+            $("#offcanvasEditUser").offcanvas("hide");
+            $("#editBtn").removeAttr("disabled");
+            $("#editForm")[0].reset();
+            //   $(".preview_img").attr("src", "images/default_profile.jpg");
+            $("#errorToast").toast("show");
+            $("#errorMsg").html(response.message);
+          } else if (response.statusCode == 400) {
+            // $("#editBtn").removeAttr("disabled");
             $("#errorToast").toast("show");
             $("#errorMsg").html(response.message);
           }
         }
       });
-    }
-  });
-});
+    });
 
+    // function to delete data
+    $("#myTableopd").on("click", ".deleteBtn", function() {
+      if (confirm("Apakah yakin Menghapus Data Ini?")) {
+        var id = $(this).val();
+        //   var delete_image = $(this).closest("td").find(".delete_image").val();
+        $.ajax({
+          url: "proses/opd/executeopd.php?action=deleteData",
+          type: "POST",
+          dataType: "json",
+          data: {
+            id
+            //   delete_image
+          },
+          success: function(response) {
+            if (response.statusCode == 200) {
+              fetchData();
+              $("#successToast").toast("show");
+              $("#successMsg").html(response.message);
+            } else if (response.statusCode == 500) {
+              $("#errorToast").toast("show");
+              $("#errorMsg").html(response.message);
+            }
+          }
+        });
+      }
+    });
+  });
 </script>

@@ -24,6 +24,8 @@ if ($_GET["action"] === "insertData") {
     $idsipd = mysqli_real_escape_string($conn, $_POST["idsipd"]);
     $namaopd = mysqli_real_escape_string($conn, $_POST["namaopd"]);
     $kodeopd = mysqli_real_escape_string($conn, $_POST["kodeopd"]);
+    $bendahara = mysqli_real_escape_string($conn, $_POST["bendahara"]);
+    $icon = mysqli_real_escape_string($conn, $_POST["fileimage"]);
   
 
     // // rename the image before saving to database
@@ -31,7 +33,7 @@ if ($_GET["action"] === "insertData") {
     // $new_name = uniqid() . time() . "." . pathinfo($original_name, PATHINFO_EXTENSION);
     // move_uploaded_file($_FILES["image"]["tmp_name"], "uploads/" . $new_name);
 
-    $sql = "INSERT INTO skpd (id_sipd,nama_opd,kode_skpd) VALUES ('$idsipd','$namaopd','$kodeopd')";
+    $sql = "INSERT INTO skpd (id_sipd,nama_opd,kode_skpd,image,bendahara) VALUES ('$idsipd','$namaopd','$kodeopd','$icon','$bendahara')";
 
     if (mysqli_query($conn, $sql)) {
       echo json_encode([
@@ -79,11 +81,13 @@ if ($_GET["action"] === "fetchSingle") {
 
 // function to update data
 if ($_GET["action"] === "updateData") {
-  if (!empty($_POST["idsipd"]) && !empty($_POST["namaopd"]) && !empty($_POST["kodeopd"])) {
+  if (!empty($_POST["idsipd"]) && !empty($_POST["namaopd"]) && !empty($_POST["kodeopd"])&& !empty($_POST["bendahara"])&& !empty($_POST["fileimageupdate"])) {
     $id = mysqli_real_escape_string($conn, $_POST["id"]);
     $idsipd = mysqli_real_escape_string($conn, $_POST["idsipd"]);
     $namaopd = mysqli_real_escape_string($conn, $_POST["namaopd"]);
     $kodeopd = mysqli_real_escape_string($conn, $_POST["kodeopd"]);
+    $bendahara = mysqli_real_escape_string($conn, $_POST["bendahara"]);
+    $icon = mysqli_real_escape_string($conn, $_POST["fileimageupdate"]);
     // $email = mysqli_real_escape_string($conn, $_POST["email"]);
     // $country = mysqli_real_escape_string($conn, $_POST["country"]);
     // $gender = mysqli_real_escape_string($conn, $_POST["gender"]);
@@ -98,7 +102,7 @@ if ($_GET["action"] === "updateData") {
     // } else {
     //   $new_name = mysqli_real_escape_string($conn, $_POST["image_old"]);
     // }
-    $sql = "UPDATE skpd SET id_sipd='$idsipd',nama_opd='$namaopd',kode_skpd='$kodeopd' WHERE id=$id";
+    $sql = "UPDATE skpd SET id_sipd='$idsipd',nama_opd='$namaopd',kode_skpd='$kodeopd',icon='$icon',bendahara='$bendahara' WHERE id=$id";
     if (mysqli_query($conn, $sql)) {
       echo json_encode([
         "statusCode" => 200,
